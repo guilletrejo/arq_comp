@@ -1,0 +1,23 @@
+
+# PlanAhead Generated physical constraints 
+
+NET "IN[7]" LOC = N3;
+NET "IN[6]" LOC = E2;
+NET "IN[5]" LOC = F3;
+NET "IN[4]" LOC = G3;
+NET "IN[3]" LOC = B4;
+NET "IN[2]" LOC = K3;
+NET "IN[1]" LOC = L3;
+NET "IN[0]" LOC = P11;
+NET "led_out[7]" LOC = G1;
+NET "led_out[6]" LOC = P4;
+NET "led_out[5]" LOC = N4;
+NET "led_out[4]" LOC = N5;
+NET "led_out[3]" LOC = P6;
+NET "led_out[2]" LOC = P7;
+NET "led_out[0]" LOC = M5;
+NET "b1" LOC = A7;
+NET "b2" LOC = M4;
+NET "b3" LOC = C11;
+NET "clk" LOC = B8;
+NET "led_out[1]" LOC = M11;
