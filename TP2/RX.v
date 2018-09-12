@@ -19,20 +19,21 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
+`define NBIT_DATA_LEN 8
 
 module receiver
     ( 
 		input clk,      // ver para que?????
-		input reset,	// ver para que?????
+		//input reset,	// ver para que?????
 		input rx_bit,	// recepcion de bits
 		input tick,		// clock salida del baud_rate_gen
 	
 		// output
 		rx_done_tick,	// fin de recepcion
-		data_out		// datos recibidos
+		data_out		// datos recibidos y enviados a la interfaz
 	); 
 
-	parameter NBIT_DATA = 8;	//largo del dato
+	parameter NBIT_DATA = NBIT_DATA_LEN;	//largo del dato
 	parameter LEN_DATA = $clog2(NBIT_DATA); 
 	parameter NUM_TICKS = 16;
 	parameter LEN_NUM_TICKS = $clog2(NUM_TICKS); 

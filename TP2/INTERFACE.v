@@ -29,9 +29,9 @@ module interface_circuit
  	input reset, //?
  	input rx_done_tick,  			 // fin de recepcion
  	input [LEN_DATA-1:0] rx_data_in, // Dato del RX recibido
- 	input [LEN_DATA-1:0] alu_data_in,// 
+ 	input [LEN_DATA-1:0] alu_data_in, // Resultado de la ALU para pasarlo al TX 
 
- 	output reg tx_start,
+ 	output reg tx_start,				// 
 	output reg [LEN_DATA-1 : 0] A,
 	output reg [LEN_DATA-1 : 0] B,
 	output reg [5 : 0] OPCODE,
