@@ -29,17 +29,16 @@ module uart
 (
 	input CLK, 	// clock de la FPGA
 	//input reset, // ver para queeeeeeeeeeeeeeee
-	input tx_start,
-	input rx_bit,
-	input [NBIT_DATA-1 : 0] data_in, // entrada del TX desde la interfaz (interfaz escribe en TX)
+	
+	input rx_bit,	// LO QUE RECIBE TX (DE LA COMPU)
 
-	output [NBIT_DATA-1 : 0] data_out, // salida del RX que va hacia la interfaz (interfaz recibe de TX)
-	output rx_done_tick,
-	output tx_bit,
+	output tx_bit,	// LO QUE SALE DE TX AL EXTERIOR (ECHO)
 	output tx_done_tick
 );
 
-	wire connect_baud_rate_rx_tx; 
+	wire [NBIT_DATA-1 : 0] buffer_tx_rx_echo;	// salida del RX a TX y entrada del TX desde RX
+	wire rx_done_tick_tx_start;					// fin de recepcion para RX e inicio de transmision para TX
+	wire connect_baud_rate_rx_tx;
 
     BR_GEN #(.BAUD_RATE(BAUD_RATE), .CLK_RATE(CLK_RATE)) 
     br_gen (
@@ -52,16 +51,16 @@ module uart
 		.rx_bit(rx_bit),
 		.tick(connect_baud_rate_rx_tx),
 
-		.rx_done_tick(rx_done_tick),
-		.data_out(data_out)
+		.rx_done_tick(rx_done_tick_tx_start),
+		.data_out(buffer_tx_rx_echo)
 		);
 
     TX #(.NBIT_DATA(NBIT_DATA), .NUM_TICKS(NUM_TICKS)) 
     tx (.clk(CLK),
 		.reset(reset),
-		.tx_start(tx_start),
+		.tx_start(rx_done_tick_tx_start),
 		.tick(connect_baud_rate_rx_tx),
-		.data_in(data_in),
+		.data_in(buffer_tx_rx_echo),
 
 		.tx_done_tick(tx_done_tick),
 		.tx_bit(tx_bit)
