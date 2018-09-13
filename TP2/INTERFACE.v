@@ -50,7 +50,7 @@ module INTERFACE
 	// registros para escribir en la ALU
 	assign data_out = alu_data_in;	// lo que recibe de la ALU lo tira a TX
 	
-	always @(posedge clk , posedge reset) 
+	always @(*) 
 	begin	 	
 		if (rx_done_tick) 
 			begin

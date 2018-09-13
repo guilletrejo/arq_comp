@@ -24,9 +24,9 @@
 module TOP
 (
 	input CLK,
-	input UART_TXD_IN,
-//	output UART_RXD_OUT
-	output JC
+	input RX_INPUT,
+
+	output TX_OUTPUT
 );
 
 	wire [`LEN_DATA-1 : 0]connect_A;
@@ -37,8 +37,6 @@ module TOP
 	wire [`LEN_DATA-1 : 0]connect_data_rx;
 	wire connect_tx_start;
 	wire connect_rx_done_tick;
-
-//    assign JC = UART_RXD_OUT;
     
 	uart #(
 		.NBITS(`LEN_DATA),
@@ -47,15 +45,14 @@ module TOP
 		)
 		u_uart
 			(
-				.CLK_100MHZ(CLK100MHZ),
-				.reset(reset),
+				.CLK(CLK),
 				.tx_start(connect_tx_start),
-				.rx(UART_TXD_IN),
+				.rx_bit(RX_INPUT),
 				.data_in(connect_data_tx),
 			
 				.data_out(connect_data_rx),
 				.rx_done_tick(connect_rx_done_tick),
-				.tx(JC),
+				.tx_bit(TX_OUTPUT),
 				.tx_done_tick()
 			);
 			
@@ -67,8 +64,8 @@ module TOP
 		(
 			.A(connect_A),
 			.B(connect_B),
-			.OPCODE(connect_OPCODE),
-			.RESULT_OUT(connect_RESULT_OUT)  
+			.Op(connect_OPCODE),
+			.out(connect_RESULT_OUT)  
 	    );
 	
 	interface_circuit #(
@@ -76,8 +73,6 @@ module TOP
 		)
 		u_interface_circuit 
 		( 
-			.clk(CLK100MHZ),
-		 	.reset(reset),
 		 	.rx_done_tick(connect_rx_done_tick),
 		 	.rx_data_in(connect_data_rx),
 		 	.alu_data_in(connect_RESULT_OUT),
@@ -85,9 +80,8 @@ module TOP
 		 	.tx_start(connect_tx_start),
 			.A(connect_A),
 			.B(connect_B),
-			.OPCODE(connect_OPCODE),
+			.Op(connect_OPCODE),
 		 	.data_out(connect_data_tx) 
 		); 
-
 
 endmodule
