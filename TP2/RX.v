@@ -21,24 +21,26 @@
 
 `define NBIT_DATA_LEN 8
 
-module receiver
+module RX
     ( 
-		input clk,      // ver para que?????
+		//input clk,    // ver para que?????
 		//input reset,	// ver para que?????
-		input rx_bit,	// recepcion de bits
-		input tick,		// clock salida del baud_rate_gen
+		rx_bit,			// recepcion de bits
+		tick,			// clock salida del baud_rate_gen
 	
 		// output
 		rx_done_tick,	// fin de recepcion
 		data_out		// datos recibidos y enviados a la interfaz
 	); 
 
-	parameter NBIT_DATA = NBIT_DATA_LEN;	//largo del dato
-	parameter LEN_DATA = $clog2(NBIT_DATA); 
+	parameter NBIT_DATA = `NBIT_DATA_LEN;	//largo del dato
+	parameter LEN_DATA = 3;  //$clog2(NBIT_DATA); 
 	parameter NUM_TICKS = 16;
-	parameter LEN_NUM_TICKS = $clog2(NUM_TICKS); 
+	parameter LEN_NUM_TICKS = 4; //$clog2(NUM_TICKS); 
 
-	output reg rx_done_tick;
+	input rx_bit;	// recepcion de bits
+	input tick;	
+	output reg rx_done_tick=1'b0;
 	output [NBIT_DATA-1:0] data_out;
 	
 	// estados 
@@ -47,18 +49,12 @@ module receiver
 	localparam	[1:0] DATA	= 2'b 10;
 	localparam	[1:0] STOP 	= 2'b 11;
 
-	reg [1:0] state;			
-	reg [LEN_NUM_TICKS - 1:0] tick_counter;
-	reg [LEN_DATA - 1:0] num_bits;
+	reg [1:0] state = IDLE;	
+	reg [LEN_NUM_TICKS - 1:0] tick_counter = 0;
+	reg [LEN_DATA - 1:0] num_bits = 0;
 	reg [NBIT_DATA - 1:0] buffer;
 
-	//inicializacion
 	assign data_out = buffer; 
-	state <= IDLE;
-	tick_counter <= 0;
-	num_bits <= 0;
-	rx_done_tick <= 1'b0; 
-	//~inicializacion
 
 	always @(posedge tick) 
 	begin
@@ -69,7 +65,6 @@ module receiver
 					state = START; 		//siguiente estado, inicio de recepcion
 					tick_counter = 0; 
 				end
-			
 			START :
 				begin
 					if (tick_counter==(NUM_TICKS>>1)-1) //cuento7 y me posiciono en el medio del bit
@@ -114,7 +109,7 @@ module receiver
 				state = IDLE; 
 				tick_counter = 0; 
 				num_bits = 0; 
-				buffer = 0; // no sabemos si va en stop o no ????????????? 
+				buffer = 0; // no sabemos si va en stop o no ????????????? parece que no che 
 			end
         endcase
 	end 

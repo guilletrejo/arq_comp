@@ -19,12 +19,12 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module uart
+module UART
 #(
 	parameter NBIT_DATA = 8,
 	parameter NUM_TICKS = 16,
 	parameter BAUD_RATE = 9600,
-	parameter CLK_RATE = 40000000
+	parameter CLK_RATE = 50000000
 )
 (
 	input CLK, 	// clock de la FPGA
@@ -48,7 +48,7 @@ module uart
 
 	RX #(.NBIT_DATA(NBIT_DATA), .NUM_TICKS(NUM_TICKS)) 
     rx (
-		.clk(CLK),
+		//.clk(CLK),
 		.rx_bit(rx_bit),
 		.tick(connect_baud_rate_rx_tx),
 
@@ -57,8 +57,8 @@ module uart
 		);
 
     TX #(.NBIT_DATA(NBIT_DATA), .NUM_TICKS(NUM_TICKS)) 
-    tx (.clk(CLK),
-		.reset(reset),
+    tx (//.clk(CLK),
+		//.reset(reset),
 		.tx_start(tx_start),
 		.tick(connect_baud_rate_rx_tx),
 		.data_in(data_in),

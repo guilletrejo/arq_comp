@@ -20,61 +20,56 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module interface_circuit
+module INTERFACE
 #(
-	parameter LEN_DATA = 8 // # buffer bits 
+	parameter NBIT_DATA_LEN = 8 // # buffer bits 
 ) 
 ( 
-	input clk,   //?
- 	input reset, //?
- 	input rx_done_tick,  			 // fin de recepcion
- 	input [LEN_DATA-1:0] rx_data_in, // Dato del RX recibido
+	//input clk,   //?
+ 	//input reset, //?
+ 	input rx_done_tick,  			  // fin de recepcion
+ 	input [LEN_DATA-1:0] rx_data_in,  // Dato del RX recibido
  	input [LEN_DATA-1:0] alu_data_in, // Resultado de la ALU para pasarlo al TX 
 
- 	output reg tx_start,				// 
-	output reg [LEN_DATA-1 : 0] A,
-	output reg [LEN_DATA-1 : 0] B,
-	output reg [5 : 0] OPCODE,
- 	output [LEN_DATA-1:0] data_out 
+ 	output reg tx_start = 0,				// LA INTERFAZ le tiene que avisar a TX cuando empezar
+	// registros para escribir en la ALU
+	output reg [LEN_DATA-1 : 0] A = 0,		
+	output reg [LEN_DATA-1 : 0] B = 0,
+	output reg [5 : 0] OPCODE = 0,
+
+	// para escribir en TX
+ 	output [LEN_DATA-1:0] data_out  // = 0 ???? Ver si inicializar 
 ); 
+
+	/* Para saber si esta recibiendo A, B, u OPCODE.
+	   00 : recibiendo A.
+	   01 : recibiendo B.
+	   02 : recibiendo OPCODE.
+	*/
 	reg [1 : 0] counter_in = 2'b 00;
-	
-	assign data_out = alu_data_in;
+	// registros para escribir en la ALU
+	assign data_out = alu_data_in;	// lo que recibe de la ALU lo tira a TX
 	
 	always @(posedge clk , posedge reset) 
-	begin
-		if (reset) 
-			begin 
-				A = 0;
-				B = 0;
-				OPCODE = 0;
-				counter_in = 0;
-				tx_start = 1'b 0;	
-				// data_out = 0;		
-			end 
-		
+	begin	 	
+		if (rx_done_tick) 
+			begin
+				case (counter_in) // ver si hay que poner default si no compila sintacticamente
+					2'b 00: A = rx_data_in;
+					2'b 01: B = rx_data_in;
+					2'b 10: OPCODE = rx_data_in;
+				endcase		
+				counter_in = counter_in + 1'b1;		
+			end
+	
+		if (counter_in == 2'b 11)
+			begin
+				counter_in = 0; 			
+				tx_start = 1'b1;
+			end
 		else
-			begin		 	
-				if (rx_done_tick) 
-					begin
-						case (counter_in)
-							2'b 00: A = rx_data_in;
-							2'b 01: B = rx_data_in;
-							2'b 10: OPCODE = rx_data_in;
-						endcase		
-						counter_in = counter_in + 1'b 1;		
-					end
-			
-				if (counter_in == 2'b 11)
-					begin
-						counter_in = 0;
-						// data_out = alu_data_in; 			
-						tx_start = 1'b 1;
-					end
-				else
-					begin
-						tx_start = 1'b 0;				
-					end		
-			end 
+			begin
+				tx_start = 1'b0;				
+			end		
     end
 endmodule
