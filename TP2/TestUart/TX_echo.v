@@ -61,7 +61,6 @@ reg [1:0] state=IDLE;
 reg [LEN_NUM_TICKS - 1:0] tick_counter=0;
 reg [LEN_DATA - 1:0] num_bits=0;
 reg [NBIT_DATA - 1:0] buffer=0;
-
 reg tx_reg=1'b1;
 
 //inicializacion
@@ -84,9 +83,9 @@ begin
 				begin
 					state = START;
 					tick_counter = 0;
-					buffer = 8'b11111001;	//01011101
-				end			 //10000110 	//11100110
-			end				 //11111000
+					buffer = data_in;	//10101100
+				end			 //10011010 	//00110101
+			end				 //10101101
 		START:
 			begin
 				tx_reg = 1'b0; // soy yo (Tx) quien tengo que avisar que empieza la trama
@@ -145,6 +144,7 @@ begin
 				num_bits = 0; 
 				buffer = 0; // no sabemos si va en stop o no ???????????
 				tx_reg = 1'b1;
+				
 			end
 	endcase
 end

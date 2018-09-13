@@ -30,8 +30,7 @@ module RX_echo
 	
 		// output
 		rx_done_tick,	// fin de recepcion
-		data_out,		// datos recibidos y enviados a la interfaz
-		success_led
+		data_out		// datos recibidos y enviados a la interfaz
 	); 
 
 parameter NBIT_DATA = `NBIT_DATA_LEN;	//largo del dato
@@ -45,7 +44,6 @@ input rx_bit;	// recepcion de bits
 input tick;	
 output reg rx_done_tick=1'b0;
 output [NBIT_DATA-1:0] data_out;
-output success_led;
 	
 	// estados 
 	localparam	[1:0] IDLE 	= 2'b 00;
@@ -57,11 +55,11 @@ output success_led;
 	reg [LEN_NUM_TICKS - 1:0] tick_counter=0;
 	reg [LEN_DATA - 1:0] num_bits=0;
 	reg [NBIT_DATA - 1:0] buffer;
-	reg success_bit=0;
+	//reg success_bit=0;
 	
 	//inicializacion
 	assign data_out = buffer; 
-	assign success_led=success_bit;
+	//assign buffer_led=success_bit;
 	//state <= IDLE;
 	//tick_counter <= 0;
 	//num_bits <= 0;
@@ -74,7 +72,7 @@ output success_led;
 			IDLE : 
 				begin
 					rx_done_tick =1'b0;//ese lo puso Nestor
-					success_bit=0; 	//esto tambien
+					//success_bit=0; 	//esto tambien
 					if (~rx_bit) 	//bit de start
 					begin 			
 						state = START; 		//siguiente estado, inicio de recepcion
@@ -116,7 +114,7 @@ output success_led;
 						num_bits = 0;
 						state = IDLE;	    //vuelve a quedar a la espera de otro dato
 						rx_done_tick =1'b1; //avisa a la interfaz que termino
-						success_bit=success_bit^1;
+						//success_bit=success_bit^1;
 					end 
 					else 
 						tick_counter = tick_counter + 1;
