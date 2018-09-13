@@ -96,7 +96,7 @@ output [NBIT_DATA-1:0] data_out;
 					if (tick_counter==NUM_TICKS-1)//cuento15 y me posiciono en el medio del bit siguiente
 					begin 
 						tick_counter = 0;
-						buffer = 8'b00101100;//{rx_bit , buffer [NBIT_DATA-1 : 1]}; //actualizo el buffer con el bit recibido
+						buffer = {rx_bit , buffer [NBIT_DATA-1 : 1]}; //actualizo el buffer con el bit recibido
 						if (num_bits==(NBIT_DATA-1)) //veo cuantos bits del dato recibio
 							state = STOP; //si recibi todos, el siguiente estado es el de stop
 						else 
