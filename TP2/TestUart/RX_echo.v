@@ -21,25 +21,31 @@
 
 `define NBIT_DATA_LEN 8
 
-module receiver
+module RX_echo
     ( 
-		input clk,      // ver para que?????
+		//clk,      // ver para que?????
 		//input reset,	// ver para que?????
-		input rx_bit,	// recepcion de bits
-		input tick,		// clock salida del baud_rate_gen
+		rx_bit,	// recepcion de bits
+		tick,		// clock salida del baud_rate_gen
 	
 		// output
 		rx_done_tick,	// fin de recepcion
-		data_out		// datos recibidos y enviados a la interfaz
+		data_out,		// datos recibidos y enviados a la interfaz
+		success_led
 	); 
 
-	parameter NBIT_DATA = NBIT_DATA_LEN;	//largo del dato
-	parameter LEN_DATA = $clog2(NBIT_DATA); 
-	parameter NUM_TICKS = 16;
-	parameter LEN_NUM_TICKS = $clog2(NUM_TICKS); 
+parameter NBIT_DATA = `NBIT_DATA_LEN;	//largo del dato
+parameter LEN_DATA = 3; //$clog2(NBIT_DATA); 
+parameter NUM_TICKS = 16;
+parameter LEN_NUM_TICKS = 4;//$clog2(NUM_TICKS); 
 
-	output reg rx_done_tick;
-	output [NBIT_DATA-1:0] data_out;
+//input clk;      // ver para que?????
+//input reset,	// ver para que?????
+input rx_bit;	// recepcion de bits
+input tick;	
+output reg rx_done_tick=1'b0;
+output [NBIT_DATA-1:0] data_out;
+output success_led;
 	
 	// estados 
 	localparam	[1:0] IDLE 	= 2'b 00;
@@ -47,29 +53,34 @@ module receiver
 	localparam	[1:0] DATA	= 2'b 10;
 	localparam	[1:0] STOP 	= 2'b 11;
 
-	reg [1:0] state;			
-	reg [LEN_NUM_TICKS - 1:0] tick_counter;
-	reg [LEN_DATA - 1:0] num_bits;
+	reg [1:0] state=IDLE;			
+	reg [LEN_NUM_TICKS - 1:0] tick_counter=0;
+	reg [LEN_DATA - 1:0] num_bits=0;
 	reg [NBIT_DATA - 1:0] buffer;
-
+	reg success_bit=0;
+	
 	//inicializacion
 	assign data_out = buffer; 
-	state <= IDLE;
-	tick_counter <= 0;
-	num_bits <= 0;
-	rx_done_tick <= 1'b0; 
+	assign success_led=success_bit;
+	//state <= IDLE;
+	//tick_counter <= 0;
+	//num_bits <= 0;
+	//rx_done_tick <= 1'b0; 
 	//~inicializacion
 
 	always @(posedge tick) 
 	begin
 		case (state)
 			IDLE : 
-				if (~rx_bit) 	//bit de start
-				begin 			
-					state = START; 		//siguiente estado, inicio de recepcion
-					tick_counter = 0; 
+				begin
+					rx_done_tick =1'b0;//ese lo puso Nestor
+					success_bit=0; 	//esto tambien
+					if (~rx_bit) 	//bit de start
+					begin 			
+						state = START; 		//siguiente estado, inicio de recepcion
+						tick_counter = 0;
+					end
 				end
-			
 			START :
 				begin
 					if (tick_counter==(NUM_TICKS>>1)-1) //cuento7 y me posiciono en el medio del bit
@@ -87,7 +98,7 @@ module receiver
 					if (tick_counter==NUM_TICKS-1)//cuento15 y me posiciono en el medio del bit siguiente
 					begin 
 						tick_counter = 0;
-						buffer = {rx_bit , buffer [NBIT_DATA-1 : 1]}; //actualizo el buffer con el bit recibido
+						buffer = 8'b00101100;//{rx_bit , buffer [NBIT_DATA-1 : 1]}; //actualizo el buffer con el bit recibido
 						if (num_bits==(NBIT_DATA-1)) //veo cuantos bits del dato recibio
 							state = STOP; //si recibi todos, el siguiente estado es el de stop
 						else 
@@ -105,6 +116,7 @@ module receiver
 						num_bits = 0;
 						state = IDLE;	    //vuelve a quedar a la espera de otro dato
 						rx_done_tick =1'b1; //avisa a la interfaz que termino
+						success_bit=success_bit^1;
 					end 
 					else 
 						tick_counter = tick_counter + 1;

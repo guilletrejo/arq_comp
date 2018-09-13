@@ -22,32 +22,32 @@
 
 `define NBIT_DATA_LEN 8
 
-module transmisor
+module TX_echo
 (
 	// input
-	clk,			//??
+	//clk,			//??
 	//reset,			//?
 	tx_start,		// Inicio de la transmision
 	tick,			// clock salida del br_gen
 	data_in,		// resultado de la ALU que me lo pasa la interfaz
 
 	// output
-	tx_done_tick,	// fin de la transmision (se lo manda a la interfaz)
+	//tx_done_tick,	// fin de la transmision (se lo manda a la interfaz)
 	tx_bit			// el dato que se transmite
 );
 
 parameter NBIT_DATA = `NBIT_DATA_LEN;	// largo del dato
-parameter LEN_DATA = $clog2(NBIT_DATA); 
+parameter LEN_DATA = 3;//$clog2(NBIT_DATA); 
 parameter NUM_TICKS = 16;
-parameter LEN_NUM_TICKS = $clog2(NUM_TICKS); 
+parameter LEN_NUM_TICKS = 4;//$clog2(NUM_TICKS); 
 
-input clk;
+//input clk;
 //input reset;
 input tx_start;
 input tick;
 input [NBIT_DATA-1:0] data_in;
 
-output reg tx_done_tick;
+//output reg tx_done_tick=1'b0;
 output tx_bit;
 
 // Declaracion de estados
@@ -57,21 +57,21 @@ localparam [1:0] DATA	= 2'b 10;
 localparam [1:0] STOP 	= 2'b 11;
 
 // declaracion de registros auxiliares
-reg [1:0] state;
-reg [LEN_NUM_TICKS - 1:0] tick_counter;
-reg [LEN_DATA - 1:0] num_bits;
-reg [NBIT_DATA - 1:0] buffer;
+reg [1:0] state=IDLE;
+reg [LEN_NUM_TICKS - 1:0] tick_counter=0;
+reg [LEN_DATA - 1:0] num_bits=0;
+reg [NBIT_DATA - 1:0] buffer=0;
 
-reg tx_reg;
+reg tx_reg=1'b1;
 
 //inicializacion
 assign tx_bit = tx_reg;
-state <= IDLE;
-tick_counter <= 0;
-num_bits <= 0;
-buffer <= 0;
-tx_done_tick <= 1'b0;
-tx_reg <= 1'b1; 
+//state = IDLE;
+//tick_counter <= 0;
+//num_bits <= 0;
+//buffer <= 0;
+//tx_done_tick <= 1'b0;
+//tx_reg <= 1'b1; 
 //~inicializacion
 
 always @(posedge tick)
@@ -79,14 +79,14 @@ begin
 	case (state)
 		IDLE:
 			begin
-				tx_reg = 1'b1; // avisa que esta en idle
+				//tx_reg = 1'b1; // avisa que esta en idle
 				if (tx_start) // cuando la interfaz me dice q empiece, empiezo
 				begin
 					state = START;
 					tick_counter = 0;
-					buffer = data_in;	
-				end
-			end
+					buffer = 8'b11111001;	//01011101
+				end			 //10000110 	//11100110
+			end				 //11111000
 		START:
 			begin
 				tx_reg = 1'b0; // soy yo (Tx) quien tengo que avisar que empieza la trama
@@ -130,7 +130,7 @@ begin
 					state = IDLE;
 					tick_counter = 0;
 					num_bits = 0;
-					tx_done_tick = 1'b1;
+					//tx_done_tick = 1'b1;
 				end
 				else 
 				begin
