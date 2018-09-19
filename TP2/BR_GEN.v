@@ -19,9 +19,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module BR_GEN(
-	input CLK,  //clock de la FPGA
+	CLK,  //clock de la FPGA
 	//input reset,//ver para que???????????
-	output reg TICK //clock del RX
+	TICK //clock del RX
     );
 	 
 parameter BAUD_RATE = 9600;
@@ -34,8 +34,9 @@ parameter LEN_REG_ACUM = 9; //$clog2(TICK_RATE); // calcula el largo (en bits) n
 												        // para generar el tick rate (163 en el ej. de la filmina)
 reg [LEN_REG_ACUM - 1 : 0] acumulator = 0;  // para contar hasta el TICK_RATE													
 
-acumulator = 0;
-TICK = 0;
+input CLK;  //clock de la FPGA
+//input reset,//ver para que???????????
+output reg TICK=0; //clock del RX
 
 always @(posedge CLK) 
 begin			

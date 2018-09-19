@@ -38,8 +38,8 @@ module TOP
 	wire connect_tx_start;
 	wire connect_rx_done_tick;
     
-	uart #(
-		.NBITS(`LEN_DATA),
+	UART #(
+		.NBIT_DATA(`LEN_DATA),
 		.NUM_TICKS(16),
 		.BAUD_RATE(9600)
 		)
@@ -56,9 +56,8 @@ module TOP
 				.tx_done_tick()
 			);
 			
-	alu #(
-		.lenghtIN(`LEN_DATA),
-		.lenghtOP(6)
+	ALU #(
+		.bits(`LEN_DATA)
 		)
 		u_alu
 		(
@@ -68,10 +67,10 @@ module TOP
 			.out(connect_RESULT_OUT)  
 	    );
 	
-	interface_circuit #(
-		.LEN_DATA(`LEN_DATA)
+	INTERFACE #(
+		.NBIT_DATA_LEN(`LEN_DATA)
 		)
-		u_interface_circuit 
+		u_interface 
 		( 
 		 	.rx_done_tick(connect_rx_done_tick),
 		 	.rx_data_in(connect_data_rx),
@@ -80,7 +79,7 @@ module TOP
 		 	.tx_start(connect_tx_start),
 			.A(connect_A),
 			.B(connect_B),
-			.Op(connect_OPCODE),
+			.OPCODE(connect_OPCODE),
 		 	.data_out(connect_data_tx) 
 		); 
 

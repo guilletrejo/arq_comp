@@ -5,7 +5,7 @@
 // 
 // Create Date: 09/12/2017 08:21:19 PM
 // Design Name: 
-// Module Name: receiver
+// Module Name: RX
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 

@@ -5,7 +5,7 @@
 // 
 // Create Date: 09/12/2017 08:23:13 PM
 // Design Name: 
-// Module Name: interface_circuit
+// Module Name: INTERFACE
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -19,7 +19,6 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
 module INTERFACE
 #(
 	parameter NBIT_DATA_LEN = 8 // # buffer bits 
@@ -28,17 +27,17 @@ module INTERFACE
 	//input clk,   //?
  	//input reset, //?
  	input rx_done_tick,  			  // fin de recepcion
- 	input [LEN_DATA-1:0] rx_data_in,  // Dato del RX recibido
- 	input [LEN_DATA-1:0] alu_data_in, // Resultado de la ALU para pasarlo al TX 
+ 	input [NBIT_DATA_LEN-1:0] rx_data_in,  // Dato del RX recibido
+ 	input [NBIT_DATA_LEN-1:0] alu_data_in, // Resultado de la ALU para pasarlo al TX 
 
  	output reg tx_start = 0,				// LA INTERFAZ le tiene que avisar a TX cuando empezar
 	// registros para escribir en la ALU
-	output reg [LEN_DATA-1 : 0] A = 0,		
-	output reg [LEN_DATA-1 : 0] B = 0,
+	output reg [NBIT_DATA_LEN-1 : 0] A = 0,		
+	output reg [NBIT_DATA_LEN-1 : 0] B = 0,
 	output reg [5 : 0] OPCODE = 0,
 
 	// para escribir en TX
- 	output [LEN_DATA-1:0] data_out  // = 0 ???? Ver si inicializar 
+ 	output [NBIT_DATA_LEN-1:0] data_out  // = 0 ???? Ver si inicializar 
 ); 
 
 	/* Para saber si esta recibiendo A, B, u OPCODE.
