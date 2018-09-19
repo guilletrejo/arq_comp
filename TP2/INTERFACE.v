@@ -3,9 +3,6 @@
 // Company: 
 // Engineer: 
 // 
-<<<<<<< HEAD
-// Create Date: 09/12/201dasdas7 08:23:13 PM
-=======
 // Create Date: 09/06/2018 08:23:13 PM
 // Design Name: 
 // Module Name: INTERFACE
