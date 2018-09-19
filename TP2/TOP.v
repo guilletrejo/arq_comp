@@ -25,7 +25,7 @@ module TOP
 (
 	input CLK,
 	input RX_INPUT,
-
+	
 	output TX_OUTPUT
 );
 
