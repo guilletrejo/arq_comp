@@ -3,11 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-<<<<<<< HEAD
-// Create Date: 09/12/201dasdas7 08:23:13 PM
-=======
 // Create Date: 09/06/2018 08:23:13 PM
->>>>>>> be4ae154eaffc098a9513e8ae86ce26114e7b666
 // Design Name: 
 // Module Name: INTERFACE
 // Project Name: 
@@ -37,7 +33,6 @@ module INTERFACE
 	output reg [NBIT_DATA_LEN-1 : 0] A = 0,		
 	output reg [NBIT_DATA_LEN-1 : 0] B = 0,
 	output reg [5 : 0] Op = 0,
-
 	// para escribir en TX
  	output [NBIT_DATA_LEN-1:0] data_out  // = 0 ???? Ver si inicializar 
 ); 
