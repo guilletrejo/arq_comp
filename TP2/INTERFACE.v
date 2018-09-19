@@ -3,7 +3,11 @@
 // Company: 
 // Engineer: 
 // 
+<<<<<<< HEAD
 // Create Date: 09/12/201dasdas7 08:23:13 PM
+=======
+// Create Date: 09/06/2018 08:23:13 PM
+>>>>>>> be4ae154eaffc098a9513e8ae86ce26114e7b666
 // Design Name: 
 // Module Name: INTERFACE
 // Project Name: 
