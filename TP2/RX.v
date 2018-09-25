@@ -22,41 +22,43 @@
 `define NBIT_DATA_LEN 8
 
 module RX
-    ( 
-		//input clk,    // ver para que?????
-		//input reset,	// ver para que?????
-		rx_bit,			// recepcion de bits
-		tick,			// clock salida del baud_rate_gen
-	
-		// output
-		rx_done_tick,	// fin de recepcion
-		data_out		// datos recibidos y enviados a la interfaz
-	); 
+( 
+	input clk,    // ver para que?????
+	//input reset,	// ver para que?????
+	rx_bit,			// recepcion de bits
+	tick,			// clock salida del baud_rate_gen
 
-	parameter NBIT_DATA = `NBIT_DATA_LEN;	//largo del dato
-	parameter LEN_DATA = 3;  //$clog2(NBIT_DATA); 
-	parameter NUM_TICKS = 16;
-	parameter LEN_NUM_TICKS = 4; //$clog2(NUM_TICKS); 
+	// output
+	rx_done_tick,	// fin de recepcion
+	data_out		// datos recibidos y enviados a la interfaz
+); 
 
-	input rx_bit;	// recepcion de bits
-	input tick;	
-	output reg rx_done_tick=1'b0;
-	output [NBIT_DATA-1:0] data_out;
-	
-	// estados 
-	localparam	[1:0] IDLE 	= 2'b 00;
-	localparam	[1:0] START	= 2'b 01;
-	localparam	[1:0] DATA	= 2'b 10;
-	localparam	[1:0] STOP 	= 2'b 11;
+parameter NBIT_DATA = `NBIT_DATA_LEN;	//largo del dato
+parameter LEN_DATA = 3;  //$clog2(NBIT_DATA); 
+parameter NUM_TICKS = 16;
+parameter LEN_NUM_TICKS = 4; //$clog2(NUM_TICKS); 
 
-	reg [1:0] state = IDLE;	
-	reg [LEN_NUM_TICKS - 1:0] tick_counter = 0;
-	reg [LEN_DATA - 1:0] num_bits = 0;
-	reg [NBIT_DATA - 1:0] buffer;
+input rx_bit;	// recepcion de bits
+input tick;	
+output reg rx_done_tick=1'b0;
+output [NBIT_DATA-1:0] data_out;
 
-	assign data_out = buffer; 
+// estados 
+localparam	[1:0] IDLE 	= 2'b 00;
+localparam	[1:0] START	= 2'b 01;
+localparam	[1:0] DATA	= 2'b 10;
+localparam	[1:0] STOP 	= 2'b 11;
 
-	always @(posedge tick) 
+reg [1:0] state = IDLE;	
+reg [LEN_NUM_TICKS - 1:0] tick_counter = 0;
+reg [LEN_DATA - 1:0] num_bits = 0;
+reg [NBIT_DATA - 1:0] buffer;
+
+assign data_out = buffer; 
+
+always @(posedge clk) 
+begin
+	if(tick)
 	begin
 		case (state)
 			IDLE : 
@@ -75,7 +77,7 @@ module RX
 					end 
 					else 
 						tick_counter = tick_counter + 1;
-                end
+				end
 			
 			DATA : 
 				begin
@@ -90,7 +92,7 @@ module RX
 					end 
 					else
 						tick_counter = tick_counter + 1;
-			    end
+				end
 
 			STOP : //no lee el valor bit de stop
 				begin
@@ -103,14 +105,15 @@ module RX
 					end 
 					else 
 						tick_counter = tick_counter + 1;
-                end
-            default :
-            begin
+				end
+			default :
+			begin
 				state = IDLE; 
 				tick_counter = 0; 
 				num_bits = 0; 
 				buffer = 0; // no sabemos si va en stop o no ????????????? parece que no che 
 			end
-        endcase
-	end 
+		endcase
+	end
+end 
 endmodule

@@ -23,7 +23,7 @@
 
 module RX_echo
     ( 
-		//clk,      // ver para que?????
+		clk,      // ver para que?????
 		//input reset,	// ver para que?????
 		rx_bit,	// recepcion de bits
 		tick,		// clock salida del baud_rate_gen
@@ -38,7 +38,7 @@ parameter LEN_DATA = 3; //$clog2(NBIT_DATA);
 parameter NUM_TICKS = 16;
 parameter LEN_NUM_TICKS = 4;//$clog2(NUM_TICKS); 
 
-//input clk;      // ver para que?????
+input clk;      // ver para que?????
 //input reset,	// ver para que?????
 input rx_bit;	// recepcion de bits
 input tick;	
@@ -66,66 +66,69 @@ output [NBIT_DATA-1:0] data_out;
 	//rx_done_tick <= 1'b0; 
 	//~inicializacion
 
-	always @(posedge tick) 
+	always @(posedge clk) 
 	begin
-		case (state)
-			IDLE : 
-				begin
-					rx_done_tick =1'b0;//ese lo puso Nestor
-					//success_bit=0; 	//esto tambien
-					if (~rx_bit) 	//bit de start
-					begin 			
-						state = START; 		//siguiente estado, inicio de recepcion
-						tick_counter = 0;
+		if(tick)
+		begin
+			case (state)
+				IDLE : 
+					begin
+						rx_done_tick =1'b0;//ese lo puso Nestor
+						//success_bit=0; 	//esto tambien
+						if (~rx_bit) 	//bit de start
+						begin 			
+							state = START; 		//siguiente estado, inicio de recepcion
+							tick_counter = 0;
+						end
 					end
-				end
-			START :
-				begin
-					if (tick_counter==(NUM_TICKS>>1)-1) //cuento7 y me posiciono en el medio del bit
-					begin 								
-						state = DATA; 	//siguiente estado, primer bit de datos			
-						tick_counter = 0; //comienzo a contar de nuevo
-						num_bits = 0;	//cantidad de datos recibidos 
-					end 
-					else 
-						tick_counter = tick_counter + 1;
-                end
-			
-			DATA : 
-				begin
-					if (tick_counter==NUM_TICKS-1)//cuento15 y me posiciono en el medio del bit siguiente
-					begin 
-						tick_counter = 0;
-						buffer = {rx_bit , buffer [NBIT_DATA-1 : 1]}; //actualizo el buffer con el bit recibido
-						if (num_bits==(NBIT_DATA-1)) //veo cuantos bits del dato recibio
-							state = STOP; //si recibi todos, el siguiente estado es el de stop
+				START :
+					begin
+						if (tick_counter==(NUM_TICKS>>1)-1) //cuento7 y me posiciono en el medio del bit
+						begin 								
+							state = DATA; 	//siguiente estado, primer bit de datos			
+							tick_counter = 0; //comienzo a contar de nuevo
+							num_bits = 0;	//cantidad de datos recibidos 
+						end 
 						else 
-							num_bits = num_bits + 1;
-					end 
-					else
-						tick_counter = tick_counter + 1;
-			    end
+							tick_counter = tick_counter + 1;
+					end
+				
+				DATA : 
+					begin
+						if (tick_counter==NUM_TICKS-1)//cuento15 y me posiciono en el medio del bit siguiente
+						begin 
+							tick_counter = 0;
+							buffer = {rx_bit , buffer [NBIT_DATA-1 : 1]}; //actualizo el buffer con el bit recibido
+							if (num_bits==(NBIT_DATA-1)) //veo cuantos bits del dato recibio
+								state = STOP; //si recibi todos, el siguiente estado es el de stop
+							else 
+								num_bits = num_bits + 1;
+						end 
+						else
+							tick_counter = tick_counter + 1;
+					end
 
-			STOP : //no lee el valor bit de stop
+				STOP : //no lee el valor bit de stop
+					begin
+						if (tick_counter==(NUM_TICKS-1)) //cuento15 y me posiciono en el medio del bit de stop
+						begin 
+							tick_counter = 0; 
+							num_bits = 0;
+							state = IDLE;	    //vuelve a quedar a la espera de otro dato
+							rx_done_tick =1'b1; //avisa a la interfaz que termino
+							//success_bit=success_bit^1;
+						end 
+						else 
+							tick_counter = tick_counter + 1;
+					end
+				default :
 				begin
-					if (tick_counter==(NUM_TICKS-1)) //cuento15 y me posiciono en el medio del bit de stop
-					begin 
-						tick_counter = 0; 
-						num_bits = 0;
-						state = IDLE;	    //vuelve a quedar a la espera de otro dato
-						rx_done_tick =1'b1; //avisa a la interfaz que termino
-						//success_bit=success_bit^1;
-					end 
-					else 
-						tick_counter = tick_counter + 1;
-                end
-            default :
-            begin
-				state = IDLE; 
-				tick_counter = 0; 
-				num_bits = 0; 
-				buffer = 0; // no sabemos si va en stop o no ????????????? 
-			end
-        endcase
+					state = IDLE; 
+					tick_counter = 0; 
+					num_bits = 0; 
+					buffer = 0; // no sabemos si va en stop o no ????????????? 
+				end
+			endcase
+		end
 	end 
 endmodule

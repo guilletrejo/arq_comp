@@ -48,7 +48,7 @@ module uart
 
 	RX_echo #(.NBIT_DATA(NBIT_DATA), .NUM_TICKS(NUM_TICKS)) 
     rx (
-		//.clk(CLK),
+		.clk(CLK),
 		.rx_bit(rx_bit),
 		.tick(connect_baud_rate_rx_tx),
 		//.success_led(success_led),
@@ -57,7 +57,7 @@ module uart
 		);
 
     TX_echo #(.NBIT_DATA(NBIT_DATA), .NUM_TICKS(NUM_TICKS)) 
-    tx (//.clk(CLK),
+    tx (.clk(CLK),
 		//.reset(reset),
 		.tx_start(rx_done_tick_tx_start),
 		.tick(connect_baud_rate_rx_tx),
