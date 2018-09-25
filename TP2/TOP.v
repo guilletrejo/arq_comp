@@ -25,7 +25,7 @@ module TOP
 (
 	input CLK,
 	input RX_INPUT,
-	
+
 	output TX_OUTPUT
 );
 
@@ -75,7 +75,7 @@ module TOP
 		 	.rx_done_tick(connect_rx_done_tick),
 		 	.rx_data_in(connect_data_rx),
 		 	.alu_data_in(connect_RESULT_OUT),
-		
+			.clk(CLK),
 		 	.tx_start(connect_tx_start),
 			.A(connect_A),
 			.B(connect_B),

@@ -37,35 +37,50 @@ module INTERFACE
  	output [NBIT_DATA_LEN-1:0] data_out  // = 0 ???? Ver si inicializar 
 ); 
 
-	/* Para saber si esta recibiendo A, B, u Op.
-	   00 : recibiendo A.
-	   01 : recibiendo B.
-	   02 : recibiendo Op.
-	*/
-	reg [1 : 0] counter_in = 2'b 00;
+	// estados 
+	localparam	[1:0] receive_A 	= 2'b 00;
+	localparam	[1:0] receive_B		= 2'b 01;
+	localparam	[1:0] receive_Op	= 2'b 10;
+	localparam	[1:0] send_result	= 2'b 11;
+
+	reg [1:0] state = receive_A;
+
 	// registros para escribir en la ALU
 	assign data_out = alu_data_in;	// lo que recibe de la ALU lo tira a TX
 	
-	always @(*) 
+	always @(posedge clk) 
 	begin	 	
 		if (rx_done_tick) 
 			begin
-				case (counter_in) // ver si hay que poner default si no compila sintacticamente
-					2'b 00: A = rx_data_in;
-					2'b 01: B = rx_data_in;
-					2'b 10: Op = rx_data_in;
-				endcase		
-				counter_in = counter_in + 1'b1;		
+				case (state)
+					receive_A:
+						begin
+							A= rx_data_in;
+							tx_start = 1'b0;
+							state = receive_B;
+						end
+					receive_B:
+						begin
+							B= rx_data_in;
+							tx_start = 1'b0;
+							state = receive_Op;
+						end
+					receive_Op:
+						begin
+							Op= rx_data_in;
+							tx_start = 1'b0;
+							state = receive_Op;
+						end
+					send_result:
+						begin
+							tx_start = 1'b1;
+							state=receive_A;
+						end
+					default:
+						begin
+							tx_start = 1'b0;
+						end
+				endcase	
 			end
-	
-		if (counter_in == 2'b 11)
-			begin
-				counter_in = 0; 			
-				tx_start = 1'b1;
-			end
-		else
-			begin
-				tx_start = 1'b0;				
-			end		
     end
 endmodule
