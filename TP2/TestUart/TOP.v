@@ -1,14 +1,25 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-//	Alumnos:
-//					 Ortmann, Nestor Javier
-// 				 Trejo, Bruno Guillermo
-// Year: 		 2018
-// Module Name: TOP
+// Company: 
+// Engineer: 
+// 
+// Create Date: 09/06/2018 09:26:45 PM
+// Design Name: 
+// Module Name: top
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
 //////////////////////////////////////////////////////////////////////////////////
 
 `define LEN_DATA 8
-`define LEN_OP	  6
 
 module TOP
 (
@@ -16,23 +27,22 @@ module TOP
 	input RX_INPUT,
 
 	output TX_OUTPUT,
-	output OSC
+	output [7:0] buffer_led
 );
 
-	wire [`LEN_DATA-1 : 0] connect_A;
-	wire [`LEN_DATA-1 : 0] connect_B;
-	wire [`LEN_DATA-1 : 0] connect_RESULT_OUT;
-	wire [`LEN_OP - 1 : 0] connect_Op;
-	wire [`LEN_DATA-1 : 0] connect_data_tx;
-	wire [`LEN_DATA-1 : 0] connect_data_rx;
-	
+	wire [`LEN_DATA-1 : 0]connect_A;
+	wire [`LEN_DATA-1 : 0]connect_B;
+	wire [5 : 0]connect_OPCODE;
+	wire [`LEN_DATA-1 : 0]connect_RESULT_OUT;
+	wire [`LEN_DATA-1 : 0]connect_data_tx;
+	wire [`LEN_DATA-1 : 0]connect_data_rx;
 	wire connect_tx_start;
 	wire connect_rx_done_tick;
 	wire connect_tx_done_tick;
 	
-   assign OSC = TX_OUTPUT;
-	
-	UART #(
+	assign buffer_led = connect_RESULT_OUT;
+    
+	UART_echo #(
 		.NBIT_DATA(`LEN_DATA),
 		.NUM_TICKS(16),
 		.BAUD_RATE(9600)
@@ -49,34 +59,31 @@ module TOP
 				.tx_bit(TX_OUTPUT),
 				.tx_done_tick(connect_tx_done_tick)
 			);
-		 
+			
 	ALU #(
-		.lenghtIN(`LEN_DATA),
-		.lenghtOP(`LEN_OP)
+		.bits(`LEN_DATA)
 		)
 		u_alu
 		(
-			.inA(connect_A),
-			.inB(connect_B),
-			.inOp(connect_Op),
-			
-			.RESULT_OUT(connect_RESULT_OUT)
+			.A(connect_A),
+			.B(connect_B),
+			.Op(connect_OPCODE),
+			.out(connect_RESULT_OUT)  
 	    );
 			
-	INTERFACE #(
+	INTERFACE_echo #(
 		.NBIT_DATA_LEN(`LEN_DATA)
 		)
 		u_interface 
 		( 
 		 	.rx_done_tick(connect_rx_done_tick),
 		 	.rx_data_in(connect_data_rx),
+		 	.alu_data_in(connect_RESULT_OUT),
 			.clk(CLK),
-			.in(connect_RESULT_OUT),
-			
-			.bout(connect_B),
-			.aout(connect_A),
-			.opout(connect_Op),
 		 	.tx_start(connect_tx_start),
+			.A(connect_A),
+			.B(connect_B),
+			.Op(connect_OPCODE),
 		 	.data_out(connect_data_tx),
 			.tx_done_tick(connect_tx_done_tick)
 		); 

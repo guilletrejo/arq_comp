@@ -1,22 +1,10 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 09/06/2018 08:21:19 PM
-// Design Name: 
-// Module Name: receiver
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+//	Alumnos:
+//					 Ortmann, Nestor Javier
+// 				 Trejo, Bruno Guillermo
+// Year: 		 2018
+// Module Name: TX
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -24,25 +12,23 @@
 
 module TX
 (
-	// input
-	clk,			//??
-	//reset,			//?
-	tx_start,		// Inicio de la transmision
+	// inputs
+	clk,
+	tx_start,	// Inicio de la transmision
 	tick,			// clock salida del br_gen
 	data_in,		// resultado de la ALU que me lo pasa la interfaz
 
-	// output
+	// outputs
 	tx_done_tick,	// fin de la transmision (se lo manda a la interfaz)
 	tx_bit			// el dato que se transmite
 );
 
 parameter NBIT_DATA = `NBIT_DATA_LEN;	// largo del dato
-parameter LEN_DATA = 3; //$clog2(NBIT_DATA); 
+parameter LEN_DATA = 3;				   	//$clog2(NBIT_DATA); 
 parameter NUM_TICKS = 16;
-parameter LEN_NUM_TICKS = 4; //$clog2(NUM_TICKS); 
+parameter LEN_NUM_TICKS = 4;				//$clog2(NUM_TICKS); 
 
 input clk;
-//input reset;
 input tx_start;
 input tick;
 input [NBIT_DATA-1:0] data_in;
@@ -72,7 +58,8 @@ begin
 		case (state)
 			IDLE:
 				begin
-					//tx_reg = 1'b1; // avisa que esta en idle. parece que no es necesario pq esta inicializado arriba
+					tx_reg = 1'b1; // avisa que esta en idle
+					tx_done_tick=1'b0;
 					if (tx_start) // cuando la interfaz me dice q empiece, empiezo
 					begin
 						state = START;
@@ -136,10 +123,10 @@ begin
 					state = IDLE; 
 					tick_counter = 0; 
 					num_bits = 0; 
-					buffer = 0; // no sabemos si va en stop o no ???????????
+					buffer = 0;
 					tx_reg = 1'b1;
 				end
-		endcase
+	endcase
 	end
 end
 endmodule
