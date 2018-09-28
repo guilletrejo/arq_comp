@@ -38,7 +38,7 @@ module TOP
 	wire [`LEN_DATA-1 : 0]win;
 	wire [`LEN_DATA-1 : 0]winB;
 	wire [`LEN_DATA-1 : 0]wout;
-	wire [1 : 0]wopout;
+	wire [5 : 0]wopout;
 	wire [`LEN_DATA-1 : 0]connect_data_tx;
 	wire [`LEN_DATA-1 : 0]connect_data_rx;
 	wire connect_tx_start;

@@ -26,30 +26,50 @@ module t(
 		tout
     );
 	 
-	 input [7:0] in;
+	 input signed [7:0] in;
 	 input [7:0] inB;
-	 input [1:0] inOp;
+	 input [5:0] inOp;
 	 
 	 output reg [7:0] tout;
 	 
 	 always @*
 	 begin
 		case(inOp)
-			2'b00:
+			6'b100000:
 			begin
 				tout = in + inB;
 			end
-			2'b01:
+			6'b100010:
 			begin
 				tout = in - inB;
 			end
-			2'b10:
+			6'b100100:
 			begin
 				tout = in & inB;
 			end
-			2'b11:
+			6'b100101:
 			begin
 				tout = in | inB;
+			end
+			6'b100110:
+			begin
+				tout = in ^ inB;
+			end
+			6'b000011:
+			begin
+				tout = in >>> inB;
+			end
+			6'b000010:
+			begin
+				tout = in >> inB;
+			end
+			6'b100111:
+			begin
+				tout = ~(in | inB);
+			end
+			default:
+			begin
+				tout = 0;
 			end
 		endcase
 	 end

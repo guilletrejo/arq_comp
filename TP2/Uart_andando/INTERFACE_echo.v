@@ -32,7 +32,7 @@ module INTERFACE_echo
  	//input [NBIT_DATA_LEN-1:0] alu_data_in, 	// Resultado de la ALU para pasarlo al TX 
  	output reg [NBIT_DATA_LEN-1 : 0] aout,
 	output reg [NBIT_DATA_LEN-1 : 0] bout,
-	output reg [1: 0] opout,
+	output reg [5: 0] opout,
 	output reg tx_start = 0,				// LA INTERFAZ le tiene que avisar a TX cuando empezar
 	// registros para escribir en la ALU
 	//output reg [NBIT_DATA_LEN-1 : 0] A,		
@@ -56,7 +56,7 @@ module INTERFACE_echo
 	//reg [NBIT_DATA_LEN-1:0] reg_in_next;
 	reg [NBIT_DATA_LEN-1:0] reg_aout_next;
 	reg [NBIT_DATA_LEN-1:0] reg_bout_next;
-	reg [1:0] reg_opout_next;
+	reg [5:0] reg_opout_next;
 	reg [NBIT_DATA_LEN-1:0] reg_data_out_next;
 	
 	//reg mandar=0;
