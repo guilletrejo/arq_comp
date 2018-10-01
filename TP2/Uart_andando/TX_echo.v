@@ -1,34 +1,48 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-//	Alumnos:
-//					 Ortmann, Nestor Javier
-// 				 Trejo, Bruno Guillermo
-// Year: 		 2018
-// Module Name: TX
+// Company: 
+// Engineer: 
+// 
+// Create Date: 09/12/2017 08:21:19 PM
+// Design Name: 
+// Module Name: receiver
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
 //////////////////////////////////////////////////////////////////////////////////
 
 
 `define NBIT_DATA_LEN 8
 
-module TX
+module TX_echo
 (
-	// inputs
-	clk,
-	tx_start,	// Inicio de la transmision
+	// input
+	clk,			//??
+	//reset,			//?
+	tx_start,		// Inicio de la transmision
 	tick,			// clock salida del br_gen
 	data_in,		// resultado de la ALU que me lo pasa la interfaz
 
-	// outputs
+	// output
 	tx_done_tick,	// fin de la transmision (se lo manda a la interfaz)
 	tx_bit			// el dato que se transmite
 );
 
 parameter NBIT_DATA = `NBIT_DATA_LEN;	// largo del dato
-parameter LEN_DATA = 3;				   	//$clog2(NBIT_DATA); 
+parameter LEN_DATA = 3;//$clog2(NBIT_DATA); 
 parameter NUM_TICKS = 16;
-parameter LEN_NUM_TICKS = 4;				//$clog2(NUM_TICKS); 
+parameter LEN_NUM_TICKS = 4;//$clog2(NUM_TICKS); 
 
 input clk;
+//input reset;
 input tx_start;
 input tick;
 input [NBIT_DATA-1:0] data_in;
@@ -49,7 +63,15 @@ reg [LEN_DATA - 1:0] num_bits=0;
 reg [NBIT_DATA - 1:0] buffer=0;
 reg tx_reg=1'b1;
 
+//inicializacion
 assign tx_bit = tx_reg;
+//state = IDLE;
+//tick_counter <= 0;
+//num_bits <= 0;
+//buffer <= 0;
+//tx_done_tick <= 1'b0;
+//tx_reg <= 1'b1; 
+//~inicializacion
 
 always @(posedge clk)
 begin
@@ -64,9 +86,9 @@ begin
 					begin
 						state = START;
 						tick_counter = 0;
-						buffer = data_in;	
-					end
-				end
+						buffer = data_in;	//10101100
+					end			 //10011010 	//00110101
+				end				 //10101101
 			START:
 				begin
 					tx_reg = 1'b0; // soy yo (Tx) quien tengo que avisar que empieza la trama
@@ -123,7 +145,7 @@ begin
 					state = IDLE; 
 					tick_counter = 0; 
 					num_bits = 0; 
-					buffer = 0;
+					buffer = 0; // no sabemos si va en stop o no ???????????
 					tx_reg = 1'b1;
 				end
 	endcase

@@ -1,54 +1,73 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Author:
-//			   Nestor Ortmann
-//				Guillermo Trejo
-// 
-// Create Date:    16:33:07 09/05/2018 
-// Design Name: 
-// Module Name:    ALU 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
-//
-// Dependencies: 
-//
-// Revision: 
-// Revision 0.01 - File Created
-// Additional Comments: 
-//
+//	Alumnos:
+//					 Ortmann, Nestor Javier
+// 				 Trejo, Bruno Guillermo
+// Year: 		 2018
+// Module Name: ALU
 //////////////////////////////////////////////////////////////////////////////////
-module ALU
 
- #(parameter bits = 8)
- 
- (
-  input signed [5:0] Op, 
-  input signed [bits-1:0] A, 
-  input signed [bits-1:0] B, 
-  output reg [bits-1:0] out
-  );
- 
- 
-always @(*)
-begin
-	 case (Op)
-		6'b100000 : out = A + B; // ADD
-		6'b100010 : out = A - B; // SUB
-		6'b100100 : out = A & B; // AND
-		6'b100101 : out = A | B; // OR
-		6'b100110 : out = A ^ B; // XOR
-		6'b000011 : out = A >>> B; // SRA
-		6'b000010 : out = A >> B; // SRL
-		6'b100111 : out = ~(A | B); // NOR
-		default : out = 0;
-	 endcase
-end
+`define lenghtIN 8
+`define lenghtOP 6
 
-
-    
+module ALU(
+		inA,
+		inB,
+		inOp,
+		
+		RESULT_OUT
+    );
+	 
+	 parameter lenghtIN = `lenghtIN; 	
+	 parameter lenghtOP = `lenghtOP;
+	 
+	 input signed [lenghtIN - 1 : 0] inA;
+	 input [lenghtIN - 1 : 0] inB;
+	 input [lenghtOP - 1 : 0] inOp;
+	 
+	 output reg [7:0] RESULT_OUT;
+	 
+	 always @*
+	 begin
+		case(inOp)
+			6'b100000:
+			begin
+				RESULT_OUT = inA + inB;
+			end
+			6'b100010:
+			begin
+				RESULT_OUT = inA - inB;
+			end
+			6'b100100:
+			begin
+				RESULT_OUT = inA & inB;
+			end
+			6'b100101:
+			begin
+				RESULT_OUT = inA | inB;
+			end
+			6'b100110:
+			begin
+				RESULT_OUT = inA ^ inB;
+			end
+			6'b000011:
+			begin
+				RESULT_OUT = inA >>> inB;
+			end
+			6'b000010:
+			begin
+				RESULT_OUT = inA >> inB;
+			end
+			6'b100111:
+			begin
+				RESULT_OUT = ~(inA | inB);
+			end
+			default:
+			begin
+				RESULT_OUT = 0;
+			end
+		endcase
+	 end
 
 
 endmodule

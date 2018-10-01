@@ -1,22 +1,10 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 09/06/2018 04:36:02 PM
-// Design Name: 
-// Module Name: uart
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+//	Alumnos:
+//					 Ortmann, Nestor Javier
+// 				 Trejo, Bruno Guillermo
+// Year: 		 2018
+// Module Name: UART
 //////////////////////////////////////////////////////////////////////////////////
 
 module UART
@@ -27,11 +15,10 @@ module UART
 	parameter CLK_RATE = 50000000
 )
 (
-	input CLK, 	// clock de la FPGA
-	//input reset, // ver para queeeeeeeeeeeeeeee
+	input CLK, 								  // clock de la FPGA
 	input tx_start,
 	input rx_bit,
-	input [NBIT_DATA-1 : 0] data_in, // entrada del TX desde la interfaz (interfaz escribe en TX)
+	input [NBIT_DATA-1 : 0] data_in,   // entrada del TX desde la interfaz (interfaz escribe en TX)
 
 	output [NBIT_DATA-1 : 0] data_out, // salida del RX que va hacia la interfaz (interfaz recibe de TX)
 	output rx_done_tick,
@@ -58,7 +45,6 @@ module UART
 
     TX #(.NBIT_DATA(NBIT_DATA), .NUM_TICKS(NUM_TICKS)) 
     tx (.clk(CLK),
-		//.reset(reset),
 		.tx_start(tx_start),
 		.tick(connect_baud_rate_rx_tx),
 		.data_in(data_in),

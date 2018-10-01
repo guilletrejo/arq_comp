@@ -32,7 +32,7 @@ module TX_echo
 	data_in,		// resultado de la ALU que me lo pasa la interfaz
 
 	// output
-	//tx_done_tick,	// fin de la transmision (se lo manda a la interfaz)
+	tx_done_tick,	// fin de la transmision (se lo manda a la interfaz)
 	tx_bit			// el dato que se transmite
 );
 
@@ -47,7 +47,7 @@ input tx_start;
 input tick;
 input [NBIT_DATA-1:0] data_in;
 
-//output reg tx_done_tick=1'b0;
+output reg tx_done_tick=1'b0;
 output tx_bit;
 
 // Declaracion de estados
@@ -80,7 +80,8 @@ begin
 		case (state)
 			IDLE:
 				begin
-					//tx_reg = 1'b1; // avisa que esta en idle
+					tx_reg = 1'b1; // avisa que esta en idle
+					tx_done_tick=1'b0;
 					if (tx_start) // cuando la interfaz me dice q empiece, empiezo
 					begin
 						state = START;
@@ -131,7 +132,7 @@ begin
 						state = IDLE;
 						tick_counter = 0;
 						num_bits = 0;
-						//tx_done_tick = 1'b1;
+						tx_done_tick = 1'b1;
 					end
 					else 
 					begin
