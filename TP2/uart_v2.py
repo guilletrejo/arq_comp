@@ -70,6 +70,7 @@ print (ser.name)
 
 a = getOperando()
 b = getOperando()
+#c = getOperando()
 op = getOperador()
 
 print(" a = {} \n b = {} \n op = {}".format(bin(a),bin(b),bin(op)))
@@ -77,6 +78,7 @@ print(" a = {} \n b = {} \n op = {}".format(bin(a),bin(b),bin(op)))
 sent = ser.write(chr(a))
 sent = ser.write(chr(b))
 sent = ser.write(chr(op))
+#sent = ser.write(chr(c))
 
 x = ser.read()         
 
