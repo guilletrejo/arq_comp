@@ -32,5 +32,18 @@ Signal extension -> si es negativo va a tener un 1 en el bit 10, copia ese 1 a l
 
 Hay cosas que deben hacerse en el flanco de subida, y otras en el de bajada. Porque sino no llego man
 
+CONCLUSIONES
 
+por que en el bloque always del instruction decoder se hace todo al mismo tiempo con <= ??? Esto no haria quilombos?
+porque es un combinacional, y no va a pasar nada hasta que en el ACC y en la memoria no aparezca el clk.
+
+
+PREGUNTAR
+
+Hay que poner el clock solo en las que, en el diagrama, aparecen con clock? (Por ej.
+en el pc_adder iria un clock????)
+
+Hay que hacer test_bench?
+
+Por que hay 2 bits separados para R/W ?? Por que no uno solo? -> RESPUESTA: porque hay momentos en que no escribis ni lees.
 
