@@ -4,9 +4,9 @@
 //					 Ortmann, Nestor Javier
 // 				 Trejo, Bruno Guillermo
 // Year: 		 2018
-// Module Name: PC
+// Module Name: MEMORIA DE PROGRAMA
 //////////////////////////////////////////////////////////////////////////////////
-module PC(
+module PROGRAM_MEM(
     );
 
 
