@@ -1,0 +1,36 @@
+Por que no es una arquitectura load/store?
+
+Porque en una arq. load/store las operaciones DEBEN realizarse
+entre registros, lo que obliga a traer datos de la memoria a los
+registros internos, y operar entre ellos.
+
+En el BIP, se puede operar entre el ACC y la memoria directamente,
+sin tener que copiar el dato de la memoria a registro.
+
+Las memorias TIENEN que ser sincronas (grabar/leer con el CLOCK)!!
+
+Como implementar las memorias? un switch case para read y write,
+indexar un vector.!
+
+CPU <-> DEBUGGER <-> UART
+
+Ultima instruccion del programa si o si es halt.
+
+El CPU al iniciar no tiene que empezar a operar, tiene que esperar
+que desde UART se le indique (a traves del debugger) que empiece y ahi recien comienza
+a leer las instrucciones y aumentar el PC.
+
+Al ultimo, el CPU tiene que enviar, a traves del debugger, a UART:
+. el valor del acumulador
+. el conteo de ciclos de clock ejecutados (agregar un modulo contador para contar los ciclos)
+
+La cantidad de ciclos de clk tiene que ser igual al valor final del PC (para asegurarse
+que sea monociclo.)
+
+Signal extension -> si es negativo va a tener un 1 en el bit 10, copia ese 1 a los bits 11-15
+                    si es positivo va a tener un 0, llena con ceros.
+
+Hay cosas que deben hacerse en el flanco de subida, y otras en el de bajada. Porque sino no llego man
+
+
+
