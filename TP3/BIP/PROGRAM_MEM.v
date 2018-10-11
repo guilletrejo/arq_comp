@@ -28,7 +28,6 @@ module PROGRAM_MEM
 	 initial
 	 begin
 		$readmemh(init_file,instruccion_ram);
-	
 	 end
 
     always @(posedge clk)   // Podria ser negedge??

@@ -10,14 +10,15 @@ module CONTROL
     #(
         parameter len_data = 16,
         parameter len_addr = 11,
-        parameter len_mux_a = 2
+        parameter len_mux_a = 2,
+		  parameter len_opcode = 5
     )
     (
         input clk,
         input reset,
         input [len_data-1:0] Data,
 
-        output Addr,
+        output [len_addr-1:0]Addr,
         output [len_mux_a-1:0] SelA,
         output SelB,
         output WrAcc,
@@ -30,8 +31,8 @@ module CONTROL
     wire [len_addr-1:0] conn_pcout_adderin; //salida del pc, entrada del pc_adder
     wire [len_addr-1:0] conn_adderout_pcin; //salida del pc_adder, entrada del pc
     wire conn_WrPC;                         //enable del pc
-    wire conn_Data_Operand;                 //operando que sale de la instruccion
-    wire conn_Data_Opcode;                  //opcode que sale de la instruccion
+    wire [len_addr-1:0]conn_Data_Operand;                 //operando que sale de la instruccion
+    wire [len_opcode-1:0]conn_Data_Opcode;  //opcode que sale de la instruccion
 
     assign conn_Data_Operand = Data [len_addr-1:0]; 
     assign conn_Data_Opcode = Data [len_data-1:len_addr];
@@ -39,7 +40,7 @@ module CONTROL
     assign Addr = conn_pcout_adderin;
 
     INSTRUCTION_DECODER #(
-        .len_opcode(3),
+        .len_opcode(len_opcode),
         .len_mux_a(len_mux_a)
     )
         u_instruction_decoder(
@@ -55,7 +56,7 @@ module CONTROL
         );
     
     PC #(
-        .len_data(len_data)
+        .len_addr(len_addr)
     )
         u_pc(
             .clk(clk),
@@ -67,7 +68,7 @@ module CONTROL
         );
 
     PC_ADDER #(
-        .len_data(len_data),
+        .len_addr(len_addr),
         .sumando(1)
     )
         u_pc_adder(

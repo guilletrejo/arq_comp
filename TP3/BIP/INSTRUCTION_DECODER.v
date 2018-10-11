@@ -6,7 +6,7 @@
 // Year: 		 2018
 // Module Name: INSTRUCTION DECODER
 //////////////////////////////////////////////////////////////////////////////////
-`define len_opcode 3
+`define len_opcode 5
 module INSTRUCTION_DECODER
     #
     (
@@ -31,7 +31,7 @@ module INSTRUCTION_DECODER
     always @(*) // no tiene clock, es un combinacional
     begin
         case (Opcode)
-          `len_opcode'b 000: // Halt
+          `len_opcode'b 00000: // Halt
             begin
                 WrPC <= 0;  // Le dice al PC que deje de contar
                 SelA <= 0; 
@@ -41,7 +41,7 @@ module INSTRUCTION_DECODER
                 WrRam <= 0;
                 RdRam <= 0;
             end
-          `len_opcode'b 001: // Store Variable (DM[operand] ← ACC)
+          `len_opcode'b 00001: // Store Variable (DM[operand] ← ACC)
             begin
                 WrPC <= 1;
                 SelA <= 0;  // No le importa cual es SelA porque el valor ya esta en ACC
@@ -51,7 +51,7 @@ module INSTRUCTION_DECODER
                 WrRam <= 1; // Quiero escribir un valor en DATA_MEM
                 RdRam <= 0;
             end
-          `len_opcode'b 010: // Load Variable (ACC ← DM[operand])
+          `len_opcode'b 00010: // Load Variable (ACC ← DM[operand])
             begin
                 WrPC <= 1;
                 SelA <= 0;  // Va a poner la salida de DATA_MEM en el ACC
@@ -61,7 +61,7 @@ module INSTRUCTION_DECODER
                 WrRam <= 0; 
                 RdRam <= 1; // Quiero sacar (leer) un valor de DATA_MEM
             end
-          `len_opcode'b 011: // Load Immediate (ACC ← operand)
+          `len_opcode'b 00011: // Load Immediate (ACC ← operand)
             begin
                 WrPC <= 1;
                 SelA <= 1;  // Va a poner el valor del operando (ya extendido) en el ACC
@@ -71,7 +71,7 @@ module INSTRUCTION_DECODER
                 WrRam <= 0; // No accedo a memoria 
                 RdRam <= 0;
             end
-          `len_opcode'b 100: // Add Variable (ACC ← ACC + DM[operand])
+          `len_opcode'b 00100: // Add Variable (ACC ← ACC + DM[operand])
             begin
                 WrPC <= 1;
                 SelA <= 2;  // Ya hay algo en ACC, entonces sumo con lo que venga de DATA_MEM y lo guardo en ACC
@@ -81,7 +81,7 @@ module INSTRUCTION_DECODER
                 WrRam <= 0; 
                 RdRam <= 1; // Leo de memoria el segundo sumando
             end
-          `len_opcode'b 101: // Add Immediate (ACC ← ACC + operand)
+          `len_opcode'b 00101: // Add Immediate (ACC ← ACC + operand)
             begin
                 WrPC <= 1;
                 SelA <= 2;  // Ya hay algo en ACC, entonces sumo con el operando y lo guardo en ACC
@@ -91,7 +91,7 @@ module INSTRUCTION_DECODER
                 WrRam <= 0; // No accedo a memoria
                 RdRam <= 0; 
             end
-          `len_opcode'b 110: // Substract Variable (ACC ← ACC - DM[operand])
+          `len_opcode'b 00110: // Substract Variable (ACC ← ACC - DM[operand])
             begin
                 WrPC <= 1;
                 SelA <= 2;  // Ya hay algo en ACC, entonces le resto lo que venga de DATA_MEM y lo guardo en ACC
@@ -101,7 +101,7 @@ module INSTRUCTION_DECODER
                 WrRam <= 0; 
                 RdRam <= 1; // Leo de memoria el sustraendo
             end
-          `len_opcode'b 111: // Substract Immediate (ACC ← ACC - operand)
+          `len_opcode'b 00111: // Substract Immediate (ACC ← ACC - operand)
             begin
                 WrPC <= 1;
                 SelA <= 2;  // Ya hay algo en ACC, entonces le resto el operando y lo guardo en ACC
@@ -111,6 +111,16 @@ module INSTRUCTION_DECODER
                 WrRam <= 0; // No accedo a memoria
                 RdRam <= 0; 
             end 
+				default:
+				begin
+					 WrPC <= 0;
+					 SelA <= 0;  // Ya hay algo en ACC, entonces le resto el operando y lo guardo en ACC
+					 SelB <= 0;  // Selecciona el valor inmediato del operando
+					 WrAcc <= 0; // Se escribe en ACC el resultado de la resta
+					 Op <= 0;    // Op = 1 -> Resta
+					 WrRam <= 0; // No accedo a memoria
+					 RdRam <= 0; 
+				end
         endcase
     end
 
