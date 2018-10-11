@@ -8,14 +8,14 @@
 //////////////////////////////////////////////////////////////////////////////////
 module PC_ADDER
     #(
-        parameter len = 16,
+        parameter len_data = 16,
         parameter sumando = 1 // Valor con el que se incrementa el PC 
                               // (es 1 porque el largo del registro es 16, igual al largo de la instruccion)
     )
     (
-        input [len - 1 : 0] pc_actual, // salida del PC, instruccion que se leyo
+        input [len_data - 1 : 0] pc_actual, // salida del PC, instruccion que se leyo
 
-        output reg [len - 1 : 0] adder_out
+        output reg [len_data - 1 : 0] adder_out
     );
 
     /*
