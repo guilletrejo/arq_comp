@@ -11,14 +11,15 @@
 `define len_data 16
 `define len_opcode 5
 `define init_file "program.hex"
+`define ram_depth 2048
 module TOP
     #(
         parameter len_mux_a = `len_mux_a,
         parameter len_addr = `len_addr,
         parameter len_data = `len_data,
         parameter init_file = `init_file,
-        parameter ram_depth = 2048,
-		  parameter len_opcode = `len_opcode
+        parameter ram_depth = `ram_depth,
+		parameter len_opcode = `len_opcode
     )
     (
     input clk,

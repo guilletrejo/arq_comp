@@ -8,11 +8,11 @@
 //////////////////////////////////////////////////////////////////////////////////
 module SIGNAL_EXTENSION
     #(
-        len_data = 16,
-        len_addr = 11
+        parameter len_data = 16,
+        parameter len_addr = 11
     )
     (
-        input [len_addr - 1 : 0] inst_operand,     // Operando tomado de la instruccion (tiene 11 bits)
+        input signed [len_addr - 1 : 0] inst_operand,     // Operando tomado de la instruccion (tiene 11 bits)
 
         output reg [len_data - 1 : 0] out_operand  // Operando tomado de la instruccion ya extendido a 16
     );

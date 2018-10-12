@@ -4,15 +4,15 @@
 // Company: 
 // Engineer:
 //
-// Create Date:   16:27:55 10/11/2018
-// Design Name:   PROGRAM_MEM
-// Module Name:   /home/nestormann/Documents/arq_comp/TP3/BIP/pro_mem_tb.v
+// Create Date:   09:16:16 10/12/2018
+// Design Name:   SIGNAL_EXTENSION
+// Module Name:   /home/nestormann/Documents/arq_comp/TP3/BIP/signal_extension_tb.v
 // Project Name:  BIP
 // Target Device:  
 // Tool versions:  
 // Description: 
 //
-// Verilog Test Fixture created by ISE for module: PROGRAM_MEM
+// Verilog Test Fixture created by ISE for module: SIGNAL_EXTENSION
 //
 // Dependencies:
 // 
@@ -22,29 +22,29 @@
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
-module pro_mem_tb;
+module signal_extension_tb;
 
 	// Inputs
-	reg clk;
-	reg [10:0] Addr;
+	reg [10:0] inst_operand;
 
 	// Outputs
-	wire [15:0] Data;
+	wire [15:0] out_operand;
 
 	// Instantiate the Unit Under Test (UUT)
-	PROGRAM_MEM uut (
-		.clk(clk), 
-		.Addr(Addr), 
-		.Data(Data)
+	SIGNAL_EXTENSION uut (
+		.inst_operand(inst_operand), 
+		.out_operand(out_operand)
 	);
 
 	initial begin
 		// Initialize Inputs
-		clk = 0;
-		Addr = 0;
+		$monitor($time,inst_operand);
+		inst_operand = 0;
 
 		// Wait 100 ns for global reset to finish
-		#100;
+		#100 inst_operand=11'b10110001110;
+		#100 inst_operand=11'b00110001110;
+
         
 		// Add stimulus here
 
