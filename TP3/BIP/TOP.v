@@ -23,39 +23,35 @@ module TOP
     )
     (
     input clk,
-    input reset,
-
-    output [len_mux_a-1:0] SelA,
-    output SelB,
-    output WrAcc,
-    output Op,
-    output WrRam,
-    output RdRam,
-    output [len_addr-1:0]Operand
+    input reset
     );
 
-    wire [len_addr-1:0] conn_Addr;
+    wire [len_addr-1:0] conn_PROGRAM_MEM_Addr;
     wire [len_data-1:0] conn_Data;
+    wire conn_Rd;
+    wire conn_Wr;
+    wire [len_addr-1:0] conn_DATA_MEM_Addr;
+    wire [len_data-1:0] conn_Out_Data;
+    wire [len_data-1:0] conn_In_Data;
 
-    CONTROL #(
+
+    CPU #(
         .len_data(len_data),
         .len_addr(len_addr),
         .len_mux_a(len_mux_a),
-		  .len_opcode(len_opcode)
+		.len_opcode(len_opcode)
     )
-        u_control(
+        u_cpu(
             .clk(clk),
             .reset(reset),
             .Data(conn_Data),
+            .Out_Data(conn_Out_Data),
             
-            .Addr(conn_Addr),
-            .SelA(SelA),
-            .SelB(SelB),
-            .WrAcc(WrAcc),
-            .Op(Op),
-            .WrRam(WrRam),
-            .RdRam(RdRam),
-            .Operand(Operand)
+            .PROG_MEM_Addr(conn_PROGRAM_MEM_Addr),
+            .DATA_MEM_Addr(conn_DATA_MEM_Addr),
+            .Wr(conn_Wr),
+            .Rd(conn_Rd),
+            .In_Data(conn_In_Data)
         ); 
 
     PROGRAM_MEM #(
@@ -66,7 +62,7 @@ module TOP
     )
         u_program_mem(
             .clk(clk),
-            .Addr(conn_Addr),
+            .Addr(conn_PROGRAM_MEM_Addr),
 
             .Data(conn_Data)
         ); 

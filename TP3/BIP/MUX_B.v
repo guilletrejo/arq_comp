@@ -7,14 +7,14 @@
 // Module Name: MULTIPLEXOR B
 //////////////////////////////////////////////////////////////////////////////////
 module MUX_B #(
-        parameter len_data = 16,
+        parameter len_data = 16
     )
     (
         input SelB,                             // viene de Control (instruction decoder)
         input [len_data - 1 : 0] inst_operand,  // viene de signal extension
         input [len_data - 1 : 0] data_mem_out,  // salida de DATA_MEM
 
-        output [len_data - 1 : 0] out           // salida para ACC
+        output reg [len_data - 1 : 0] out           // salida para ACC
     );
 
     always @(*)

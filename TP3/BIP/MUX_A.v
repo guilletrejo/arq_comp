@@ -18,7 +18,7 @@ module MUX_A
         input [len_data - 1 : 0] alu_result,    // salida de la ALU
         input [len_data - 1 : 0] data_mem_out,  // salida de DATA_MEM
 
-        output [len_data - 1 : 0] out           // salida para ACC
+        output reg [len_data - 1 : 0] out           // salida para ACC
     );
 
     always @(*)
