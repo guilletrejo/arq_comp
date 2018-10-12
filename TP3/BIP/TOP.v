@@ -67,5 +67,20 @@ module TOP
             .Data(conn_Data)
         ); 
 
+    DATA_MEM #(
+        .len_data(len_data),
+        .len_addr(len_addr),
+        .ram_depth(ram_depth)
+    )
+        u_data_mem(
+            .clk(clk),
+            .Rd(conn_Rd),
+            .Wr(conn_Wr),
+            .Addr(conn_DATA_MEM_Addr),
+            .In_Data(conn_In_Data),
+
+            .Out_Data(conn_Out_Data)
+        );
+
 
 endmodule
