@@ -23,7 +23,11 @@ module TOP
     )
     (
     input clk,
-    input reset
+    input reset,
+	 
+	 //output hola1,
+	 output [len_data-1:0] acumulador,
+	 output [len_addr-1:0] pc
     );
 
     wire [len_addr-1:0] conn_PROGRAM_MEM_Addr;
@@ -33,7 +37,10 @@ module TOP
     wire [len_addr-1:0] conn_DATA_MEM_Addr;
     wire [len_data-1:0] conn_Out_Data;
     wire [len_data-1:0] conn_In_Data;
-
+	 
+	 //assign hola1= conn_Wr;
+	 assign acumulador= conn_In_Data;
+	 assign pc= conn_PROGRAM_MEM_Addr;
 
     CPU #(
         .len_data(len_data),

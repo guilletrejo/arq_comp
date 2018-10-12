@@ -54,13 +54,14 @@ module DATA_MEM_TB;
 		In_Data = 0;
 
 		// Wait 100 ns for global reset to finish
-		#10 	In_Data = 32;
+		#10 	In_Data = 37;
 		#10	Wr=1;
 		#50 	clk=1;
 		#10	Wr=0;
 		#50 	clk=0;
-				Addr=1;
+		#10	Rd=1;
 		#50 	clk=1;
+		#10	Rd=0;
 		// Add stimulus here
 
 	end
