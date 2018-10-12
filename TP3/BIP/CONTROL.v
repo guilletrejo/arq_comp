@@ -11,7 +11,7 @@ module CONTROL
         parameter len_data = 16,
         parameter len_addr = 11,
         parameter len_mux_a = 2,
-		  parameter len_opcode = 5
+		parameter len_opcode = 5
     )
     (
         input clk,
