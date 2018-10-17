@@ -1,0 +1,30 @@
+Test_Assembler_BIP
+/*
+
+LDI 10 (pone el 10 en ACC)
+STO 0  (pone lo que tiene ACC (10) en DATA_MEM, direccion 0)
+LDI 1  (pone el 1 en ACC)
+ADD 0  (suma lo que esta en DATA_MEM, direccion 0 (un 10) con
+		lo que esta en ACC (un 1) y lo guarda en ACC)
+
+*/
+
+Binario
+/*
+
+0001 1000 0000 1010
+0000 1000 0000 0000
+0001 1000 0000 0001
+0010 0000 0000 0000
+
+*/
+
+Hexa
+/*
+
+180A
+0800
+1801
+2000
+
+*/
