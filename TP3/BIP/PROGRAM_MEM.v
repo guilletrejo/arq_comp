@@ -8,20 +8,21 @@
 //////////////////////////////////////////////////////////////////////////////////
 module PROGRAM_MEM
     #(
-        parameter len_addr = 11,
-        parameter len_data = 16,
-		  parameter ram_depth= 2048,
-        parameter init_file = ""    //se le va a pasar el path 
+        parameter len_addr  = 11,
+        parameter len_data  = 16,
+		parameter ram_depth = 2048, // Cantidad de entradas de la memoria
+        parameter init_file = ""    // Se le va a pasar el path 
     )
     (
         input clk,
-        input [len_addr-1:0]Addr,     //direccion de la instruccion
+        input [len_addr-1:0] Addr,     // Direccion de la instruccion
 
-        output [len_data-1:0]Data     //contenido de la instruccion
+        output [len_data-1:0] Data     // Contenido de la instruccion
     );
-    //memoria de solo lectura
-    reg [len_data-1:0] instruccion_ram [ram_depth-1:0]; //vector de instrucciones(primero tamaño de registro, segundo depth)
-    reg [len_addr-1:0] Addr_reg;                  //contiene el valor de la direccion accedida
+
+    /* Memoria de solo lectura */
+    reg [len_data-1:0] instruccion_ram [ram_depth-1:0]; // Vector de instrucciones (primero tamaño de registro, segundo depth)
+    reg [len_addr-1:0] Addr_reg;                        // Guarda el valor de la direccion accedida
     
     assign Data = instruccion_ram[Addr_reg];
 	 

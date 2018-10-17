@@ -18,14 +18,14 @@ module CONTROL
         input reset,
         input [len_data-1:0] Data,
 
-        output [len_addr-1:0]Addr,
+        output [len_addr-1:0] Addr,
         output [len_mux_a-1:0] SelA,
         output SelB,
         output WrAcc,
         output Op,
         output WrRam,
         output RdRam,
-        output [len_addr-1:0]Operand
+        output [len_addr-1:0] Operand
     );
 
     wire [len_addr-1:0] conn_pcout_adderin; //salida del pc, entrada del pc_adder

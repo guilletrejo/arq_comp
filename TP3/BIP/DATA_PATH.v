@@ -10,7 +10,7 @@ module DATA_PATH
     #(
         parameter len_data = 16,
         parameter len_addr = 11,
-        parameter len_mux_a = 2,
+        parameter len_mux_a = 2
     )
     (
         input clk,
@@ -44,7 +44,7 @@ module DATA_PATH
             .inst_operand(inst_operand),
 
             .out_operand(conn_signExt_muxAB)
-        )
+        );
     
     MUX_A #(
         .len_data(len_data),
@@ -58,7 +58,7 @@ module DATA_PATH
             .data_mem_out(Out_Data),
 
             .out(conn_muxA_acc)
-        )
+        );
 
     MUX_B #(
         .len_data(len_data)
@@ -70,7 +70,7 @@ module DATA_PATH
             .data_mem_out(Out_Data),
 
             .out(conn_muxB_alu)
-        )
+        );
 
     ACC #(
         .len_data(len_data)
@@ -83,7 +83,7 @@ module DATA_PATH
             .ena(WrAcc),
 
             .out(conn_acc_alu)
-        )
+        );
 
     ALU #(
         .len_data(len_data)
@@ -94,6 +94,6 @@ module DATA_PATH
             .in_B(conn_muxB_alu),
             .Op(Op),
 
-            .out(conn_aluResult_muxA)
-        )
+            .result(conn_aluResult_muxA)
+        );
 endmodule
