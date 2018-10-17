@@ -11,7 +11,7 @@ module PROGRAM_MEM
         parameter len_addr  = 11,
         parameter len_data  = 16,
 		parameter ram_depth = 2048, // Cantidad de entradas de la memoria
-        parameter init_file = ""    // Se le va a pasar el path 
+        parameter init_file = "program.hex"    // Se le va a pasar el path 
     )
     (
         input clk,
