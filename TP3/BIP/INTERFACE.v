@@ -10,17 +10,20 @@
 module INTERFACE
 #(
 	parameter NBIT_DATA_LEN = 8, 		// buffer bits 
-	parameter NBIT_OP_LEN   = 6  		// op bits 
+	parameter len_data		= 16	// bits del acumulador
 ) 
 ( 
-	input [NBIT_DATA_LEN-1:0] in,    		// Dato del CPU (ACC1, ACC2, y CLK) para pasarlo al TX 
-	input clk,								// necesario para cambiar de estados
- 	input rx_done_tick,  			  		// fin de recepcion
-	input tx_done_tick,						// recibe la confirmacion desde UART que se termino de transimitir
+	input [NBIT_DATA_LEN-1:0] in_clk_count,  	// Dato del CPU (CLK) para pasarlo al TX
+	input [len_data-1:0] in_acc, 				// Dato del CPU (ACC) para pasarlo al TX
+	input clk,										// necesario para cambiar de estados
+ 	input rx_done_tick,  			  			// fin de recepcion
+	input tx_done_tick,							// recibe la confirmacion desde UART que se termino de transimitir
  	input [NBIT_DATA_LEN-1:0] rx_data_in,  	// Dato del RX recibido (si recibe un 1, significa CPU, START!)
+	input cpu_done,								// indica si cpu termino
 
 	//registros para escribir en la CPU
- 	output reg [NBIT_DATA_LEN-1 : 0] cpu_start,
+ 	output reg cpu_start,
+	//output reg cpu_reset,
 	
 	// LA INTERFAZ le tiene que avisar a TX cuando empezar
 	output reg tx_start = 0,
@@ -30,10 +33,11 @@ module INTERFACE
 ); 
 
 	// estados 
-	localparam	[1:0] RECEIVE 	= 2'b 00;
-	localparam	[1:0] SEND_ACC1	= 2'b 01;
-	localparam	[1:0] SEND_ACC2	= 2'b 10;
-	localparam	[1:0] SEND_CLK	= 2'b 11;
+	localparam	[2:0] RECEIVE 	= 2'b 000;
+	localparam  [2:0] PROCESSING = 2'b 001;
+	localparam	[2:0] SEND_ACC1	= 2'b 010;
+	localparam	[2:0] SEND_ACC2	= 2'b 011;
+	localparam	[2:0] SEND_CLK	= 2'b 100;
 	
 	// registros internos
 	reg [1:0] state = RECEIVE;
@@ -41,7 +45,8 @@ module INTERFACE
 	reg reg_tx_done_tick;
 	reg reg_rx_done_tick;
 	
-	reg [NBIT_DATA_LEN-1:0] reg_cpu_start_next;
+	reg reg_cpu_start_next;
+	//reg reg_cpu_reset_next;
 	reg [NBIT_DATA_LEN-1:0] reg_data_out_next;
 	
 	
@@ -56,6 +61,7 @@ module INTERFACE
 		state <= state_next;
 		
 		cpu_start <= reg_cpu_start_next;
+		//cpu_reset <= reg_cpu_reset_next;
 		data_out  <= reg_data_out_next;
 	end
 	
@@ -70,13 +76,25 @@ module INTERFACE
 		
 			RECEIVE:
 				begin
-					if((rx_done_tick == 1) && (reg_rx_done_tick == 0))
+					if((rx_done_tick == 1) && (reg_rx_done_tick == 0)) 
+					begin
+						state_next = PROCESSING;
+					end
+					else
+					begin
+						state_next = RECEIVE;
+					end
+				end
+
+			PROCESSING:
+				begin
+					if(cpu_done == 1) 
 					begin
 						state_next = SEND_ACC1;
 					end
 					else
 					begin
-						state_next = RECEIVE;
+						state_next = PROCESSING;
 					end
 				end
 		
@@ -119,8 +137,9 @@ module INTERFACE
 	end
 	
 	/* Logica de recepcion de datos de RX.
-		(bit de inicio para CPU -> cpu_s), y de envio de datos
-		a TX (resultado).*/
+		(bit de inicio para CPU -> cpu_start), y de envio de datos
+		a TX (ACC y CLK).
+	*/
 	always @(*)
 	begin
 
@@ -129,37 +148,38 @@ module INTERFACE
 			RECEIVE:
 			begin
 				tx_start = 1'b0;
-				reg_data_out_next = data_out;
-				reg_aout_next = rx_data_in; // recibo A
-				reg_bout_next = bout;
-				reg_opout_next = opout;
+				reg_data_out_next  = data_out;
+				reg_cpu_start_next = rx_data_in[0]; // recibo cpu_start
+				//reg_cpu_reset_next = reg_cpu_reset_next[1]; // recibo cpu_reset
+			end
+
+			PROCESSING:
+			begin
+				tx_start = 1'b0;
+				reg_cpu_start_next = 1'b0;
+				//reg_cpu_reset_next = 1'b0;
+				reg_data_out_next  = data_out;
 			end
 			
 			SEND_ACC1:
 			begin
-				tx_start = 1'b0;
-				reg_data_out_next = data_out;
-				reg_aout_next = aout;
-				reg_bout_next = rx_data_in; // recibo B
-				reg_opout_next = opout;
+				tx_start = 1'b1;					// habilito envio
+				reg_data_out_next = in_acc[7:0];	// envio ACC1
+				reg_cpu_start_next = cpu_start;
 			end
 			
 			SEND_ACC2:
 			begin
-				tx_start = 1'b0;
-				reg_data_out_next = data_out;
-				reg_aout_next = aout;
-				reg_bout_next = bout;
-				reg_opout_next = rx_data_in; // recibo Op
+				tx_start = 1'b1;				// habilito envio
+				reg_data_out_next = in_acc[15:8];			// envio ACC2
+				reg_cpu_start_next = cpu_start;
 			end
 			
 			SEND_CLK:
 			begin
-				tx_start = 1'b1;				  // habilito envio
-				reg_data_out_next = in;		  // envio RESULT_OUT
-				reg_aout_next = aout;
-				reg_bout_next = bout;
-				reg_opout_next = opout;
+				tx_start = 1'b1;			  // habilito envio
+				reg_data_out_next = in_clk_count;		  // envio CLK
+				reg_cpu_start_next = cpu_start;
 			end
 	
 		endcase

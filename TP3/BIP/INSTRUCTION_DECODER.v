@@ -25,7 +25,9 @@ module INSTRUCTION_DECODER
            el dato que esta en su entrada In_Data en la correspondiente direccion
            que esta en su entrada Addr. */
         output reg WrRam,
-        output reg RdRam
+        output reg RdRam,
+		  
+		  output reg cpu_done							 // indica que el CPU termino de procesar
     );
 
     always @(*) // no tiene clock, es un combinacional
@@ -40,6 +42,7 @@ module INSTRUCTION_DECODER
                 Op <= 0;
                 WrRam <= 0;
                 RdRam <= 0;
+					 cpu_done <= 1;
             end
           `len_opcode'b 00001: // Store Variable (DM[operand] ← ACC)
             begin
@@ -50,6 +53,7 @@ module INSTRUCTION_DECODER
                 Op <= 0;    // No importa porque no opero
                 WrRam <= 1; // Quiero escribir un valor en DATA_MEM
                 RdRam <= 0;
+					 cpu_done <= 0;
             end
           `len_opcode'b 00010: // Load Variable (ACC ← DM[operand])
             begin
@@ -60,6 +64,7 @@ module INSTRUCTION_DECODER
                 Op <= 0;    // No importa porque no opero
                 WrRam <= 0; 
                 RdRam <= 1; // Quiero sacar (leer) un valor de DATA_MEM
+					 cpu_done <= 0;
             end
           `len_opcode'b 00011: // Load Immediate (ACC ← operand)
             begin
@@ -70,6 +75,7 @@ module INSTRUCTION_DECODER
                 Op <= 0;    // No importa porque no opero
                 WrRam <= 0; // No accedo a memoria 
                 RdRam <= 0;
+					 cpu_done <= 0;
             end
           `len_opcode'b 00100: // Add Variable (ACC ← ACC + DM[operand])
             begin
@@ -80,6 +86,7 @@ module INSTRUCTION_DECODER
                 Op <= 0;    // Op = 0 -> Suma
                 WrRam <= 0; 
                 RdRam <= 1; // Leo de memoria el segundo sumando
+					 cpu_done <= 0;
             end
           `len_opcode'b 00101: // Add Immediate (ACC ← ACC + operand)
             begin
@@ -90,6 +97,7 @@ module INSTRUCTION_DECODER
                 Op <= 0;    // Op = 0 -> Suma
                 WrRam <= 0; // No accedo a memoria
                 RdRam <= 0; 
+					 cpu_done <= 0;
             end
           `len_opcode'b 00110: // Substract Variable (ACC ← ACC - DM[operand])
             begin
@@ -100,6 +108,7 @@ module INSTRUCTION_DECODER
                 Op <= 1;    // Op = 1 -> Resta
                 WrRam <= 0; 
                 RdRam <= 1; // Leo de memoria el sustraendo
+					 cpu_done <= 0;
             end
           `len_opcode'b 00111: // Substract Immediate (ACC ← ACC - operand)
             begin
@@ -110,6 +119,7 @@ module INSTRUCTION_DECODER
                 Op <= 1;    // Op = 1 -> Resta
                 WrRam <= 0; // No accedo a memoria
                 RdRam <= 0; 
+					 cpu_done <= 0;
             end 
 				default:
 				begin
@@ -120,6 +130,7 @@ module INSTRUCTION_DECODER
 					 Op <= 0;    // Op = 1 -> Resta
 					 WrRam <= 0; // No accedo a memoria
 					 RdRam <= 0; 
+					 cpu_done <= 0;
 				end
         endcase
     end

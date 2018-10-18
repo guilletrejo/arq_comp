@@ -24,7 +24,8 @@ module CPU
         output [len_addr - 1 : 0] DATA_MEM_Addr,
         output Rd,
         output Wr,
-        output [len_data - 1 : 0] In_Data   // Para escribir un dato en memoria
+        output [len_data - 1 : 0] In_Data,   // Para escribir un dato en memoria
+        output cpu_done
     );
 
     wire [len_mux_a - 1 : 0] conn_SelA;
@@ -52,7 +53,8 @@ module CPU
             .Op(conn_Op),
             .WrRam(Wr),
             .RdRam(Rd),
-            .Operand(conn_inst_operand)
+            .Operand(conn_inst_operand),
+            .cpu_done(cpu_done)
         );
 
     DATA_PATH #(

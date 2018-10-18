@@ -26,7 +26,8 @@ module CONTROL
         output Op,
         output WrRam,
         output RdRam,
-        output [len_addr-1:0] Operand
+        output [len_addr-1:0] Operand,
+        output cpu_done
     );
 
     wire [len_addr-1:0] conn_pcout_adderin; //salida del pc, entrada del pc_adder
@@ -53,7 +54,8 @@ module CONTROL
             .WrAcc(WrAcc),
             .Op(Op),
             .WrRam(WrRam),
-            .RdRam(RdRam)
+            .RdRam(RdRam),
+            .cpu_done(cpu_done)
         );
     
     PC #(
