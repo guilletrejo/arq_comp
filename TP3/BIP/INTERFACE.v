@@ -33,15 +33,15 @@ module INTERFACE
 ); 
 
 	// estados 
-	localparam	[2:0] RECEIVE 	= 2'b 000;
-	localparam  [2:0] PROCESSING = 2'b 001;
-	localparam	[2:0] SEND_ACC1	= 2'b 010;
-	localparam	[2:0] SEND_ACC2	= 2'b 011;
-	localparam	[2:0] SEND_CLK	= 2'b 100;
+	localparam	[2:0] RECEIVE 	= 3'b 000;
+	localparam  [2:0] PROCESSING = 3'b 001;
+	localparam	[2:0] SEND_ACC1	= 3'b 010;
+	localparam	[2:0] SEND_ACC2	= 3'b 011;
+	localparam	[2:0] SEND_CLK	= 3'b 100;
 	
 	// registros internos
-	reg [1:0] state = RECEIVE;
-	reg [1:0] state_next = RECEIVE;
+	reg [2:0] state = RECEIVE;
+	reg [2:0] state_next = RECEIVE;
 	reg reg_tx_done_tick;
 	reg reg_rx_done_tick;
 	
@@ -73,7 +73,6 @@ module INTERFACE
 	begin
 		
 		case(state)
-		
 			RECEIVE:
 				begin
 					if((rx_done_tick == 1) && (reg_rx_done_tick == 0)) 
@@ -133,6 +132,10 @@ module INTERFACE
 						state_next = SEND_CLK;
 					end
 				end
+			default:
+				begin
+					state_next = RECEIVE;
+				end
 		endcase
 	end
 	
@@ -179,6 +182,13 @@ module INTERFACE
 			begin
 				tx_start = 1'b1;			  // habilito envio
 				reg_data_out_next = in_clk_count;		  // envio CLK
+				reg_cpu_start_next = cpu_start;
+			end
+			
+			default:
+			begin
+				tx_start = 1'b0;			  // habilito envio
+				reg_data_out_next = data_out;		  // envio CLK
 				reg_cpu_start_next = cpu_start;
 			end
 	

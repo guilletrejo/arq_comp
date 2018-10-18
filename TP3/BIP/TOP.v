@@ -64,7 +64,7 @@ module TOP
             .reset(reset),
             .start(conn_cpu_start),
             
-            .count(clk_count)
+            .count(conn_clk_count)
         );
 
     CPU #(
@@ -78,14 +78,14 @@ module TOP
             .reset(reset),
             .Data(conn_Data),
             .Out_Data(conn_Out_Data),
-            .start(start),
+            .start(conn_cpu_start),
             
             .PROG_MEM_Addr(conn_PROGRAM_MEM_Addr),
             .DATA_MEM_Addr(conn_DATA_MEM_Addr),
             .Wr(conn_Wr),
             .Rd(conn_Rd),
             .In_Data(conn_In_Data),
-            .cpu_done(cpu_done)
+            .cpu_done(conn_cpu_done)
         ); 
 
     PROGRAM_MEM #(
@@ -127,7 +127,7 @@ module TOP
             .rx_done_tick(conn_rx_done_tick),
             .tx_done_tick(conn_tx_done_tick),
             .rx_data_in(conn_rx_data),
-            .cpu_done(cpu_done),
+            .cpu_done(conn_cpu_done),
 
             .cpu_start(conn_cpu_start),
             .tx_start(conn_tx_start),
