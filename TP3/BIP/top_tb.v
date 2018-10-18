@@ -29,27 +29,29 @@ module top_tb;
 	reg reset;
 
 	// Outputs
-	wire [15:0] acumulador;
-	wire [10:0] pc;
+	/*wire [15:0] acumulador;
+	wire [10:0] pc;*/
+	wire [7:0] led_acc;
 
 	// Instantiate the Unit Under Test (UUT)
 	TOP uut (
 		.clk(clk), 
 		.reset(reset), 
-		.acumulador(acumulador), 
-		.pc(pc)
+		.led_acc(led_acc)
+		//.acumulador(acumulador), 
+		//.pc(pc)
 	);
 
 	initial begin
 		// Initialize Inputs
 		$monitor($time,clk);
-		clk = 1;
+		clk = 0;
 		reset = 0;
 
 		// Wait 100 ns for global reset to finish
 		//#10 reset=1;
 		//#10 reset=0;
-		//#50 clk=1;
+		#50 clk=1;
 		#50 clk=0;
 		#50 clk=1;
 		//#10 reset=1;

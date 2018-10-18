@@ -30,6 +30,7 @@ module DATA_MEM
     
     always @(posedge clk)   // Podria ser negedge??
     begin
+		//Addr_reg <= Addr;
       if(Wr == 1 && Rd == 0)
         begin
           datos_ram[Addr] <= In_Data;
@@ -42,7 +43,11 @@ module DATA_MEM
 			begin
           Out_Data <= datos_ram[Addr_reg];
         end
-		Addr_reg <= Addr;
     end
+	 
+	 always@(*)
+	 begin
+		Addr_reg <= Addr;
+	 end
 
 endmodule

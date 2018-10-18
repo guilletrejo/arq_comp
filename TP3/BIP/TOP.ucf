@@ -1,0 +1,13 @@
+
+# PlanAhead Generated physical constraints 
+
+NET "led_acc[7]" LOC = G1;
+NET "led_acc[6]" LOC = P4;
+NET "led_acc[5]" LOC = N4;
+NET "led_acc[4]" LOC = N5;
+NET "led_acc[3]" LOC = P6;
+NET "led_acc[2]" LOC = P7;
+NET "led_acc[0]" LOC = M5;
+NET "reset" LOC = A7;
+NET "clk" LOC = B8;
+NET "led_acc[1]" LOC = M11;
