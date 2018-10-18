@@ -47,3 +47,6 @@ Hay que hacer test_bench?
 
 Por que hay 2 bits separados para R/W ?? Por que no uno solo? -> RESPUESTA: porque hay momentos en que no escribis ni lees.
 
+Cómo leer? Mostramos nticonuamente la salida?
+
+Como hacemos que no arranque hasta que se le indique?

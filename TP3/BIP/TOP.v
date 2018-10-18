@@ -27,7 +27,8 @@ module TOP
 	 
 	 //output hola1,
 	 output [len_data-1:0] acumulador,
-	 output [len_addr-1:0] pc
+	 //output [len_addr-1:0] pc,
+	 output [7:0] led_acc
     );
 
     wire [len_addr-1:0] conn_PROGRAM_MEM_Addr;
@@ -40,7 +41,8 @@ module TOP
 	 
 	 //assign hola1= conn_Wr;
 	 assign acumulador= conn_In_Data;
-	 assign pc= conn_PROGRAM_MEM_Addr;
+	 //assign pc= conn_PROGRAM_MEM_Addr;
+	 assign led_acc = acumulador[7:0];
 
     CPU #(
         .len_data(len_data),
