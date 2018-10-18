@@ -18,6 +18,7 @@ module CPU
         input reset,
         input [len_data - 1 : 0] Data,      // Instruccion de PROGRAM_MEM
         input [len_data - 1 : 0] Out_Data,  // Dato de DATA_MEM
+        input start,
 
         output [len_addr - 1 : 0] PROG_MEM_Addr, 
         output [len_addr - 1 : 0] DATA_MEM_Addr,
@@ -42,6 +43,7 @@ module CPU
             .clk(clk),
             .reset(reset),
             .Data(Data),
+				.start(start),
 
             .Addr(PROG_MEM_Addr),
             .SelA(conn_SelA),

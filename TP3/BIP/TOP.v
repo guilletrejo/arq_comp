@@ -12,6 +12,7 @@
 `define len_opcode 5
 `define init_file "program.hex"
 `define ram_depth 2048
+`define len_trama 8
 module TOP
     #(
         parameter len_mux_a = `len_mux_a,
@@ -19,15 +20,16 @@ module TOP
         parameter len_data = `len_data,
         parameter init_file = `init_file,
         parameter ram_depth = `ram_depth,
-		parameter len_opcode = `len_opcode
+		  parameter len_opcode = `len_opcode,
+		  parameter len_trama = `len_trama
     )
     (
     input clk,
     input reset,
+    input start,        //ahora para probar, debe ser un wire con la interfaz
 	 
-	 //output hola1,
 	 output [len_data-1:0] acumulador,
-	 //output [len_addr-1:0] pc,
+	 output [len_trama-1:0] clk_count,
 	 output [7:0] led_acc
     );
 
@@ -39,10 +41,19 @@ module TOP
     wire [len_data-1:0] conn_Out_Data;
     wire [len_data-1:0] conn_In_Data;
 	 
-	 //assign hola1= conn_Wr;
 	 assign acumulador= conn_In_Data;
-	 //assign pc= conn_PROGRAM_MEM_Addr;
-	 assign led_acc = acumulador[7:0];
+	 assign led_acc = clk_count;
+	 
+	 CLK_COUNTER #(
+        .len_counter(len_trama)
+    )
+        u_clk_counter(
+            .clk(clk),
+            .reset(reset),
+            .start(start),
+            
+            .count(clk_count)
+        );
 
     CPU #(
         .len_data(len_data),
@@ -55,6 +66,7 @@ module TOP
             .reset(reset),
             .Data(conn_Data),
             .Out_Data(conn_Out_Data),
+            .start(start),
             
             .PROG_MEM_Addr(conn_PROGRAM_MEM_Addr),
             .DATA_MEM_Addr(conn_DATA_MEM_Addr),

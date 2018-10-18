@@ -17,6 +17,7 @@ module CONTROL
         input clk,
         input reset,
         input [len_data-1:0] Data,
+        input start,
 
         output [len_addr-1:0] Addr,
         output [len_mux_a-1:0] SelA,
@@ -63,6 +64,7 @@ module CONTROL
             .ena(conn_WrPC),
             .adder_input(conn_adderout_pcin),
             .reset(reset),
+            .start(start),
 
             .pc_out(conn_pcout_adderin)
         );

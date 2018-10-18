@@ -15,20 +15,21 @@ module PC
         input ena,              // Enable para copiar valor de la entrada del PC a la salida
         input [len_addr-1:0]adder_input,      // Aumenta el valor del PC.
         input reset,            // Reinicia el PC a cero.
+        input start,            //Flag que habilita el comienzo de ejecucion
 
         output reg [len_addr-1 : 0] pc_out = 0 // Direccion que se leera de PROGRAM_MEM
     );
 
     always @(negedge clk) // Podria hacer posedge aca?
     begin
-      if(reset)
-      begin
-        pc_out = 0;
-      end
-      else if(ena)
-      begin
-        pc_out = adder_input;
-      end
+        if(reset)
+        begin
+          pc_out = 0;
+        end
+        else if(ena && start)
+        begin
+          pc_out = adder_input;
+        end
     end    
 
 endmodule
