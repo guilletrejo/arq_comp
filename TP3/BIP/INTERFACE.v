@@ -20,7 +20,7 @@ module INTERFACE
 	input tx_done_tick,							// recibe la confirmacion desde UART que se termino de transimitir
  	input [NBIT_DATA_LEN-1:0] rx_data_in,  	// Dato del RX recibido (si recibe un 1, significa CPU, START!)
 	input cpu_done,								// indica si cpu termino
-
+	input reset,
 	//registros para escribir en la CPU
  	output reg cpu_start,
 	//output reg cpu_reset,
@@ -63,6 +63,10 @@ module INTERFACE
 		cpu_start <= reg_cpu_start_next;
 		//cpu_reset <= reg_cpu_reset_next;
 		data_out  <= reg_data_out_next;
+		if(reset)
+		begin
+			state<=RECEIVE;
+		end
 	end
 	
 	/* Logica de actualizacion de estados.
@@ -159,7 +163,7 @@ module INTERFACE
 			PROCESSING:
 			begin
 				tx_start = 1'b0;
-				reg_cpu_start_next = 1'b0;
+				reg_cpu_start_next = rx_data_in[1];
 				//reg_cpu_reset_next = 1'b0;
 				reg_data_out_next  = data_out;
 			end
@@ -168,28 +172,28 @@ module INTERFACE
 			begin
 				tx_start = 1'b1;					// habilito envio
 				reg_data_out_next = in_acc[7:0];	// envio ACC1
-				reg_cpu_start_next = cpu_start;
+				reg_cpu_start_next = rx_data_in[1];
 			end
 			
 			SEND_ACC2:
 			begin
 				tx_start = 1'b1;				// habilito envio
 				reg_data_out_next = in_acc[15:8];			// envio ACC2
-				reg_cpu_start_next = cpu_start;
+				reg_cpu_start_next = rx_data_in[1];
 			end
 			
 			SEND_CLK:
 			begin
 				tx_start = 1'b1;			  // habilito envio
 				reg_data_out_next = in_clk_count;		  // envio CLK
-				reg_cpu_start_next = cpu_start;
+				reg_cpu_start_next = rx_data_in[1];
 			end
 			
 			default:
 			begin
 				tx_start = 1'b0;			  // habilito envio
 				reg_data_out_next = data_out;		  // envio CLK
-				reg_cpu_start_next = cpu_start;
+				reg_cpu_start_next = rx_data_in[1];
 			end
 	
 		endcase

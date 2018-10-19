@@ -29,7 +29,7 @@ module TOP
     input RX_INPUT,
     //input start,        // ahora para probar, debe ser un wire con la interfaz
 	 
-    output [len_trama-1:0] TX_OUTPUT,
+    output TX_OUTPUT,
 	// output [len_data-1:0] acumulador,
 	// output [len_trama-1:0] clk_count,
 	output [len_trama-1:0] led_acc
@@ -54,15 +54,16 @@ module TOP
     wire [len_trama-1:0] conn_clk_count;
 	 
 	//assign acumulador= conn_In_Data;
-	assign led_acc = conn_clk_count;
-	 
+	assign led_acc [7:1] = conn_In_Data[7:1];
+	assign led_acc [0]= conn_cpu_start; 
 	CLK_COUNTER #(
         .len_counter(len_trama)
     )
         u_clk_counter(
             .clk(clk),
             .reset(reset),
-            .start(conn_cpu_start),
+            .done(conn_cpu_done),
+				.start(conn_cpu_start),
             
             .count(conn_clk_count)
         );
@@ -128,6 +129,7 @@ module TOP
             .tx_done_tick(conn_tx_done_tick),
             .rx_data_in(conn_rx_data),
             .cpu_done(conn_cpu_done),
+				.reset(reset),
 
             .cpu_start(conn_cpu_start),
             .tx_start(conn_tx_start),

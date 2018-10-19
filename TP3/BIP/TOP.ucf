@@ -8,3 +8,5 @@ NET "led_acc[3]" LOC = P6;
 NET "led_acc[2]" LOC = P7;
 NET "led_acc[1]" LOC = M11;
 NET "led_acc[0]" LOC = M5;
+NET "RX_INPUT" LOC = B9;
+NET "TX_OUTPUT" LOC = A9;

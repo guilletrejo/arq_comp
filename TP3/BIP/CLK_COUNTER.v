@@ -11,6 +11,7 @@ module CLK_COUNTER
         parameter len_counter = 8
     )
 	 (
+			input done,
 			input start,
 			input clk,
 			input reset,
@@ -24,7 +25,7 @@ module CLK_COUNTER
         begin
           count = 0;
         end
-        else if(start)
+        else if(start && ~done)
         begin
           count = count + 1;
         end
