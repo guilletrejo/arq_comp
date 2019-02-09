@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date:    10:30:39 02/07/2019 
+// Create Date:    09:01:29 02/08/2019 
 // Design Name: 
-// Module Name:    CONTROL 
+// Module Name:    z 
 // Project Name: 
 // Target Devices: 
 // Tool versions: 
@@ -18,8 +18,15 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module CONTROL(
+module z(
+		input [1:0] a,
+		input [1:0]b,
+		input [1:0]bb,
+		output [1:0] c
     );
+	 
+
+	assign c = a < b;
 
 
 endmodule
