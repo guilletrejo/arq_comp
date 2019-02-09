@@ -27,13 +27,13 @@ if __name__ == '__main__':
         outputFileName = sys.argv[sys.argv.index("-o")+1]
 	#Abrimos el archivo de salida, le escribimos el vector de inicializacion seguido de todas las instrucciones
     with open(outputFileName, "w+") as outFile:
-        outFile.write('memory_initialization_radix=16;\nmemory_initialization_vector=\n')
+        #outFile.write('memory_initialization_radix=16;\nmemory_initialization_vector=\n')
         for line in instructionList:
             separator = str()
 			#Si es la ultima linea, terminamos con ; sino terminamos con ,
             if line == instructionList[-1]:
-                separator = ';'
+                separator = ''
             else:
-                separator = ',\n'
+                separator = '\n'
             outFile.write(line+separator)
 			
