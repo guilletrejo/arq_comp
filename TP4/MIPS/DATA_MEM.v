@@ -20,14 +20,15 @@ module DATA_MEM
         input [len_addr-1:0] Addr,     // Direccion del dato a leer/escribir
         input [len_data-1:0] In_Data,  // Dato a escribir si Wr = 1
 
-        output reg [len_data-1:0] Out_Data // Contenido del dato leido si Rd = 1
+        output reg [len_data-1:0] Out_Data, // Contenido del dato leido si Rd = 1
+        output [len_data-1:0] douta_wire
     );
 
     /* Memoria Escritura/Lectura */
     reg [len_data-1:0] datos_ram [ram_depth-1:0]; // Vector de datos (primero tamaño de registro, segundo depth)
     reg [len_addr-1:0] Addr_reg=0;                // Guarda el valor de la direccion
     
-    //assign Out_Data = datos_ram[Addr_reg];
+    assign douta_wire = datos_ram[Addr_reg];
     
     always @(posedge clk)   // Podria ser negedge??
     begin

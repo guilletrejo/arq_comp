@@ -142,14 +142,14 @@ module TOP_MIPS#(
 			.reset(reset),
 			.in_pc_src({connect_flag_jump, connect_flag_jump_register, connect_branch_flag}),
 			.in_pc_jump(connect_in_pc_jump),
-			.in_pc_branch(connect_in_pc_branch_4_1),
+			.in_branch_address(connect_in_pc_branch_4_1),
 			.in_pc_register(connect_in_pc_jump_register),
 			.stall_flag(!connect_stall_flag),
 
 			.in_addr_debug(in_addr_mem_inst),
 			.debug_flag(debug_flag),
 			.in_ins_to_mem(in_ins_to_mem),
-			.wea_ram_inst(wea_ram_inst),
+			//.wea_ram_inst(wea_ram_inst),
 
 			.out_pc_branch(connect_in_pc_branch_1_2),
 			.out_instruction(connect_instruccion),
@@ -215,10 +215,10 @@ module TOP_MIPS#(
 			.memory_bus(connect_memory_bus_2_3),
 			.writeBack_bus(connect_writeBack_bus_2_3), 
 
-			.register_write_3_4(connect_writeBack_bus_3_4[1]),
-			.register_write_4_5(connect_out_writeBack_bus[1]),
-			.rd_3_4(connect_write_reg_3_4),
-			.rd_4_5(connect_write_reg_4_2),
+			.ex_mem_reg_write(connect_writeBack_bus_3_4[1]),
+			.mem_wb_reg_write(connect_out_writeBack_bus[1]),
+			.ex_mem_rd(connect_write_reg_3_4),
+			.mem_wb_rd(connect_write_reg_4_2),
 			.in_rs(connect_rs),
 
 			.in_mem_forw(connect_alu_out),

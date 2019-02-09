@@ -12,7 +12,7 @@ module IF_ID #(
 	) (
 	input clk,
 	input reset,
-	input in_pc_src, // viene de la unidad de control
+	input [2:0] in_pc_src, // viene de la unidad de control
 	input [len_data-1:0] in_pc_jump,
 	input [len_data-1:0] in_pc_register,
 	input [len_data-1:0] in_branch_address,
@@ -26,7 +26,7 @@ module IF_ID #(
 	output reg [len_data-1:0] out_pc_branch,
 	output [len_data-1:0] out_instruction,
 	output [len_data-1:0] out_pc,
-	output [len_data-1:0] out_adder,
+	//output [len_data-1:0] out_adder,
 	output reg out_halt_flag_if // para debug
     );
 
@@ -72,7 +72,7 @@ module IF_ID #(
 
 	INSTRUCTION_MEM #(
 		.len_addr(len_data),
-        .len_data(len_data),
+      .len_data(len_data),
 		.ram_depth(2048),
 		.init_file("program32.hex")
 		)

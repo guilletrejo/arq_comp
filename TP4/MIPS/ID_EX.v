@@ -73,7 +73,7 @@ module ID_EX #(
 
     assign stall_flag = (flush) ? (0) : (mux_control);
 
-	CONTROL #()
+	CONTROL
 		u_control(
 			.opcode(in_instruccion[31:26]),
 			.opcode_lsb(in_instruccion[5:0]),
