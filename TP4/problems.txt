@@ -1,0 +1,14 @@
+Addi no funcionan bien la actualizacion de registros si estan como primeras instrucciones (1 y 2)
+Ej:    addi 1, 2, 3
+       addi 4, 5, 6
+       addi 7, 8, 9  ---- recien esta instruccion funciona correctamente.
+Si se ponen 2 NOPS al principio, todo funciona.
+
+YA ANDA EL LOAD LOCO! ERA PORQUE LA ESCRITURA LA HACIA EN POSEDGE Y TENIA QUE SER EN NEGEDGE
+
+PERO NO ANDA EL ADD DESPUES DEL LW, VER ESO. TAMPOCO ANDA POR EJ.
+sw 3, 0(0)
+lw 2, 0(0) ----- hasta aca anda joya
+add 1, 1, 2 -- no anda o tampoco anda add 4, 1, 30 (no dependen de nada de lo anterior asi q tendria q andar)
+
+PROBLEMA ENCONTRADO: EN LA ALU, CUANDO DEBERIA HACER LA SUMA, ENTRA EN EL CASO DEL SHIFT LEFT!!!!!!!! POR ESO NO ANDABA LO DE ARRIBA.

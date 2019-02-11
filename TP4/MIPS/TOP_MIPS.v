@@ -29,14 +29,22 @@ module TOP_MIPS#(
 	input [len_data-1:0] in_ins_to_mem,
 	input wea_ram_inst,
 
+	output [len_data-1:0] out_reg0_recolector,
 	output [len_data-1:0] out_reg1_recolector,
+	output [len_data-1:0] out_reg2_recolector,
+	output [len_data-1:0] out_reg3_recolector,
+	output [len_data-1:0] out_reg4_recolector,
+	output [len_data-1:0] out_reg5_recolector,
+	output [len_data-1:0] out_reg6_recolector,
+	output [len_data-1:0] out_reg7_recolector,
+	
 	output [len_data-1:0] out_mem_wire,
 	output [len_data-1:0] out_pc,
 	output halt_flag,
-    output [(nb_Latches_1_2*8)-1:0] Latches_1_2, // pensar la longitud pq queda demasiados cables
-    output [(nb_Latches_2_3*8)-1:0] Latches_2_3, // pensar la longitud pq queda demasiados cables
-    output [(nb_Latches_3_4*8)-1:0] Latches_3_4, // pensar la longitud pq queda demasiados cables
-    output [(nb_Latches_4_5*8)-1:0] Latches_4_5 // pensar la longitud pq queda demasiados cables
+   output [32-1:0] Latches_1_2, // pensar la longitud pq queda demasiados cables
+   output [32-1:0] Latches_2_3, // pensar la longitud pq queda demasiados cables
+   output [32-1:0] Latches_3_4, // pensar la longitud pq queda demasiados cables
+   output [32-1:0] Latches_4_5 // pensar la longitud pq queda demasiados cables
 	);
 	// input CLK100MHZ,
 	// input SWITCH_RESET
@@ -61,7 +69,14 @@ module TOP_MIPS#(
 				   connect_write_data_3_4,
 				   connect_in_pc_branch_3_4,
 				   connect_in_pc_branch_4_1,
+				   connect_reg0_recolector,
 				   connect_reg1_recolector,
+				   connect_reg2_recolector,
+				   connect_reg3_recolector,
+				   connect_reg4_recolector,
+				   connect_reg5_recolector,
+				   connect_reg6_recolector,
+				   connect_reg7_recolector,
 				   connect_out_mem_wire,
 				   connect_out_pc;
 
@@ -92,46 +107,56 @@ module TOP_MIPS#(
 	     connect_halt_flag_4_5; 
 
 	assign connect_write_data_5_2 = (connect_out_writeBack_bus[0]) ? connect_read_data : connect_out_addr_mem;
+ 	//assign connect_write_data_5_2 = connect_read_data; //no se soluciona con esto, por lo q el problema no es el MUX
 
+	assign out_reg0_recolector = connect_reg0_recolector;
 	assign out_reg1_recolector = connect_reg1_recolector;
+	assign out_reg2_recolector = connect_reg2_recolector;
+	assign out_reg3_recolector = connect_reg3_recolector;
+	assign out_reg4_recolector = connect_reg4_recolector;
+	assign out_reg5_recolector = connect_reg5_recolector;
+	assign out_reg6_recolector = connect_reg6_recolector;
+	assign out_reg7_recolector = connect_reg7_recolector;
+	
 	assign out_mem_wire = connect_out_mem_wire;
 	assign out_pc = connect_out_pc;
 	assign halt_flag = connect_halt_flag_4_5;
 
-	assign Latches_1_2 = {	// 2 registros
-		connect_instruccion, // 32 bits
-		connect_in_pc_branch_1_2 // 32 bits
+	assign Latches_1_2 = {	// 2 registros			TOTAL 64 BITS
+		connect_instruccion // 32 bits
+		//connect_in_pc_branch_1_2 // 32 bits
 	};
-	assign Latches_2_3 = {	// 4 registros
-		{10{1'b 0}}, // 10 bits
-		connect_execute_bus, // 11 bits
-		connect_memory_bus_2_3, // 9 bits
-		connect_writeBack_bus_2_3, // 2 bits
+	assign Latches_2_3 = {	// 4 registros ...	TOTAL 128 BITS
+		//{10{1'b 0}}, // 10 bits
+		//connect_execute_bus, // 11 bits
+		//connect_memory_bus_2_3, // 9 bits
+		//connect_writeBack_bus_2_3, // 2 bits
 		{12{1'b 0}}, // 12 bits
 		connect_rd, // 5 bits
 		connect_rs, // 5 bits
 		connect_rt, // 5 bits
-		connect_shamt, // 5 bits
-		connect_sign_extend, // 32 bits
-		connect_in_pc_branch_2_3 // 32 bits
+		connect_shamt // 5 bits
+		//connect_sign_extend // 32 bits
+		//connect_in_pc_branch_2_3 // 32 bits
 	};
-	assign Latches_3_4 = {	// 4 registros
-		{15{1'b 0}}, // 15 bits
-		connect_memory_bus_3_4, // 9 bits
-		connect_writeBack_bus_3_4, // 2 bits
-		connect_write_reg_3_4, // 5 bits
-		connect_zero_flag, // 1 bit
-		connect_alu_out, // 32 bits
-		connect_in_pc_branch_3_4, // 32 bits
-		connect_reg2 // 32 bits
+	assign Latches_3_4 = {	// 4 registros			TOTAL 128 BITS
+		//{15{1'b 0}}, // 15 bits
+		//connect_memory_bus_3_4, // 9 bits
+		//connect_writeBack_bus_3_4, // 2 bits
+		//connect_write_reg_3_4, // 5 bits
+		//connect_zero_flag, // 1 bit
+		//connect_alu_out // 32 bits
+		//connect_in_pc_branch_3_4, // 32 bits
+		connect_reg1 // 32 bits
 	};
-	assign Latches_4_5 = {	// 3 registros
-		{24{1'b 0}}, // 24 bits
-		connect_halt_flag_4_5, // 1 bit
-		connect_write_reg_4_2, // 5 bits
-		connect_out_writeBack_bus, // 2 bits
-		connect_out_addr_mem, // 32 bits
-		connect_read_data // 32 bits
+	assign Latches_4_5 = {	// 3 registros			TOTAL 96 BITS
+		//{24{1'b 0}}, // 24 bits
+		//connect_halt_flag_4_5, // 1 bit
+		//connect_write_reg_4_2, // 5 bits
+		//connect_out_writeBack_bus, // 2 bits
+		//connect_out_addr_mem // 32 bits
+		//connect_read_data // 32 bits
+		//connect_reg2
 	};
 
 	IF_ID #(
@@ -182,7 +207,14 @@ module TOP_MIPS#(
 			.out_rs(connect_rs),
 			.out_shamt(connect_shamt),
 
+			.out_reg0_recolector(connect_reg0_recolector),
 			.out_reg1_recolector(connect_reg1_recolector),
+			.out_reg2_recolector(connect_reg2_recolector),
+			.out_reg3_recolector(connect_reg3_recolector),
+			.out_reg4_recolector(connect_reg4_recolector),
+			.out_reg5_recolector(connect_reg5_recolector),
+			.out_reg6_recolector(connect_reg6_recolector),
+			.out_reg7_recolector(connect_reg7_recolector),
 
 			.execute_bus(connect_execute_bus),
 			.flag_jump(connect_flag_jump),

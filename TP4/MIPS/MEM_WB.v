@@ -80,11 +80,11 @@ module MEM_WB #(
             .Addr(in_addr_mem),
             .In_Data(connect_mux_in_mem),
 		
-				.Out_Data(conn_out_mem),
+			.Out_Data(conn_out_mem),
 			.douta_wire(connect_out_mem_debug)
 			);
 
-	always @(posedge clk, posedge reset) 
+	always @(negedge clk, posedge reset)
 	begin
 
 		if(reset)

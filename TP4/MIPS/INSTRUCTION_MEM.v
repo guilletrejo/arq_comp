@@ -12,7 +12,7 @@ module INSTRUCTION_MEM
         parameter len_addr  = 32,
         parameter len_data  = 32,
 		parameter ram_depth = 2048, // Cantidad de entradas de la memoria
-        parameter init_file = "program32.hex"    // Se le va a pasar el path 
+        parameter init_file = "test2.hex"    // Se le va a pasar el path 
     )
     (
         input clk,

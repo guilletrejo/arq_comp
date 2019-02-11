@@ -20,7 +20,7 @@ module PC
         output reg [len_addr-1 : 0] pc_out = 0 // Direccion que se leera de INSTRUCTION_MEM
     );
 
-    always @(negedge clk) // Podria hacer posedge aca?
+    always @(posedge clk) // Podria hacer posedge aca?
     begin
         if(reset)
         begin

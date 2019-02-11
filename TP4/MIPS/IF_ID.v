@@ -74,7 +74,7 @@ module IF_ID #(
 		.len_addr(len_data),
       .len_data(len_data),
 		.ram_depth(2048),
-		.init_file("program32.hex")
+		.init_file("test2.hex")
 		)
 		u_instruction_mem(
 			.clk(clk),
@@ -100,7 +100,7 @@ module IF_ID #(
 		); 
 
 
-	always @(posedge clk, posedge reset) 
+	always @(negedge clk, posedge reset) 
 	begin
 		if(reset) begin
 			out_pc_branch <= 0;
@@ -108,7 +108,7 @@ module IF_ID #(
 		end
 
 		else begin
-			out_halt_flag_if <= connect_wire_douta;
+			out_halt_flag_if <= 0;//connect_wire_douta;
 
 			if (stall_flag | flush) 
 			begin

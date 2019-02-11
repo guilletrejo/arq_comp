@@ -33,19 +33,23 @@ module DATA_MEM
     always @(posedge clk)   // Podria ser negedge??
     begin
 		Addr_reg <= Addr;
-      if(Wr == 1 && Rd == 0)
-        begin
-          datos_ram[Addr] <= In_Data;
-        end
-      else if(Rd == 1 && Wr == 0)
+      if(Rd == 1 && Wr == 0)
         begin
           Out_Data <= datos_ram[Addr_reg];
         end
 		else
 			begin
-          Out_Data <= datos_ram[Addr_reg];
-        end
+			 Out_Data <= datos_ram[Addr_reg];
+			 end
     end
+	 
+	 always @(negedge clk)
+	 begin
+		 if(Wr == 1 && Rd == 0)
+			  begin
+				 datos_ram[Addr] <= In_Data;
+			  end
+	 end
 	 /*
 	 always@(*)
 	 begin
