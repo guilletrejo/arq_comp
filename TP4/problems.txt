@@ -12,3 +12,20 @@ lw 2, 0(0) ----- hasta aca anda joya
 add 1, 1, 2 -- no anda o tampoco anda add 4, 1, 30 (no dependen de nada de lo anterior asi q tendria q andar)
 
 PROBLEMA ENCONTRADO: EN LA ALU, CUANDO DEBERIA HACER LA SUMA, ENTRA EN EL CASO DEL SHIFT LEFT!!!!!!!! POR ESO NO ANDABA LO DE ARRIBA.
+
+test2
+
+21 = 3
+2 = 3
+3 ^ 5 -> 4 = 1
+3 or 6 -> 3 = 7
+3 + 1 -> 0 = 4
+
+test1
+
+1 - 3 -> 2 = -2
+2 and 5 -> 5 = 4
+2 or  6 -> 4 = -2
+2 + 2   -> 7 = -4 
+102=3
+0 = 3

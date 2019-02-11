@@ -156,7 +156,7 @@ module TOP_MIPS#(
 		//connect_out_writeBack_bus, // 2 bits
 		//connect_out_addr_mem // 32 bits
 		//connect_read_data // 32 bits
-		//connect_reg2
+		connect_reg2
 	};
 
 	IF_ID #(
