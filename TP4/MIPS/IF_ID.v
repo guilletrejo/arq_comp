@@ -52,6 +52,7 @@ module IF_ID #(
             .adder_out(conn_adder_pcmux),
             .branch_address(in_branch_address),
 			.jump_address(in_pc_jump),
+			.register(in_pc_register),
 
             .pc_out(conn_pcmux_pc)
 		); 
@@ -63,8 +64,8 @@ module IF_ID #(
             .clk(clk),
             .reset(reset),
             .PCWrite(stall_flag), //ver eso despues, la stall flag no deberia estar negada? SEMANTICA
-            .adder_input(conn_pcmux_pc),
-			//.In((connect_wire_douta)?(connect_pc_sumador_mem):(connect_mux_pc)),
+            //.adder_input(conn_pcmux_pc),
+			.adder_input((connect_wire_douta)?(conn_pc_adder_imem):(conn_pcmux_pc)),
 			
 			
             .pc_out(conn_pc_adder_imem)
@@ -80,11 +81,11 @@ module IF_ID #(
 			.clk(clk),
             .Addr(conn_pc_adder_imem),
 
-            .Data(conn_out_instruction)
+            .Data(conn_out_instruction),
 			//.reset(reset),
 			//.ena(stall_flag), // ver desues si hace falta
 			//.wea(wea_ram_inst),
-			//.wire_douta(connect_wire_douta),
+			.wire_douta(connect_wire_douta)
 			//.flush(flush),
 			//.douta(connect_out_instruction),
 			//.dina(in_ins_to_mem)
@@ -108,7 +109,7 @@ module IF_ID #(
 		end
 
 		else begin
-			out_halt_flag_if <= 0;//connect_wire_douta;
+			out_halt_flag_if <= connect_wire_douta;
 
 			if (stall_flag | flush) 
 			begin

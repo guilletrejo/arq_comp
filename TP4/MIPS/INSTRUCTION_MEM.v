@@ -18,7 +18,8 @@ module INSTRUCTION_MEM
         input clk,
         input [len_addr-1:0] Addr,     // Direccion de la instruccion
 
-        output [len_data-1:0] Data     // Contenido de la instruccion
+        output [len_data-1:0] Data,     // Contenido de la instruccion
+        output wire_douta
     );
 
     /* Memoria de solo lectura */
@@ -26,6 +27,7 @@ module INSTRUCTION_MEM
     reg [len_addr-1:0] Addr_reg;                        // Guarda el valor de la direccion accedida
     
     assign Data = instruccion_ram[Addr_reg];
+    assign wire_douta = &instruccion_ram[Addr][len_addr-1:len_addr-6]; // verifica si el Opcode es 111111 para hacer el halt
 	 
 	 initial
 	 begin
@@ -37,3 +39,4 @@ module INSTRUCTION_MEM
       Addr_reg <= Addr;   
     end
 endmodule
+ 

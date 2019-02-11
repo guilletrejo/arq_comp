@@ -69,6 +69,7 @@ module ID_EX #(
 								connect_out_wire_reg5,
 								connect_out_wire_reg6,
 								connect_out_wire_reg7,
+					connect_reg_jump_register,
 					connect_out_reg1,
 					connect_out_reg2;
 
@@ -79,7 +80,7 @@ module ID_EX #(
 	assign flag_jump_register = (flush) ? (0) : (connect_execute_bus[4]);
 	
 	assign out_pc_jump = (flush) ? (0) : ({in_pc_branch[31:28], {2'b 00, (in_instruccion[25:0])}}); // para que es el out_pc_jump???
-	assign out_pc_jump_register = (flush) ? (0) : (connect_out_wire_reg1);
+	assign out_pc_jump_register = (flush) ? (0) : (connect_reg_jump_register);
 
 	assign out_reg0_recolector = connect_out_wire_reg0; // para recolector en modo debug
 	assign out_reg1_recolector = connect_out_wire_reg1; // para recolector en modo debug
@@ -128,6 +129,7 @@ module ID_EX #(
 			.wire_read_data_5(connect_out_wire_reg5),
 			.wire_read_data_6(connect_out_wire_reg6),
 			.wire_read_data_7(connect_out_wire_reg7),
+			.reg_jump_register(connect_reg_jump_register),
 			.read_data_1(connect_out_reg1),
 			.read_data_2(connect_out_reg2)
 		);
