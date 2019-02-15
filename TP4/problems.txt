@@ -11,9 +11,17 @@ sw 3, 0(0)
 lw 2, 0(0) ----- hasta aca anda joya
 add 1, 1, 2 -- no anda o tampoco anda add 4, 1, 30 (no dependen de nada de lo anterior asi q tendria q andar)
 
-PROBLEMA ENCONTRADO: EN LA ALU, CUANDO DEBERIA HACER LA SUMA, ENTRA EN EL CASO DEL SHIFT LEFT!!!!!!!! POR ESO NO ANDABA LO DE ARRIBA.
+PROBLEMA ENCONTRADO: EN LA ALU, CUANDO DEBERIA HACER LA SUMA, ENTRA EN EL CASO DEL SHIFT LEFT!!!!!!!! POR ESO NO ANDABA LO DE ARRIBA. -->> Arreglado, era por mal codificacion.
 
-test2
+test2 ANDA
+
+sw 3, 20(1)
+lw 2, 20(1)
+and 4, 2, 5
+or 3, 2, 6
+addu 0, 4, 2
+slt 5, 6, 7
+END
 
 21 = 3
 2 = 3
@@ -21,7 +29,7 @@ test2
 3 or 6 -> 3 = 7
 3 + 1 -> 0 = 4
 
-test1
+test1 ANDA
 
 1 - 3 -> 2 = -2
 2 and 5 -> 5 = 4
@@ -29,3 +37,131 @@ test1
 2 + 2   -> 7 = -4 
 102=3
 0 = 3
+
+test3 ANDA
+
+sw 3, 100(2)
+jr 5
+addu 7, 2, 2
+subu 2, 1, 3
+lw 0, 100(2)
+addi 0, 0, 4
+and 5, 2, 5
+or 4, 6, 2
+END
+
+test4 ANDA BRANCH PERO EL LW no carga (AUN CON 0(0), TAMPOCO CARGA)
+
+sw 3, 1(0)
+addu 7, 2, 2
+beq 7, 0, 3
+subu 2, 1, 3
+lw 0, 1(0)
+addi 0, 0, 4
+and 5, 2, 5
+or 4, 6, 2
+END
+
+test6 -> para probar lo de que si branchea pero el PC suma 2 mas y recien ahi salta.
+
+sw 3, 1(0)
+addu 7, 2, 2
+bne 7, 0, 8
+subu 2, 1, 3
+addi 3, 3, 3
+addi 3, 0, 3
+addi 3, 0, 0
+addi 3, 0, 0
+lw 0, 1(0)
+addi 0, 0, 4
+and 5, 2, 5
+or 4, 6, 2
+END
+
+Test Anda con:
+
+- PC posedge
+- Ifid posedge
+- Idex neg
+- Exmeme neg
+- Memwb  pos
+- Reg    Rd pos y Wr neg
+- Datamem Rd pos y Wr neg
+- Instrmem pos
+
+ este anda incluso poniendo distintas bases y offset
+{
+sw 3, 0(0)
+and 4, 2, 5
+lw 2, 0(0)
+or 3, 2, 6
+addu 0, 4, 2
+slt 5, 6, 7
+END  
+} 
+ peeero con este codigo, el LW no anda, a menos que el sw y el lw tengan 0(0)
+{
+sw 3, 1(0)
+addu 7, 2, 2
+beq 7, 0, 3
+subu 2, 1, 3
+lw 0, 1(0)
+addi 0, 0, 4
+and 5, 2, 5
+or 4, 6, 2
+END
+}
+ y si dejo solo el beq entre sw y lw, anda bien con cualquier base y offset
+{
+sw 3, 1(0)
+beq 7, 0, 3
+lw 0, 1(0)
+addi 0, 0, 4
+and 5, 2, 5
+or 4, 6, 2
+END
+}
+ y si agrego una instruccion mas? nop, deja de andar
+{
+sw 3, 1(0)
+addu 7, 2, 2
+beq 7, 0, 3
+lw 0, 1(0)
+addi 0, 0, 4
+and 5, 2, 5
+or 4, 6, 2
+END
+}
+ y si la agrego abajo? nop
+{
+sw 3, 1(0)
+beq 7, 0, 3
+addu 7, 2, 2
+lw 0, 1(0)
+addi 0, 0, 4
+and 5, 2, 5
+or 4, 6, 2
+END
+}
+
+ y si saco el beq? sip
+{
+sw 3, 1(0)
+addu 7, 2, 2
+lw 0, 1(0)
+addi 0, 0, 4
+and 5, 2, 5
+or 4, 6, 2
+END
+}
+ y si pongo mas de una instruccion sin beq en el medio? SE ROMPEEEE
+{
+sw 3, 1(0)
+addu 7, 2, 2
+subu 2, 1, 3
+lw 0, 1(0)
+addi 0, 0, 4
+and 5, 2, 5
+or 4, 6, 2
+END
+}

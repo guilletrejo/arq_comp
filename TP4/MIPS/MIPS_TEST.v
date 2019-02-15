@@ -79,7 +79,7 @@ module MIPS_TEST;
 
 	initial begin
 		// Initialize Inputs
-		$monitor($time,out_mem_wire);
+		//$monitor($time,out_mem_wire, out_pc);
 		clk = 1;
 		reset = 1;
 		debug_flag = 0;

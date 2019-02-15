@@ -84,7 +84,7 @@ module MEM_WB #(
 			.douta_wire(connect_out_mem_debug)
 			);
 
-	always @(negedge clk, posedge reset)
+	always @(posedge clk, posedge reset)
 	begin
 
 		if(reset)

@@ -42,7 +42,6 @@ module IF_ID #(
 
     assign out_instruction = conn_out_instruction;
     assign out_pc = conn_pc_adder_imem;
-	// assign out_pc_branch = conn_adder_pcmux;
 
 	PC_MUX #(
 		.len_data(len_data)
@@ -64,7 +63,6 @@ module IF_ID #(
             .clk(clk),
             .reset(reset),
             .PCWrite(stall_flag), //ver eso despues, la stall flag no deberia estar negada? SEMANTICA
-            //.adder_input(conn_pcmux_pc),
 			.adder_input((connect_wire_douta)?(conn_pc_adder_imem):(conn_pcmux_pc)),
 			
 			
@@ -101,7 +99,7 @@ module IF_ID #(
 		); 
 
 
-	always @(negedge clk, posedge reset) 
+	always @(posedge clk, posedge reset) 
 	begin
 		if(reset) begin
 			out_pc_branch <= 0;

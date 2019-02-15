@@ -131,13 +131,13 @@ module TOP_MIPS#(
 		//connect_execute_bus, // 11 bits
 		//connect_memory_bus_2_3, // 9 bits
 		//connect_writeBack_bus_2_3, // 2 bits
-		{12{1'b 0}}, // 12 bits
-		connect_rd, // 5 bits
-		connect_rs, // 5 bits
-		connect_rt, // 5 bits
-		connect_shamt // 5 bits
+		//{12{1'b 0}}, // 12 bits
+		//connect_rd, // 5 bits
+		//connect_rs, // 5 bits
+		//connect_rt, // 5 bits
+		//connect_shamt // 5 bits
 		//connect_sign_extend // 32 bits
-		//connect_in_pc_branch_2_3 // 32 bits
+		connect_in_pc_branch_2_3 // 32 bits
 	};
 	assign Latches_3_4 = {	// 4 registros			TOTAL 128 BITS
 		//{15{1'b 0}}, // 15 bits
@@ -146,7 +146,7 @@ module TOP_MIPS#(
 		//connect_write_reg_3_4, // 5 bits
 		//connect_zero_flag, // 1 bit
 		//connect_alu_out // 32 bits
-		//connect_in_pc_branch_3_4, // 32 bits
+		//connect_in_pc_branch_3_4 // 32 bits
 		connect_reg1 // 32 bits
 	};
 	assign Latches_4_5 = {	// 3 registros			TOTAL 96 BITS
