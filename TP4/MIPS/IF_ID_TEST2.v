@@ -35,6 +35,7 @@ module IF_ID_TEST2;
 	reg [31:0] in_addr_debug;
 	reg debug_flag;
 	reg [31:0] in_ins_to_mem;
+	reg wea_ram_inst;
 
 	// Outputs
 	wire [31:0] out_pc_branch;
@@ -57,13 +58,14 @@ module IF_ID_TEST2;
 		.out_pc_branch(out_pc_branch), 
 		.out_instruction(out_instruction), 
 		.out_pc(out_pc), 
-		.out_halt_flag_if(out_halt_flag_if)
+		.out_halt_flag_if(out_halt_flag_if),
+		.wea_ram_inst(wea_ram_inst)
 	);
 
 	initial begin
 		// Initialize Inputs
 		$monitor($time,clk,out_pc,out_instruction);
-		clk = 0;
+		clk = 1;
 		reset = 0;
 		in_pc_src = 0;
 		in_pc_jump = 0;
@@ -73,19 +75,21 @@ module IF_ID_TEST2;
 		in_addr_debug = 0;
 		debug_flag = 0;
 		in_ins_to_mem = 0;
+		wea_ram_inst=0;
 
-		#200 clk=1;
 		#200 clk=0;
 		
 		#200 clk=1;
 		#200 clk=0;
-		
+		wea_ram_inst=1;
+		in_ins_to_mem = 'hac030000;
 		#200 clk=1;
 		#200 clk=0;
-		
+		wea_ram_inst=0;
 		#200 clk=1;
 		#200 clk=0;		
-		
+		wea_ram_inst=1;
+		in_ins_to_mem = 'hac033333;
 		#200 clk=1;
 		#200 clk=0;	
 		
