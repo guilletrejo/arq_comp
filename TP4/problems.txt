@@ -62,7 +62,7 @@ and 5, 2, 5
 or 4, 6, 2
 END
 
-test6 -> para probar lo de que si branchea pero el PC suma 2 mas y recien ahi salta.
+test6 -> para probar lo de que si branchea pero el PC suma 2 mas y recien ahi salta. ANDA
 
 sw 3, 1(0)
 addu 7, 2, 2
@@ -89,7 +89,7 @@ Test Anda con:
 - Datamem Rd pos y Wr neg
 - Instrmem pos
 
- este anda incluso poniendo distintas bases y offset
+1 este anda incluso poniendo distintas bases y offset
 {
 sw 3, 0(0)
 and 4, 2, 5
@@ -99,7 +99,7 @@ addu 0, 4, 2
 slt 5, 6, 7
 END  
 } 
- peeero con este codigo, el LW no anda, a menos que el sw y el lw tengan 0(0)
+2 peeero con este codigo, el LW no anda, a menos que el sw y el lw tengan 0(0)
 {
 sw 3, 1(0)
 addu 7, 2, 2
@@ -111,7 +111,7 @@ and 5, 2, 5
 or 4, 6, 2
 END
 }
- y si dejo solo el beq entre sw y lw, anda bien con cualquier base y offset
+3 y si dejo solo el beq entre sw y lw, anda bien con cualquier base y offset
 {
 sw 3, 1(0)
 beq 7, 0, 3
@@ -121,7 +121,7 @@ and 5, 2, 5
 or 4, 6, 2
 END
 }
- y si agrego una instruccion mas? nop, deja de andar
+4 y si agrego una instruccion mas? nop, deja de andar, incluso con 0(0)
 {
 sw 3, 1(0)
 addu 7, 2, 2
@@ -132,7 +132,7 @@ and 5, 2, 5
 or 4, 6, 2
 END
 }
- y si la agrego abajo? nop
+5 y si la agrego abajo? nop
 {
 sw 3, 1(0)
 beq 7, 0, 3
@@ -144,7 +144,7 @@ or 4, 6, 2
 END
 }
 
- y si saco el beq? sip
+6 y si saco el beq? sip
 {
 sw 3, 1(0)
 addu 7, 2, 2
@@ -154,7 +154,7 @@ and 5, 2, 5
 or 4, 6, 2
 END
 }
- y si pongo mas de una instruccion sin beq en el medio? SE ROMPEEEE
+7 y si pongo mas de una instruccion sin beq en el medio? SE ROMPEEEE, no anda ni con 0(0)
 {
 sw 3, 1(0)
 addu 7, 2, 2
