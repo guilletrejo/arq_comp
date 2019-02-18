@@ -21,7 +21,7 @@ module IF_ID #(
 	input [len_data-1:0] in_addr_debug,
 	input debug_flag,
 	input [len_data-1:0] in_ins_to_mem,
-	//input wea_ram_inst, POR QUE TIENEN ESTO??:?
+	input wea_ram_inst, // POR QUE TIENEN ESTO??:? PARA ESCRIBIR EN LA MEMORIA
 
 	output reg [len_data-1:0] out_pc_branch,
 	output [len_data-1:0] out_instruction,
@@ -62,9 +62,8 @@ module IF_ID #(
 		u_pc(
             .clk(clk),
             .reset(reset),
-            .PCWrite(stall_flag), //ver eso despues, la stall flag no deberia estar negada? SEMANTICA
-			.adder_input((connect_wire_douta)?(conn_pc_adder_imem):(conn_pcmux_pc)),
-			
+            .PCWrite(~stall_flag), //ver eso despues, la stall flag no deberia estar negada? SI
+				.adder_input((connect_wire_douta)?(conn_pc_adder_imem):(conn_pcmux_pc)),
 			
             .pc_out(conn_pc_adder_imem)
 			);
@@ -77,12 +76,13 @@ module IF_ID #(
 		)
 		u_instruction_mem(
 			.clk(clk),
+			.Wr(wea_ram_inst),
             .Addr(conn_pc_adder_imem),
+			.In_Data(in_ins_to_mem),
 
             .Data(conn_out_instruction),
 			//.reset(reset),
 			//.ena(stall_flag), // ver desues si hace falta
-			//.wea(wea_ram_inst),
 			.wire_douta(connect_wire_douta)
 			//.flush(flush),
 			//.douta(connect_out_instruction),

@@ -39,7 +39,7 @@ module DATA_MEM
         end
 		else
 			begin
-			 Out_Data <= datos_ram[Addr_reg];
+			    Out_Data <= datos_ram[Addr_reg];
 			 end
     end
 	 

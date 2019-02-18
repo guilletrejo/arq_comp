@@ -7,7 +7,7 @@
 // Module Name:  UNIDAD DE DEBUG
 //////////////////////////////////////////////////////////////////////////////////
 
-module INTERFACE
+module DEBUG_UNIT
 #(
 	parameter NBIT_DATA_LEN = 8, 		// buffer bits 
 	parameter len_data		= 32,	    // bits del acumulador
@@ -29,7 +29,7 @@ module INTERFACE
 	input tx_done_tick,						 // recibe la confirmacion desde UART que se termino de transimitir
  	input [NBIT_DATA_LEN-1:0] rx_data_in,  	 // Dato del RX recibido (si recibe un 1, significa CPU, START!)
 	output reg tx_start = 0,                 // LA INTERFAZ le tiene que avisar a TX cuando empezar
- 	output reg [NBIT_DATA_LEN-1:0] data_out  // para escribir en TX (para mandar ACC1, ACC2 y CLK)
+ 	output reg [NBIT_DATA_LEN-1:0] data_out  // para escribir en TX (para mandar las cosas del MIPS a la compu, por ejemplo el PC)
 ); 
 
 	// estados 
@@ -38,7 +38,7 @@ module INTERFACE
                      WAITING        = 3'b 010,
                      STEP_BY_STEP   = 3'b 011,
                      SENDING_DATA   = 3'b 100,
-                     CONTINUOUS      = 3'b 101;
+                     CONTINUOUS     = 3'b 101;
 
     localparam [2:0] SUB_INIT       = 3'b 000,
                      SUB_READ_1     = 3'b 001,
@@ -51,7 +51,7 @@ module INTERFACE
         Señales de comparacion con los datos que llegan desde la PC
     */
     localparam [7:0] StartSignal        = 8'b 00000001,
-                     ContinuousSignal    = 8'b 00000010,
+                     ContinuousSignal   = 8'b 00000010,
                      StepByStepSignal   = 8'b 00000011,
                      ReProgramSignal    = 8'b 00000101,
                      StepSignal         = 8'b 00000110;
@@ -165,7 +165,7 @@ module INTERFACE
                                 end
                             StepByStepSignal:
                                 begin
-                                  state = STATE_BY_STEP;
+                                  state = STEP_BY_STEP;
                                 end
                         endcase
 					end
