@@ -18,8 +18,8 @@ module IF_ID #(
 	input [len_data-1:0] in_branch_address,
 	input stall_flag,  // ??
 
-	input [len_data-1:0] in_addr_debug,
-	input debug_flag,
+	//input [len_data-1:0] in_addr_debug,
+	//input debug_flag,
 	input [len_data-1:0] in_ins_to_mem,
 	input wea_ram_inst, // POR QUE TIENEN ESTO??:? PARA ESCRIBIR EN LA MEMORIA
 

@@ -23,12 +23,12 @@ module TOP_MIPS#(
 
 	// para debug
 
-	input debug_flag,
-	input [len_data-1:0] in_addr_debug,
+	//input debug_flag,
+	//input [len_data-1:0] in_addr_debug,
 	input [len_data-1:0] in_addr_mem_inst,
 	input [len_data-1:0] in_ins_to_mem,
 	input wea_ram_inst,
-
+/*
 	output [len_data-1:0] out_reg0_recolector,
 	output [len_data-1:0] out_reg1_recolector,
 	output [len_data-1:0] out_reg2_recolector,
@@ -38,13 +38,13 @@ module TOP_MIPS#(
 	output [len_data-1:0] out_reg6_recolector,
 	output [len_data-1:0] out_reg7_recolector,
 	
-	output [len_data-1:0] out_mem_wire,
-	output [len_data-1:0] out_pc,
-	output halt_flag,
+	output [len_data-1:0] out_mem_wire,*/
+	output [len_data-1:0] out_pc
+	/*output halt_flag,
    output [32-1:0] Latches_1_2, // pensar la longitud pq queda demasiados cables
    output [32-1:0] Latches_2_3, // pensar la longitud pq queda demasiados cables
    output [32-1:0] Latches_3_4, // pensar la longitud pq queda demasiados cables
-   output [32-1:0] Latches_4_5 // pensar la longitud pq queda demasiados cables
+   output [32-1:0] Latches_4_5 // pensar la longitud pq queda demasiados cables*/
 	);
 	// input CLK100MHZ,
 	// input SWITCH_RESET
@@ -109,20 +109,20 @@ module TOP_MIPS#(
 	assign connect_write_data_5_2 = (connect_out_writeBack_bus[0]) ? connect_read_data : connect_out_addr_mem;
  	//assign connect_write_data_5_2 = connect_read_data; //no se soluciona con esto, por lo q el problema no es el MUX
 
-	assign out_reg0_recolector = connect_reg0_recolector;
+	/*assign out_reg0_recolector = connect_reg0_recolector;
 	assign out_reg1_recolector = connect_reg1_recolector;
 	assign out_reg2_recolector = connect_reg2_recolector;
 	assign out_reg3_recolector = connect_reg3_recolector;
 	assign out_reg4_recolector = connect_reg4_recolector;
 	assign out_reg5_recolector = connect_reg5_recolector;
 	assign out_reg6_recolector = connect_reg6_recolector;
-	assign out_reg7_recolector = connect_reg7_recolector;
+	assign out_reg7_recolector = connect_reg7_recolector;*/
 	
-	assign out_mem_wire = connect_out_mem_wire;
+	//assign out_mem_wire = connect_out_mem_wire;
 	assign out_pc = connect_out_pc;
-	assign halt_flag = connect_halt_flag_4_5;
+	//assign halt_flag = connect_halt_flag_4_5;
 
-	assign Latches_1_2 = {	// 2 registros			TOTAL 64 BITS
+	/*assign Latches_1_2 = {	// 2 registros			TOTAL 64 BITS
 		connect_instruccion // 32 bits
 		//connect_in_pc_branch_1_2 // 32 bits
 	};
@@ -157,7 +157,7 @@ module TOP_MIPS#(
 		//connect_out_addr_mem // 32 bits
 		//connect_read_data // 32 bits
 		connect_reg2
-	};
+	};*/
 
 	IF_ID #(
 		.len_data(len_data)
@@ -171,10 +171,10 @@ module TOP_MIPS#(
 			.in_pc_register(connect_in_pc_jump_register),
 			.stall_flag(!connect_stall_flag),
 
-			.in_addr_debug(in_addr_mem_inst),
-			.debug_flag(debug_flag),
+			//.in_addr_debug(in_addr_mem_inst),
+			//.debug_flag(debug_flag),
 			.in_ins_to_mem(in_ins_to_mem),
-			//.wea_ram_inst(wea_ram_inst),
+			.wea_ram_inst(wea_ram_inst),
 
 			.out_pc_branch(connect_in_pc_branch_1_2),
 			.out_instruction(connect_instruccion),
@@ -189,7 +189,7 @@ module TOP_MIPS#(
 			.clk(clk),
 			.reset(reset),
 			.in_pc_branch(connect_in_pc_branch_1_2),
-			.in_instruccion(debug_flag ? {{6{1'b0}}, in_addr_debug[4:0], {21{1'b0}}} : connect_instruccion),
+			.in_instruccion(connect_instruccion),
 
 			.RegWrite(connect_out_writeBack_bus[1]),
 			.write_data(connect_write_data_5_2),
@@ -277,7 +277,7 @@ module TOP_MIPS#(
 		u_mem_wb(
 			.clk(clk),
 			.reset(reset),
-			.in_addr_mem(debug_flag ? in_addr_debug : connect_alu_out),
+			.in_addr_mem(connect_alu_out),
 			.write_data(connect_write_data_3_4),
 			
 			.memory_bus(connect_memory_bus_3_4),

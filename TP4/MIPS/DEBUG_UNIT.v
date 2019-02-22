@@ -11,15 +11,16 @@ module DEBUG_UNIT
 #(
 	parameter NBIT_DATA_LEN = 8, 		// buffer bits 
 	parameter len_data		= 32,	    // bits del acumulador
-    parameter cant_inst     = 64,        // cantidad esperada de instrucciones
-    parameter NBIT_cant_inst = 6
+    parameter cant_inst     = 64,       // cantidad esperada de instrucciones
+    parameter NBIT_cant_inst = 6,
+    parameter total_lenght   = 4        // queremos mandar solo el PC, por lo que con 4*8 nos alcanza. 
 ) 
 ( 
 	input clk,								 // necesario para cambiar de estados
 	input reset,
     input halt,								 // indica si cpu termino
 
-    input [len_data-1:0] test_reg,           // para probar si MIPS le manda a PC
+    input [NBIT_DATA_LEN-1:0] test_reg,           // para probar si MIPS le manda a PC
     output [len_data-1:0] addr_mem_inst,     // direccion de la instruccion a escribir
     output [len_data-1:0] ins_to_mem,        // instruccion a escribir
     output wr_ram_inst,                      // pin para habilitar escritura a INST_MEM
@@ -28,7 +29,7 @@ module DEBUG_UNIT
  	input rx_done_tick,  			  		 // fin de recepcion
 	input tx_done_tick,						 // recibe la confirmacion desde UART que se termino de transimitir
  	input [NBIT_DATA_LEN-1:0] rx_data_in,  	 // Dato del RX recibido (si recibe un 1, significa CPU, START!)
-	output reg tx_start = 0,                 // LA INTERFAZ le tiene que avisar a TX cuando empezar
+	output reg tx_start,                 // LA INTERFAZ le tiene que avisar a TX cuando empezar
  	output reg [NBIT_DATA_LEN-1:0] data_out  // para escribir en TX (para mandar las cosas del MIPS a la compu, por ejemplo el PC)
 ); 
 
@@ -64,12 +65,12 @@ module DEBUG_UNIT
 	reg reg_rx_done_tick;
     reg [len_data-1:0] instruction;     // instruccion a escribir en memoria de programa
     reg write_enable_ram_inst;          // le dice al MIPS cuando escribir en mem la instruccion
-	reg [NBIT_cant_inst-1:0] num_inst;  // contador de instrucciones para direccionar donde escribir
+	reg [NBIT_cant_inst-1:0] num_inst=0;  // contador de instrucciones para direccionar donde escribir
 	//reg reg_cpu_start_next;
 	//reg reg_cpu_reset_next;
 	reg [NBIT_DATA_LEN-1:0] reg_data_out_next;
 
-
+    //wire [NBIT_DATA_LEN-1:0] bytes_to_send [total_lenght-1:0];
 
     assign ins_to_mem = instruction;
     assign addr_mem_inst = num_inst;
@@ -81,10 +82,13 @@ module DEBUG_UNIT
 	*/
 	always @(posedge clk)
 	begin
-		reg_rx_done_tick <= rx_done_tick;
+		
+        reg_rx_done_tick <= rx_done_tick;
 		reg_tx_done_tick <= tx_done_tick;
-        data_out  <= reg_data_out_next;
+        data_out <= reg_data_out_next;
 		state <= state_next;
+
+
 		
 		//cpu_start <= reg_cpu_start_next;
 		//cpu_reset <= reg_cpu_reset_next;
@@ -92,6 +96,10 @@ module DEBUG_UNIT
 		begin
 			state<=IDLE;
 		end
+        else
+        begin
+            state<=state_next;
+        end
 	end
 	
 	/* Logica de actualizacion de estados.
@@ -106,14 +114,20 @@ module DEBUG_UNIT
 				begin
 					if((rx_done_tick == 1) && (reg_rx_done_tick == 0)) 
 					begin
-                    if (rx_data_in == StartSignal) 
-						state_next = PROGRAMMING;
-                        sub_state = SUB_INIT;
-					end
-					else
-					begin
-						state_next = IDLE;
-					end
+                        if (rx_data_in == StartSignal) 
+                        begin
+                            state_next = PROGRAMMING;
+                            sub_state = SUB_INIT;
+                        end
+                        else
+                        begin
+                            state_next = IDLE;
+                        end
+                    end
+                    else
+                    begin
+                      state_next = IDLE;
+                    end
 				end
 
 			PROGRAMMING:
@@ -139,13 +153,17 @@ module DEBUG_UNIT
                             begin
                               if(&instruction[31:26])
                               begin
-                                state = WAITING;
+                                state_next = WAITING;
                                 sub_state = SUB_INIT;
                               end
                               else
                               begin
                                 sub_state = SUB_READ_1;  
                               end
+                            end
+                        default:
+                            begin
+                              sub_state = SUB_INIT;
                             end
                     endcase
 				end
@@ -157,15 +175,15 @@ module DEBUG_UNIT
 						case(rx_data_in)
                             ReProgramSignal:
                                 begin
-                                  state = IDLE;
+                                  state_next = IDLE;
                                 end
                             ContinuousSignal:
                                 begin
-                                  state = CONTINUOUS;
+                                  state_next = CONTINUOUS;
                                 end
                             StepByStepSignal:
                                 begin
-                                  state = STEP_BY_STEP;
+                                  state_next = STEP_BY_STEP;
                                 end
                         endcase
 					end
@@ -181,7 +199,11 @@ module DEBUG_UNIT
 					begin
                         if (rx_data_in == StepSignal)
                         begin
-                          state = SENDING_DATA;
+                          state_next = SENDING_DATA;
+                        end
+                        else
+                        begin
+                          state_next = STEP_BY_STEP;
                         end
 					end
 					else
@@ -194,11 +216,11 @@ module DEBUG_UNIT
 				begin
 					if (halt)
                     begin
-                      state = SENDING_DATA;
+                      state_next = SENDING_DATA;
                     end
                     else
                     begin
-                      state = CONTINUOUS;   // ver esto, para que usan el registro ciclos?
+                      state_next = CONTINUOUS;   // ver esto, para que usan el registro ciclos?
                     end
 				end
             SENDING_DATA:   
@@ -239,46 +261,55 @@ module DEBUG_UNIT
                 case(sub_state)
                     SUB_INIT:
                         begin
-                            tx_start = 1'b0;
-                            num_inst = 0;
+                            //tx_start = 1'b0;/
+                            //num_inst = 0;
                             reg_data_out_next = data_out;
                             write_enable_ram_inst = 1'b0;
                         end
                     SUB_READ_1:
                         begin
-                            tx_start = 1'b0;
+                            //tx_start = 1'b0;
                             reg_data_out_next = data_out;
                             write_enable_ram_inst = 1'b0;
+                            //instruction = {{24{1'b0}},rx_data_in};   
                             instruction[7:0] = rx_data_in;   
                         end
                     SUB_READ_2:
                         begin
-                            tx_start = 1'b0;
+                            //tx_start = 1'b0;
                             reg_data_out_next = data_out;
                             write_enable_ram_inst = 1'b0;
+                            //instruction = {{16{1'b0}},rx_data_in,instruction[7:0]};  
                             instruction[15:8] = rx_data_in;
                         end
                     SUB_READ_3:
                         begin
-                            tx_start = 1'b0;
+                            //tx_start = 1'b0;
                             reg_data_out_next = data_out;
                             write_enable_ram_inst = 1'b0;
+                            //instruction = {{8{1'b0}},rx_data_in,instruction[15:0]};
                             instruction[23:16] = rx_data_in;
                         end
                     SUB_READ_4:
                         begin
-                            tx_start = 1'b0;
+                            //tx_start = 1'b0;
                             reg_data_out_next = data_out;
                             write_enable_ram_inst = 1'b0;
+                            //instruction = {rx_data_in,instruction[23:0]};
                             instruction[31:24] = rx_data_in;
                         end
                     SUB_WRITE_MEM:
                         begin
-                            tx_start = 1'b0;
+                            //tx_start = 1'b0;
                             reg_data_out_next = data_out;
                             num_inst = num_inst + 1;
                             write_enable_ram_inst = 1'b1;
                         end
+                    default:
+                    begin
+                        reg_data_out_next = data_out;
+                        write_enable_ram_inst = 1'b0;
+                    end
                 endcase
 			end
 			
@@ -307,7 +338,7 @@ module DEBUG_UNIT
             SENDING_DATA:
             begin
                 tx_start = 1'b1;
-                //reg_data_out_next = program counter o algo;
+                reg_data_out_next = test_reg; // mandamos solo los primeros 8 bits del PC
             end
 
 			default:
