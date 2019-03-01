@@ -82,9 +82,13 @@ module DEBUG_UNIT_TEST;
 		
 		#200 clk=1;
 		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
 		
 		rx_done_tick = 1'b1;
 		
+		#200 clk=1;
+		#200 clk=0;
 		#200 clk=1;
 		#200 clk=0;
 		
@@ -92,7 +96,90 @@ module DEBUG_UNIT_TEST;
 		
 		#200 clk=1;
 		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
 		
+		rx_data_in = 8'b11011101; // LSB de la instruccion
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_data_in = 8'b11001100; // 2do LSB de la instruccion
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_data_in = 8'b10111011; // 3er LSB de la instruccion
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_data_in = 8'b10101010; // MSB de la instruccion
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+		
+		#200 clk=1;
+		#200 clk=0;
 		#200 clk=1;
 		#200 clk=0;
 		
