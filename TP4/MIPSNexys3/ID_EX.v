@@ -35,9 +35,9 @@ module ID_EX #(
 	output reg [num_bits-1:0] out_rs,
 	output reg [num_bits-1:0] out_shamt,         // shamt = SHIT AMOUNT
 
-	/*output [len_data-1:0] out_reg0_recolector,	// para recolector en modo debug
+	//output [len_data-1:0] out_reg0_recolector,	// para recolector en modo debug
 	output [len_data-1:0] out_reg1_recolector,	// para recolector en modo debug
-	output [len_data-1:0] out_reg2_recolector,	// para recolector en modo debug
+	/*output [len_data-1:0] out_reg2_recolector,	// para recolector en modo debug
 	output [len_data-1:0] out_reg3_recolector,	// para recolector en modo debug
 	output [len_data-1:0] out_reg4_recolector,	// para recolector en modo debug
 	output [len_data-1:0] out_reg5_recolector,	// para recolector en modo debug
@@ -63,10 +63,10 @@ module ID_EX #(
 
 	wire [len_data-1:0]		connect_reg_jump_register,
 							connect_out_reg1,
-							connect_out_reg2;
-								/*connect_out_wire_reg0,
-								connect_out_wire_reg1,
-								connect_out_wire_reg2,
+							connect_out_reg2,
+								//connect_out_wire_reg0,
+								connect_out_wire_reg1;
+								/*connect_out_wire_reg2,
 								connect_out_wire_reg3,
 								connect_out_wire_reg4,
 								connect_out_wire_reg5,
@@ -83,9 +83,9 @@ module ID_EX #(
 	assign out_pc_jump = (flush) ? (1'b0) : ({in_pc_branch[31:28], {2'b 00, (in_instruccion[25:0])}}); // para que es el out_pc_jump???
 	assign out_pc_jump_register = (flush) ? (1'b0) : (connect_reg_jump_register);
 
-	/*assign out_reg0_recolector = connect_out_wire_reg0; // para recolector en modo debug
+	//assign out_reg0_recolector = connect_out_wire_reg0; // para recolector en modo debug
 	assign out_reg1_recolector = connect_out_wire_reg1; // para recolector en modo debug
-	assign out_reg2_recolector = connect_out_wire_reg2; // para recolector en modo debug
+	/*assign out_reg2_recolector = connect_out_wire_reg2; // para recolector en modo debug
 	assign out_reg3_recolector = connect_out_wire_reg3; // para recolector en modo debug
 	assign out_reg4_recolector = connect_out_wire_reg4; // para recolector en modo debug
 	assign out_reg5_recolector = connect_out_wire_reg5; // para recolector en modo debug
@@ -122,9 +122,9 @@ module ID_EX #(
 			.write_register(write_register),
 			.write_data(write_data),
 
-			/*.wire_read_data_0(connect_out_wire_reg0),
+			//.wire_read_data_0(connect_out_wire_reg0),
 			.wire_read_data_1(connect_out_wire_reg1),
-			.wire_read_data_2(connect_out_wire_reg2),
+			/*.wire_read_data_2(connect_out_wire_reg2),
 			.wire_read_data_3(connect_out_wire_reg3),
 			.wire_read_data_4(connect_out_wire_reg4),
 			.wire_read_data_5(connect_out_wire_reg5),

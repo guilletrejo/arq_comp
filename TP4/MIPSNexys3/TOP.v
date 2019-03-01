@@ -27,7 +27,7 @@ module TOP
 	output [NBIT_DATA_LEN-1:0] led_fpga
 );
 
-	wire [7:0]conn_led;
+	wire [32-1:0] conn_led;
 
     wire clk_mips, 
          ctrl_clk_mips; 
@@ -70,7 +70,7 @@ module TOP
 
 	//assign connect_rx_debug = RX_INPUT; //(1 & estamos_en_test_bench) ? connect_tx_debug : UART_TXD_IN;
 	assign TX_OUTPUT = connect_tx_debug;
-	assign led_fpga = conn_led;
+	assign led_fpga = conn_led[7:0];
 	//assign tx_done_debug = connect_uart_tx_done;
 
 
@@ -117,8 +117,8 @@ module TOP
 		.in_ins_to_mem(connect_ins_to_mem),
 		.wea_ram_inst(connect_wea_ram_inst),
 
-		//.out_reg1_recolector(connect_regs_recolector_mips),
-		.out_mem_wire(conn_led),
+		.out_reg1_recolector(conn_led),
+		//.out_mem_wire(conn_led),
 		.out_pc(connect_pc_debug),
 		.halt_flag(connect_halt)
 		/*.Latches_1_2(connect_Latches_1_2),

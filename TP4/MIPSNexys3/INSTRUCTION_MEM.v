@@ -37,13 +37,17 @@ module INSTRUCTION_MEM
 		$readmemh(init_file,instruccion_ram);
 	 end
 
+    always @(posedge Wr) begin
+      instruccion_ram[Addr] <= In_Data;
+    end
+    
     always @(posedge clk) 
     begin
       Addr_reg <= Addr;
-		if(Wr)
+		/*if(Wr)
         begin
             instruccion_ram[Addr] <= In_Data;
-        end		
+        end	*/	
     end
 endmodule
  

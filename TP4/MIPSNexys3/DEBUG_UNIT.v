@@ -22,7 +22,7 @@ module DEBUG_UNIT
     input halt,								 // indica si cpu termino
 
     input [NBIT_DATA_LEN-1:0] test_reg,           // para probar si MIPS le manda a PC
-    output [len_addr-1:0] addr_mem_inst,     // direccion de la instruccion a escribir
+    output reg [len_addr-1:0] addr_mem_inst,     // direccion de la instruccion a escribir
     output reg [len_data-1:0] ins_to_mem,        // instruccion a escribir
     output reg wr_ram_inst,                      // pin para habilitar escritura a INST_MEM
 
@@ -74,7 +74,7 @@ module DEBUG_UNIT
 	reg [len_addr-1:0] num_inst;  // contador de instrucciones para direccionar donde escribir
 	reg [NBIT_DATA_LEN-1:0] reg_data_out_next;
     
-    assign addr_mem_inst = num_inst;
+    //assign addr_mem_inst = num_inst;
     //assign ins_to_mem = instruction;
     /*assign wr_ram_inst = write_enable_ram_inst;*/
     /*generate
@@ -100,7 +100,7 @@ module DEBUG_UNIT
 
         ins_to_mem <= instruction;
         wr_ram_inst <= write_enable_ram_inst;
-        //addr_mem_inst <= num_inst;
+        addr_mem_inst <= num_inst;
         data_out <= reg_data_out_next;
 
 		if(reset)
