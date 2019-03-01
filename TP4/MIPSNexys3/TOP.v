@@ -117,7 +117,7 @@ module TOP
 		.in_ins_to_mem(connect_ins_to_mem),
 		.wea_ram_inst(connect_wea_ram_inst),
 
-		.out_reg1_recolector(conn_led),
+		//.out_reg1_recolector(conn_led),
 		//.out_mem_wire(conn_led),
 		.out_pc(connect_pc_debug),
 		.halt_flag(connect_halt)
@@ -169,6 +169,8 @@ module TOP
 			.debug(connect_debug_mode),
 			.wr_ram_inst(connect_wea_ram_inst),
 		
+			.test(conn_led),
+
 		    //UART
 		    .rx_done_tick(connect_uart_rx_done),	    
 		    .tx_done_tick(connect_uart_tx_done),

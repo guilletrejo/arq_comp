@@ -26,12 +26,14 @@ module DEBUG_UNIT
     output reg [len_data-1:0] ins_to_mem,        // instruccion a escribir
     output reg wr_ram_inst,                      // pin para habilitar escritura a INST_MEM
 
+    output [len_data-1:0] test,
+
     output reg ctrl_clk_mips,
     output reg debug,                       // debug_flag para indicar si se esta escribiendo el programa en INST_MEM
     // UART
  	input rx_done_tick,  			  		 // fin de recepcion
 	input tx_done_tick,						 // recibe la confirmacion desde UART que se termino de transimitir
- 	input [NBIT_DATA_LEN-1:0] rx_data_in,  	 // Dato del RX recibido (si recibe un 1, significa CPU, START!)
+ 	input [NBIT_DATA_LEN-1:0] rx_data_in,  	 // Dato del RX recibido
 	output reg tx_start,                 // LA INTERFAZ le tiene que avisar a TX cuando empezar
  	output reg [NBIT_DATA_LEN-1:0] data_out  // para escribir en TX (para mandar las cosas del MIPS a la compu, por ejemplo el PC)
 ); 
@@ -69,11 +71,13 @@ module DEBUG_UNIT
     reg reg_tx_done_tick=0;
 	reg reg_rx_done_tick=0;
     // alimentan salidas
-    reg [len_data-1:0] instruction;     // instruccion a escribir en memoria de programa
-    reg write_enable_ram_inst;          // le dice al MIPS cuando escribir en mem la instruccion
-	reg [len_addr-1:0] num_inst;  // contador de instrucciones para direccionar donde escribir
-	reg [NBIT_DATA_LEN-1:0] reg_data_out_next;
+    reg [len_data-1:0] instruction=0;     // instruccion a escribir en memoria de programa
+    reg write_enable_ram_inst=0;          // le dice al MIPS cuando escribir en mem la instruccion
+	reg [len_addr-1:0] num_inst=0;  // contador de instrucciones para direccionar donde escribir
+	reg [NBIT_DATA_LEN-1:0] reg_data_out_next=0;
     
+    assign test = ins_to_mem;
+
     //assign addr_mem_inst = num_inst;
     //assign ins_to_mem = instruction;
     /*assign wr_ram_inst = write_enable_ram_inst;*/
@@ -144,24 +148,59 @@ module DEBUG_UNIT
 				begin
                     case(sub_state)
                         SUB_INIT:
+                            if((rx_done_tick == 1) && (reg_rx_done_tick == 0))
                             begin
                               state_next = PROGRAMMING;
                               sub_state_next = SUB_READ_1;
                             end
+                            else
+                            begin
+                              state_next = PROGRAMMING;
+                              sub_state_next = SUB_INIT;
+                            end
                         SUB_READ_1:
+                            if((rx_done_tick == 1) && (reg_rx_done_tick == 0))
                             begin
                               state_next = PROGRAMMING;
                               sub_state_next = SUB_READ_2;
                             end
+                            else
+                            begin
+                              state_next = PROGRAMMING;
+                              sub_state_next = SUB_READ_1;
+                            end
                         SUB_READ_2:
+                            if((rx_done_tick == 1) && (reg_rx_done_tick == 0))
+                            begin
+                              state_next = PROGRAMMING;
+                              sub_state_next = SUB_READ_3;
+                            end
+                            else
+                            begin
+                              state_next = PROGRAMMING;
+                              sub_state_next = SUB_READ_2;
+                            end
+                        SUB_READ_3:
+                            if((rx_done_tick == 1) && (reg_rx_done_tick == 0))
+                            begin
+                              state_next = PROGRAMMING;
+                              sub_state_next = SUB_READ_4;
+                            end
+                            else
                             begin
                               state_next = PROGRAMMING;
                               sub_state_next = SUB_READ_3;
                             end
                         SUB_READ_4:
+                            if((rx_done_tick == 1) && (reg_rx_done_tick == 0))
                             begin
                               state_next = PROGRAMMING;
                               sub_state_next = SUB_WRITE_MEM;
+                            end
+                            else
+                            begin
+                              state_next = PROGRAMMING;
+                              sub_state_next = SUB_READ_4;
                             end
                         SUB_WRITE_MEM:
                             begin

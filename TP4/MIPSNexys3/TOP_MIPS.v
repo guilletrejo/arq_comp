@@ -31,7 +31,7 @@ module TOP_MIPS#(
 	input wea_ram_inst,
 
 	//output [len_data-1:0] out_reg0_recolector,
-	output [len_data-1:0] out_reg1_recolector,
+	//output [len_data-1:0] out_reg1_recolector,
 	/*output [len_data-1:0] out_reg2_recolector,
 	output [len_data-1:0] out_reg3_recolector,
 	output [len_data-1:0] out_reg4_recolector,
@@ -39,7 +39,7 @@ module TOP_MIPS#(
 	output [len_data-1:0] out_reg6_recolector,
 	output [len_data-1:0] out_reg7_recolector,*/
 	
-	output [len_data-1:0] out_mem_wire,
+	//output [len_data-1:0] out_mem_wire,
 	output [8-1:0] out_pc,
 	output halt_flag
    /*output [32-1:0] Latches_1_2, // pensar la longitud pq queda demasiados cables
@@ -71,7 +71,7 @@ module TOP_MIPS#(
 				   connect_in_pc_branch_3_4,
 				   connect_in_pc_branch_4_1,
 				   //connect_reg0_recolector,
-				   connect_reg1_recolector,
+				   //connect_reg1_recolector,
 				   /*connect_reg2_recolector,
 				   connect_reg3_recolector,
 				   connect_reg4_recolector,
@@ -111,7 +111,7 @@ module TOP_MIPS#(
  	//assign connect_write_data_5_2 = connect_read_data; //no se soluciona con esto, por lo q el problema no es el MUX
 
 	//assign out_reg0_recolector = connect_reg0_recolector;
-	assign out_reg1_recolector = connect_reg1_recolector;
+	//assign out_reg1_recolector = connect_reg1_recolector;
 	/*assign out_reg2_recolector = connect_reg2_recolector;
 	assign out_reg3_recolector = connect_reg3_recolector;
 	assign out_reg4_recolector = connect_reg4_recolector;
@@ -119,7 +119,7 @@ module TOP_MIPS#(
 	assign out_reg6_recolector = connect_reg6_recolector;
 	assign out_reg7_recolector = connect_reg7_recolector;*/
 	
-	assign out_mem_wire = connect_instruccion; //[7:0];
+	//assign out_mem_wire = in_addr_mem_inst; //[7:0];
 	assign out_pc = connect_out_pc [7:0];
 	assign halt_flag = connect_halt_flag_4_5;
 
@@ -209,7 +209,7 @@ module TOP_MIPS#(
 			.out_shamt(connect_shamt),
 
 			//.out_reg0_recolector(connect_reg0_recolector),
-			.out_reg1_recolector(connect_reg1_recolector),
+			//.out_reg1_recolector(connect_reg1_recolector),
 			/*.out_reg2_recolector(connect_reg2_recolector),
 			.out_reg3_recolector(connect_reg3_recolector),
 			.out_reg4_recolector(connect_reg4_recolector),
@@ -296,7 +296,7 @@ module TOP_MIPS#(
 			.out_addr_mem(connect_out_addr_mem),
 			.out_write_reg(connect_write_reg_4_2),
 
-			.out_mem_wire(connect_out_mem_wire), // para debug
+			//.out_mem_wire(connect_out_mem_wire), // para debug
 			.out_halt_flag_m(connect_halt_flag_4_5)
 			);
 
