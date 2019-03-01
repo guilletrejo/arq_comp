@@ -53,7 +53,7 @@ module REGISTERS#(
 		integer i;		
 		initial
         for (i = 0; i < depth; i = i + 1)
-          registers_mips[i] = {len_data{1'b0+(i)}}; // reg0 = 0. reg1 = 1. reg2 = 2... etc.
+          registers_mips[i] = i; // reg0 = 0. reg1 = 1. reg2 = 2... etc.
 	endgenerate
 
 	always @(posedge clk)

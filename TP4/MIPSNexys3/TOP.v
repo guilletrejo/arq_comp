@@ -10,6 +10,7 @@ module TOP
 #(
     parameter NBIT_DATA_LEN = 8,
 	parameter len_data = 32,
+	parameter len_addr = 11,
 	parameter num_bits = 5,
     parameter estamos_en_test_bench = 0,
 	parameter len_exec_bus = 11,
@@ -51,8 +52,8 @@ module TOP
 		 connect_wea_ram_inst;
 	wire [7:0]	connect_pc_debug;
 		 
-	wire [len_data-1:0]connect_addr_mem_inst,
-							connect_ins_to_mem;
+	wire [len_addr-1:0] connect_addr_mem_inst;
+	wire [len_data-1:0] connect_ins_to_mem;
 
 	/*wire [(nb_Latches_1_2*8)-1:0] connect_Latches_1_2;
 	wire [(nb_Latches_2_3*8)-1:0] connect_Latches_2_3;

@@ -10,6 +10,7 @@
 module DEBUG_UNIT
 #(
 	parameter NBIT_DATA_LEN = 8, 		// buffer bits 
+    parameter len_addr      = 11,
 	parameter len_data		= 32,	    // bits del acumulador
     parameter cant_inst     = 64,       // cantidad esperada de instrucciones
     parameter NBIT_cant_inst = 6,
@@ -21,7 +22,7 @@ module DEBUG_UNIT
     input halt,								 // indica si cpu termino
 
     input [NBIT_DATA_LEN-1:0] test_reg,           // para probar si MIPS le manda a PC
-    output reg [len_data-1:0] addr_mem_inst,     // direccion de la instruccion a escribir
+    output [len_addr-1:0] addr_mem_inst,     // direccion de la instruccion a escribir
     output reg [len_data-1:0] ins_to_mem,        // instruccion a escribir
     output reg wr_ram_inst,                      // pin para habilitar escritura a INST_MEM
 
@@ -70,12 +71,20 @@ module DEBUG_UNIT
     // alimentan salidas
     reg [len_data-1:0] instruction;     // instruccion a escribir en memoria de programa
     reg write_enable_ram_inst;          // le dice al MIPS cuando escribir en mem la instruccion
-	reg [len_data-1:0] num_inst;  // contador de instrucciones para direccionar donde escribir
+	reg [len_addr-1:0] num_inst;  // contador de instrucciones para direccionar donde escribir
 	reg [NBIT_DATA_LEN-1:0] reg_data_out_next;
     
-    /*assign addr_mem_inst = num_inst;
-    assign ins_to_mem = instruction;
-    assign wr_ram_inst = write_enable_ram_inst;*/
+    assign addr_mem_inst = num_inst;
+    //assign ins_to_mem = instruction;
+    /*assign wr_ram_inst = write_enable_ram_inst;*/
+    /*generate
+	 initial
+    begin
+        addr_mem_inst = 0;
+        
+    end
+	 endgenerate*/
+
 
 	/* Logica de actualizacion de registros
 	   (pasa lo que hay en la entrada a los reg)
@@ -91,7 +100,7 @@ module DEBUG_UNIT
 
         ins_to_mem <= instruction;
         wr_ram_inst <= write_enable_ram_inst;
-        addr_mem_inst <= num_inst;
+        //addr_mem_inst <= num_inst;
         data_out <= reg_data_out_next;
 
 		if(reset)
@@ -346,7 +355,7 @@ module DEBUG_UNIT
                     SUB_WRITE_MEM:
                         begin
                             instruction = ins_to_mem;
-                            num_inst = num_inst + 1;
+                            num_inst = num_inst + 11'b1;
                             write_enable_ram_inst = 1'b1;
                             ctrl_clk_mips = 1'b0;
                             debug = 1'b0;

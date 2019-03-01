@@ -8,7 +8,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module IF_ID #(
-	parameter len_data = 32
+	parameter len_data = 32,
+	parameter len_addr = 11
 	) (
 	input clk,
 	input reset,
@@ -18,7 +19,7 @@ module IF_ID #(
 	input [len_data-1:0] in_branch_address,
 	input stall_flag,  // ??
 
-	input [len_data-1:0] in_addr_debug,
+	input [len_addr-1:0] in_addr_debug,
 	input debug_flag,
 	input [len_data-1:0] in_ins_to_mem,
 	input wea_ram_inst, // POR QUE TIENEN ESTO??:? PARA ESCRIBIR EN LA MEMORIA
@@ -68,7 +69,7 @@ module IF_ID #(
 			);
 
 	INSTRUCTION_MEM #(
-		.len_addr(len_data),
+		.len_addr(11),
       .len_data(len_data),
 		.ram_depth(2048),
 		.init_file("test2.hex")
@@ -76,7 +77,7 @@ module IF_ID #(
 		u_instruction_mem(
 			.clk(clk),
 			.Wr(wea_ram_inst),
-            .Addr(debug_flag ? in_addr_debug : conn_pc_adder_imem),
+            .Addr(debug_flag ? in_addr_debug : conn_pc_adder_imem[10:0]),
 			.In_Data(in_ins_to_mem),
 
             .Data(conn_out_instruction),
@@ -84,8 +85,6 @@ module IF_ID #(
 			//.ena(stall_flag), // ver desues si hace falta
 			.wire_douta(connect_wire_douta)
 			//.flush(flush),
-			//.douta(connect_out_instruction),
-			//.dina(in_ins_to_mem)
 			); 
 
 	PC_ADDER #(

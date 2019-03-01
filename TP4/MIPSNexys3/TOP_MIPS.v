@@ -9,6 +9,7 @@
 
 module TOP_MIPS#(
 	parameter len_data = 32,
+	parameter len_addr = 11,
 	parameter num_bits = 5, //$clog2(len_data),
 	parameter len_exec_bus = 11,
 	parameter len_mem_bus = 9,
@@ -25,7 +26,7 @@ module TOP_MIPS#(
 
 	input debug_flag,
 	//input [len_data-1:0] in_addr_debug, // para recolector, no usamos aun
-	input [len_data-1:0] in_addr_mem_inst,
+	input [len_addr-1:0] in_addr_mem_inst,
 	input [len_data-1:0] in_ins_to_mem,
 	input wea_ram_inst,
 /*

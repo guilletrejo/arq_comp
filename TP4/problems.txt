@@ -13,6 +13,17 @@ add 1, 1, 2 -- no anda o tampoco anda add 4, 1, 30 (no dependen de nada de lo an
 
 PROBLEMA ENCONTRADO: EN LA ALU, CUANDO DEBERIA HACER LA SUMA, ENTRA EN EL CASO DEL SHIFT LEFT!!!!!!!! POR ESO NO ANDABA LO DE ARRIBA. -->> Arreglado, era por mal codificacion.
 
+
+--------------------- SINTESIS Y PRUEBA EN FPGA -----------------------------------
+
+Addr_reg_ is unconnnected... es porque usamos solo 2^10 de direcciones de memoria (depth es 2048)
+
+Input execute bus 5-4 no usados. Error aparece en EX_MEM y no importa porque 
+
+ERROR AREA CONSTRAINT : en REGISTERS y en las dos memorias.
+
+
+
 test2 ANDA
 
 sw 3, 20(1)
@@ -165,3 +176,5 @@ and 5, 2, 5
 or 4, 6, 2
 END
 }
+
+Sintesis mem_wb -> WARNING:Xst:2254 - Area constraint could not be met for block <MEM_WB>, final ratio is 5692.
