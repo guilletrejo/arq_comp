@@ -38,6 +38,9 @@ module DEBUG_UNIT_TEST;
 	wire [31:0] ins_to_mem;
 	wire wr_ram_inst;
 	wire [31:0] test;
+	//wire flag;
+	wire [2:0] substate_flag;
+	wire [2:0] substatenext_flag;
 	wire ctrl_clk_mips;
 	wire debug;
 	wire tx_start;
@@ -53,6 +56,9 @@ module DEBUG_UNIT_TEST;
 		.ins_to_mem(ins_to_mem), 
 		.wr_ram_inst(wr_ram_inst), 
 		.test(test), 
+		//.flag(flag),
+		.substate_flag(substate_flag),
+		.substatenext_flag(substatenext_flag),
 		.ctrl_clk_mips(ctrl_clk_mips), 
 		.debug(debug), 
 		.rx_done_tick(rx_done_tick), 
@@ -163,6 +169,173 @@ module DEBUG_UNIT_TEST;
 		#200 clk=0;
 		
 		rx_data_in = 8'b10101010; // MSB de la instruccion
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_data_in = 8'b01000100; // LSB de la 2da instruccion
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_data_in = 8'b00110011; // 2do LSB de la 2da instruccion
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_data_in = 8'b00100010; // 3er LSB de la 2da instruccion
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_data_in = 8'b00010001; // MSB de la 2da instruccion
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_data_in = 8'b11111111; // LSB del halt
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_data_in = 8'b11111111; // LSB del halt
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_data_in = 8'b11111111; // LSB del halt
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_data_in = 8'b11111111; // MSB del halt
 		
 		#200 clk=1;
 		#200 clk=0;
