@@ -38,9 +38,11 @@ module DEBUG_UNIT_TEST;
 	wire [31:0] ins_to_mem;
 	wire wr_ram_inst;
 	wire [31:0] test;
-	//wire flag;
+	wire rewr_flag;
 	wire [2:0] substate_flag;
 	wire [2:0] substatenext_flag;
+	wire [2:0] state_flag;
+	wire [2:0] statenext_flag;
 	wire ctrl_clk_mips;
 	wire debug;
 	wire tx_start;
@@ -56,9 +58,11 @@ module DEBUG_UNIT_TEST;
 		.ins_to_mem(ins_to_mem), 
 		.wr_ram_inst(wr_ram_inst), 
 		.test(test), 
-		//.flag(flag),
+		.rewr_flag(rewr_flag),
 		.substate_flag(substate_flag),
 		.substatenext_flag(substatenext_flag),
+		.state_flag(state_flag),
+		.statenext_flag(statenext_flag),
 		.ctrl_clk_mips(ctrl_clk_mips), 
 		.debug(debug), 
 		.rx_done_tick(rx_done_tick), 
@@ -73,7 +77,7 @@ module DEBUG_UNIT_TEST;
 		clk = 0;
 		reset = 0;
 		halt = 0;
-		test_reg = 0;
+		test_reg = 8'b00000100;
 		rx_done_tick = 0;
 		tx_done_tick = 0;
 		rx_data_in = 0;
@@ -356,6 +360,68 @@ module DEBUG_UNIT_TEST;
 		#200 clk=1;
 		#200 clk=0;
 		
+		rx_data_in = 8'b00000010;	// Continuous Signal
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+		halt = 1'b1;
+
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+		tx_done_tick = 1'b1;	// El MIPS me termino de mandar los datos
+
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+		tx_done_tick = 1'b0;
+
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
 	end
       
 endmodule

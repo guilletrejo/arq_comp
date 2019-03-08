@@ -25,9 +25,11 @@ module DEBUG_UNIT
     output reg [len_addr-1:0] addr_mem_inst,     // direccion de la instruccion a escribir
     output reg [len_data-1:0] ins_to_mem,        // instruccion a escribir
     output reg wr_ram_inst,                      // pin para habilitar escritura a INST_MEM
-    //output flag,
+    output rewr_flag,
     output [2:0] substate_flag,
     output [2:0] substatenext_flag,
+    output [2:0] state_flag,
+    output [2:0] statenext_flag,
     output [len_data-1:0] test,
 
     output reg ctrl_clk_mips,
@@ -82,9 +84,11 @@ module DEBUG_UNIT
 	reg [NBIT_DATA_LEN-1:0] reg_data_out_next=0;
     
     assign test = ins_to_mem;
-    //assign flag = rewrite_flag;
+    assign rewr_flag = rewrite_flag;
     assign substate_flag = sub_state;
     assign substatenext_flag = sub_state_next;
+    assign state_flag = state;
+    assign statenext_flag = state_next;
 
     //assign addr_mem_inst = num_inst;
     //assign ins_to_mem = instruction;
@@ -133,25 +137,25 @@ module DEBUG_UNIT
 		case(state)
 			IDLE:
 				begin
-                    rewrite_flag = rewrite_flag_prev;
+          rewrite_flag = rewrite_flag_prev;
 					if((rx_done_tick == 1) && (reg_rx_done_tick == 0)) 
 					begin
-                        if (rx_data_in == StartSignal) 
-                        begin
-                            state_next = PROGRAMMING;
-                            sub_state_next = SUB_INIT;
-                        end
-                        else
-                        begin
-                            state_next = IDLE;
-                            sub_state_next = SUB_INIT;
-                        end
-                    end
-                    else
-                    begin
-                      state_next = IDLE;
-                      sub_state_next = SUB_INIT;
-                    end
+                if (rx_data_in == StartSignal) 
+                begin
+                    state_next = PROGRAMMING;
+                    sub_state_next = SUB_INIT;
+                end
+                else
+                begin
+                    state_next = IDLE;
+                    sub_state_next = SUB_INIT;
+                end
+          end
+          else
+          begin
+            state_next = IDLE;
+            sub_state_next = SUB_INIT;
+          end
 				end
 
 			PROGRAMMING:
@@ -159,21 +163,15 @@ module DEBUG_UNIT
                     case(sub_state)
                         SUB_INIT:
                         begin
-                            if((rx_done_tick == 1) && (reg_rx_done_tick == 0)) // sube rxdonetick, vino primer dato
+                            if ((rx_done_tick == 0) && (reg_rx_done_tick == 0)) // bajo rx donetick
                             begin
                               rewrite_flag = 1'b0;
                               state_next = PROGRAMMING;
                               sub_state_next = SUB_READ_1;
                             end
-                            else if ((rx_done_tick == 0) && (reg_rx_done_tick == 1))
-                            begin
-                              rewrite_flag = 1'b1;
-                              state_next = PROGRAMMING;
-                              sub_state_next = SUB_INIT;
-                            end
                             else
                             begin
-                              rewrite_flag = rewrite_flag_prev;
+                              rewrite_flag = 1'b1;
                               state_next = PROGRAMMING;
                               sub_state_next = SUB_INIT;
                             end
@@ -194,7 +192,7 @@ module DEBUG_UNIT
                             end
                             else
                             begin
-                              rewrite_flag = rewrite_flag_prev;
+                              rewrite_flag = 1'b1;
                               state_next = PROGRAMMING;
                               sub_state_next = SUB_READ_1;
                             end
@@ -322,7 +320,7 @@ module DEBUG_UNIT
 		
 			STEP_BY_STEP:
 				begin
-                    rewrite_flag = rewrite_flag_prev;
+          rewrite_flag = rewrite_flag_prev;
 					if((rx_done_tick == 1) && (reg_rx_done_tick == 0))
 					begin
                         if (rx_data_in == StepSignal)
@@ -357,25 +355,25 @@ module DEBUG_UNIT
                       sub_state_next = SUB_INIT;
                     end
 				end
-            SENDING_DATA:   
-                begin
-                    rewrite_flag = rewrite_flag_prev;
+      SENDING_DATA:   
+        begin
+          rewrite_flag = rewrite_flag_prev;
 					if((tx_done_tick == 1) && (reg_tx_done_tick == 0))
 					begin
 						state_next = IDLE;
-                        sub_state_next = SUB_INIT;
+            sub_state_next = SUB_INIT;
 					end
 					else
 					begin
 						state_next = SENDING_DATA;
-                        sub_state_next = SUB_INIT;
+            sub_state_next = SUB_INIT;
 					end
 				end
 			default:
 				begin
-                    rewrite_flag = rewrite_flag_prev;
+          rewrite_flag = rewrite_flag_prev;
 					state_next = IDLE;
-                    sub_state_next = SUB_INIT;
+          sub_state_next = SUB_INIT;
 				end
 		endcase
 	end
@@ -383,18 +381,18 @@ module DEBUG_UNIT
 	/* Logica de recepcion de datos de RX.
 	   (inicio para CPU), y de envio de datos a TX.
 	*/
-	always @(negedge clk)
+	always @(*)
 	begin
 
 		case(state)
 			
 			IDLE:
 			begin
-                instruction = ins_to_mem;
-                num_inst = 11'b0;
-                write_enable_ram_inst = 1'b0;
-                ctrl_clk_mips = 1'b0;
-                debug = 1'b0;
+        instruction = ins_to_mem;
+        num_inst = 11'b0;
+        write_enable_ram_inst = 1'b0;
+        ctrl_clk_mips = 1'b0;
+        debug = 1'b0;
 				tx_start = 1'b0;
 				reg_data_out_next  = data_out;
 			end
@@ -412,68 +410,125 @@ module DEBUG_UNIT
                             tx_start = 1'b0;
                             reg_data_out_next  = data_out;
                         end
-                    SUB_READ_1:
+                    SUB_READ_1: //CONTROLZETEAME HASTA QUE YO DESAPAREZCA
                         begin
+                            num_inst = addr_mem_inst;
+                            write_enable_ram_inst = 1'b0;
+                            ctrl_clk_mips = 1'b0;
+                            debug = 1'b1;
+                            tx_start = 1'b0;
+                            reg_data_out_next  = data_out;
                             if(!rewrite_flag)
                             begin
-                                instruction = {{24{1'b0}},rx_data_in};
-                                num_inst = addr_mem_inst;
-                                write_enable_ram_inst = 1'b0;
-                                ctrl_clk_mips = 1'b0;
-                                debug = 1'b1;
-                                tx_start = 1'b0;
-                                reg_data_out_next  = data_out;
+                              instruction = {{24{1'b0}},rx_data_in};
                             end
+                            else
+                            begin
+                              instruction = ins_to_mem;
+                            end
+                           /* else
+                            begin
+                              instruction = ins_to_mem;
+                              num_inst = addr_mem_inst;
+                              write_enable_ram_inst = 1'b0;
+                              ctrl_clk_mips = 1'b0;
+                              debug = 1'b0;
+                              tx_start = 1'b0;
+                              reg_data_out_next  = data_out;
+                            end*/
                         end
                     SUB_READ_2:
                         begin
+                            num_inst = addr_mem_inst;
+                            write_enable_ram_inst = 1'b0;
+                            ctrl_clk_mips = 1'b0;
+                            debug = 1'b1;
+                            tx_start = 1'b0;
+                            reg_data_out_next  = data_out;  
                             if(!rewrite_flag)
                             begin
-                                instruction = {{16{1'b0}},rx_data_in,ins_to_mem[7:0]}; 
-                                num_inst = addr_mem_inst;
-                                write_enable_ram_inst = 1'b0;
-                                ctrl_clk_mips = 1'b0;
-                                debug = 1'b1;
-                                tx_start = 1'b0;
-                                reg_data_out_next  = data_out;  
-                            end 
+                              instruction = {{16{1'b0}},rx_data_in,ins_to_mem[7:0]};                               
+                            end
+                            else
+                            begin
+                              instruction = ins_to_mem;
+                            end
+                            /*else
+                            begin
+                              instruction = ins_to_mem;
+                              num_inst = addr_mem_inst;
+                              write_enable_ram_inst = 1'b0;
+                              ctrl_clk_mips = 1'b0;
+                              debug = 1'b0;
+                              tx_start = 1'b0;
+                              reg_data_out_next  = data_out;
+                            end */
                         end
                     SUB_READ_3:
                         begin
+                            num_inst = addr_mem_inst;
+                            write_enable_ram_inst = 1'b0;
+                            ctrl_clk_mips = 1'b0;
+                            debug = 1'b1;
+                            tx_start = 1'b0;
+                            reg_data_out_next  = data_out; 
                             if(!rewrite_flag)
                             begin
-                                instruction = {{8{1'b0}},rx_data_in,ins_to_mem[15:0]};
-                                num_inst = addr_mem_inst;
-                                write_enable_ram_inst = 1'b0;
-                                ctrl_clk_mips = 1'b0;
-                                debug = 1'b1;
-                                tx_start = 1'b0;
-                                reg_data_out_next  = data_out; 
-                            end  
+                              instruction = {{8{1'b0}},rx_data_in,ins_to_mem[15:0]};                                                            
+                            end
+                            else
+                            begin
+                              instruction = ins_to_mem;
+                            end
+                           /* else
+                            begin
+                              instruction = ins_to_mem;
+                              num_inst = addr_mem_inst;
+                              write_enable_ram_inst = 1'b0;
+                              ctrl_clk_mips = 1'b0;
+                              debug = 1'b0;
+                              tx_start = 1'b0;
+                              reg_data_out_next  = data_out;
+                            end  */
                         end
                     SUB_READ_4:
                         begin
+                            num_inst = addr_mem_inst;
+                            write_enable_ram_inst = 1'b0;
+                            ctrl_clk_mips = 1'b0;
+                            debug = 1'b1;
+                            tx_start = 1'b0;
+                            reg_data_out_next  = data_out;   
                             if(!rewrite_flag)
                             begin
                                 instruction = {rx_data_in,ins_to_mem[23:0]};
-                                num_inst = addr_mem_inst;
-                                write_enable_ram_inst = 1'b0;
-                                ctrl_clk_mips = 1'b0;
-                                debug = 1'b1;
-                                tx_start = 1'b0;
-                                reg_data_out_next  = data_out;   
                             end
+                            else
+                            begin
+                              instruction = ins_to_mem;
+                            end
+                            /*else
+                            begin
+                              instruction = ins_to_mem;
+                              num_inst = addr_mem_inst;
+                              write_enable_ram_inst = 1'b0;
+                              ctrl_clk_mips = 1'b0;
+                              debug = 1'b0;
+                              tx_start = 1'b0;
+                              reg_data_out_next  = data_out;
+                            end*/
                         end
                     SUB_WRITE_MEM:
                         begin
                             instruction = ins_to_mem;
-                            num_inst = num_inst + 11'b1;
+                            num_inst = addr_mem_inst + 11'b1;
                             write_enable_ram_inst = 1'b1;
                             ctrl_clk_mips = 1'b0;
                             debug = 1'b0;
                             tx_start = 1'b0;
                             reg_data_out_next  = data_out;
                         end
+                        
                     default:
                     begin
                         instruction = ins_to_mem;
