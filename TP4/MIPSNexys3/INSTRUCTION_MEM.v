@@ -9,9 +9,9 @@
 
 module INSTRUCTION_MEM
     #(
-        parameter len_addr  = 11,
+        parameter len_addr  = 8,
         parameter len_data  = 32,
-		parameter ram_depth = 2048, // Cantidad de entradas de la memoria
+		parameter ram_depth = 256, // Cantidad de entradas de la memoria
         parameter init_file = "test2.hex"    // Se le va a pasar el path 
     )
     (

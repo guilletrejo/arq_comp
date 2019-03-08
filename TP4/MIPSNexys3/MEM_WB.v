@@ -70,13 +70,13 @@ module MEM_WB #(
 
 	DATA_MEM #(
         .len_data(len_data),
-		.ram_depth(2048)
+		.ram_depth(256)
 		)
 		u_data_mem(
             .clk(clk),
             .Rd(MemRead),
             .Wr(MemWrite),
-            .Addr(in_addr_mem[10:0]),
+            .Addr(in_addr_mem[7:0]),
             .In_Data(connect_mux_in_mem),
 		
 			.Out_Data(conn_out_mem)

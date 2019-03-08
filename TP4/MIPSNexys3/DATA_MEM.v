@@ -4,30 +4,10 @@
 //  to the memory, the output remains unchanged.  This is the most power efficient write mode.
 //  If a reset or enable is not necessary, it may be tied off or removed from the code.
 
-/*
- #(
-        parameter len_addr  = 32,
-        parameter len_data  = 32,
-	     parameter ram_depth = 2048,
-        parameter init_file = "test2.hex"    // Se le va a pasar el path 
-
-    )
-    (
-        input clk,
-        input Rd,                      // Enable para lectura (habilita registro de salida)
-        input Wr,                      // Enable para escritura
-        input [len_addr-1:0] Addr,     // Direccion del dato a leer/escribir
-        input [len_data-1:0] In_Data,  // Dato a escribir si Wr = 1
-
-        output reg [len_data-1:0] Out_Data, // Contenido del dato leido si Rd = 1
-        output [len_data-1:0] douta_wire
-    );
-*/
-
 
 module DATA_MEM #(
   parameter len_data = 32,                       // Specify RAM data width
-  parameter ram_depth = 2048,                    // Specify RAM depth (number of entries)
+  parameter ram_depth = 256,                    // Specify RAM depth (number of entries)
   parameter RAM_PERFORMANCE = "LOW_LATENCY",     // Select "HIGH_PERFORMANCE" or "LOW_LATENCY" 
   parameter init_file = "test2.hex"              // Specify name/location of RAM initialization file if using one (leave blank if not)
 ) (

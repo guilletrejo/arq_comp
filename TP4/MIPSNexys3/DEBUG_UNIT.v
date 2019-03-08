@@ -10,7 +10,7 @@
 module DEBUG_UNIT
 #(
 	parameter NBIT_DATA_LEN = 8, 		// buffer bits 
-    parameter len_addr      = 11,
+    parameter len_addr      = 8,
 	parameter len_data		= 32,	    // bits del acumulador
     parameter cant_inst     = 64,       // cantidad esperada de instrucciones
     parameter NBIT_cant_inst = 6,
@@ -25,11 +25,11 @@ module DEBUG_UNIT
     output reg [len_addr-1:0] addr_mem_inst,     // direccion de la instruccion a escribir
     output reg [len_data-1:0] ins_to_mem,        // instruccion a escribir
     output reg wr_ram_inst,                      // pin para habilitar escritura a INST_MEM
-    output rewr_flag,
+    /*output rewr_flag,
     output [2:0] substate_flag,
     output [2:0] substatenext_flag,
     output [2:0] state_flag,
-    output [2:0] statenext_flag,
+    output [2:0] statenext_flag,*/
     output [len_data-1:0] test,
 
     output reg ctrl_clk_mips,
@@ -80,15 +80,15 @@ module DEBUG_UNIT
     // alimentan salidas
     reg [len_data-1:0] instruction=0;     // instruccion a escribir en memoria de programa
     reg write_enable_ram_inst=1'b0;          // le dice al MIPS cuando escribir en mem la instruccion
-	reg [len_addr-1:0] num_inst=11'b0;  // contador de instrucciones para direccionar donde escribir
+	reg [len_addr-1:0] num_inst=8'b0;  // contador de instrucciones para direccionar donde escribir
 	reg [NBIT_DATA_LEN-1:0] reg_data_out_next=0;
     
     assign test = ins_to_mem;
-    assign rewr_flag = rewrite_flag;
+    /*assign rewr_flag = rewrite_flag;
     assign substate_flag = sub_state;
     assign substatenext_flag = sub_state_next;
     assign state_flag = state;
-    assign statenext_flag = state_next;
+    assign statenext_flag = state_next;*/
 
     //assign addr_mem_inst = num_inst;
     //assign ins_to_mem = instruction;
@@ -389,7 +389,7 @@ module DEBUG_UNIT
 			IDLE:
 			begin
         instruction = ins_to_mem;
-        num_inst = 11'b0;
+        num_inst = 8'b0;
         write_enable_ram_inst = 1'b0;
         ctrl_clk_mips = 1'b0;
         debug = 1'b0;
@@ -521,7 +521,7 @@ module DEBUG_UNIT
                     SUB_WRITE_MEM:
                         begin
                             instruction = ins_to_mem;
-                            num_inst = addr_mem_inst + 11'b1;
+                            num_inst = addr_mem_inst + 8'b1;
                             write_enable_ram_inst = 1'b1;
                             ctrl_clk_mips = 1'b0;
                             debug = 1'b0;

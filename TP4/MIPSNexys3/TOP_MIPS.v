@@ -9,7 +9,7 @@
 
 module TOP_MIPS#(
 	parameter len_data = 32,
-	parameter len_addr = 11,
+	parameter len_addr = 8,
 	parameter num_bits = 5, //$clog2(len_data),
 	parameter len_exec_bus = 11,
 	parameter len_mem_bus = 9,

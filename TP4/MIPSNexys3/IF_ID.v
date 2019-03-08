@@ -9,7 +9,7 @@
 
 module IF_ID #(
 	parameter len_data = 32,
-	parameter len_addr = 11
+	parameter len_addr = 8
 	) (
 	input clk,
 	input reset,
@@ -69,15 +69,15 @@ module IF_ID #(
 			);
 
 	INSTRUCTION_MEM #(
-		.len_addr(11),
+		.len_addr(len_addr),
       .len_data(len_data),
-		.ram_depth(2048),
+		.ram_depth(256),
 		.init_file("test2.hex")
 		)
 		u_instruction_mem(
 			.clk(clk),
 			.Wr(wea_ram_inst),
-            .Addr(debug_flag ? in_addr_debug : conn_pc_adder_imem[10:0]),
+            .Addr(debug_flag ? in_addr_debug : conn_pc_adder_imem[len_addr-1:0]),
 			.In_Data(in_ins_to_mem),
 
             .Data(conn_out_instruction),

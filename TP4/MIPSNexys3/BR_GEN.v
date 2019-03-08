@@ -27,7 +27,7 @@ parameter TICK_RATE = CLK_RATE / (BAUD_RATE * NUM_TICKS);	//frecuencia del clk d
 parameter LEN_REG_ACUM = 10; 	//clog2(TICK_RATE);
 
 // registro para ir sumando el tick rate
-reg [LEN_REG_ACUM - 1 : 0] acumulator = 0;												
+reg [LEN_REG_ACUM - 1 : 0] acumulator = 10'b0;												
 
 
 always @(posedge CLK) 
@@ -36,7 +36,7 @@ begin
 	if (acumulator == (TICK_RATE)) 
 		begin
 			TICK = 1;
-			acumulator = 0;
+			acumulator = 10'b0;
 		end
 	else
 		TICK = 0;

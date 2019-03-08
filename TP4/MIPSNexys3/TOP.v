@@ -10,7 +10,7 @@ module TOP
 #(
     parameter NBIT_DATA_LEN = 8,
 	parameter len_data = 32,
-	parameter len_addr = 11,
+	parameter len_addr = 8,
 	parameter num_bits = 5,
     parameter estamos_en_test_bench = 0,
 	parameter len_exec_bus = 11,
@@ -183,7 +183,7 @@ module TOP
 		.NBIT_DATA(8),
 		.NUM_TICKS(16),
 		.BAUD_RATE(9600),
-		.CLK_RATE(50000000)
+		.CLK_RATE(100000000)
 		)
 		u_uart(
 			.CLK(CLK100MHZ),
