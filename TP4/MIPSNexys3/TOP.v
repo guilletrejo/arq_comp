@@ -149,7 +149,7 @@ module TOP
 		    .clk(CLK100MHZ),
 		    .reset(SWITCH_RESET),
 		    .halt(connect_halt),
-		    .test_reg(connect_addr_mem_inst),
+		    .test_reg(connect_pc_debug),
 		    /*.Latches_1_2(connect_Latches_1_2),
 		    .Latches_2_3(connect_Latches_2_3),
 		    .Latches_3_4(connect_Latches_3_4),

@@ -1,0 +1,12 @@
+NET "clk" LOC = V10;
+NET "reset" LOC = B8;
+NET "debug_flag" LOC = T10;
+NET "wea_ram_inst" LOC = T9;
+NET "led_fpga[7]" LOC = T11;
+NET "led_fpga[6]" LOC = R11;
+NET "led_fpga[5]" LOC = N11;
+NET "led_fpga[4]" LOC = M11;
+NET "led_fpga[3]" LOC = V15;
+NET "led_fpga[2]" LOC = U15;
+NET "led_fpga[1]" LOC = V16;
+NET "led_fpga[0]" LOC = U16;

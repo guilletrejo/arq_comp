@@ -205,8 +205,8 @@ def showAllRegisters():
 
 	return bus1_4_5 & (1 << 7)
 
-def readPC():
-	print "---Contador de Programa---"
+def readTestReg():
+	print "---Registro mostrado---"
 	pc = read8()
 	print "result =", bin(ord(pc))	
 	print
@@ -264,9 +264,10 @@ if __name__ == '__main__':
 			print "Modo continuo seleccionado\nEl valor final del PC es:\n\n"
 			ret = ser.write(chr(ContinuosSignal))
 			#showAllRegisters()
-			readPC()
+			readTestReg()
 
 		elif modo == "s":
+			count = 0
 			print "Modo paso a paso seleccionado"
 			print "Para ejecutar un ciclo de clock y ver el estado de los registros, ingrese s"
 			print "Para salir del modo paso a paso, ingrese x"
@@ -281,10 +282,17 @@ if __name__ == '__main__':
 					while (not read_all()):
 						ret = ser.write(chr(StepSignal))
 					break
+				elif command == '1':
+					ret = ser.write(chr(StartSignal)) 
+					instrucciones = openFile(ser, file)
+					ret = ser.write(chr(StepByStepSignal))
 				else:
 					ret = ser.write(chr(StepSignal))
-					if(showAllRegisters()):
+					readTestReg()
+					count = count + 1
+					if count == 7:
 						print 'Ejecucion finalizada'
+						count = 0
 						break
 
 		elif modo == "r":

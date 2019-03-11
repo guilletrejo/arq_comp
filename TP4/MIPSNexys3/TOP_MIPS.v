@@ -40,6 +40,9 @@ module TOP_MIPS#(
 	output [len_data-1:0] out_reg7_recolector,*/
 	
 	//output [len_data-1:0] out_mem_wire,
+
+	output [8-1:0] led_fpga,
+
 	output [8-1:0] out_pc,
 	output halt_flag
    /*output [32-1:0] Latches_1_2, // pensar la longitud pq queda demasiados cables
@@ -118,7 +121,8 @@ module TOP_MIPS#(
 	assign out_reg5_recolector = connect_reg5_recolector;
 	assign out_reg6_recolector = connect_reg6_recolector;
 	assign out_reg7_recolector = connect_reg7_recolector;*/
-	
+	wire [32-1:0] conn_led_test;
+	assign led_fpga = conn_led_test[7:0];
 	//assign out_mem_wire = in_addr_mem_inst; //[7:0];
 	assign out_pc = connect_out_pc [7:0];
 	assign halt_flag = connect_halt_flag_4_5;
@@ -207,6 +211,7 @@ module TOP_MIPS#(
 			.out_rd(connect_rd),
 			.out_rs(connect_rs),
 			.out_shamt(connect_shamt),
+			.out_test(conn_led_test),
 
 			//.out_reg0_recolector(connect_reg0_recolector),
 			//.out_reg1_recolector(connect_reg1_recolector),

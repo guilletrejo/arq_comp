@@ -30,6 +30,8 @@ module REGISTERS#(
 	output [len_data-1:0] wire_read_data_6, // ver despues para que lo usa
 	output [len_data-1:0] wire_read_data_7, // ver despues para que lo usa*/
 
+	// TESTINGGG
+	output [len_data-1:0] test_reg,
 
 	output [len_data-1:0] reg_jump_register,
 	output reg [len_data-1:0] read_data_1,
@@ -48,6 +50,9 @@ module REGISTERS#(
 	assign wire_read_data_7 = registers_mips[7]; // Algo desconozido aun*/
 	
 	assign reg_jump_register = registers_mips[read_register_1];
+
+	//TESTITNITSNIGINGNFGI
+	assign test_reg = registers_mips[3];
 
 	generate
 		integer i;		

@@ -25,11 +25,11 @@ module DEBUG_UNIT
     output reg [len_addr-1:0] addr_mem_inst,     // direccion de la instruccion a escribir
     output reg [len_data-1:0] ins_to_mem,        // instruccion a escribir
     output reg wr_ram_inst,                      // pin para habilitar escritura a INST_MEM
-    /*output rewr_flag,
+    output rewr_flag,
     output [2:0] substate_flag,
     output [2:0] substatenext_flag,
     output [2:0] state_flag,
-    output [2:0] statenext_flag,*/
+    output [2:0] statenext_flag,
     //output [len_data-1:0] test,
 
     output reg ctrl_clk_mips,
@@ -90,11 +90,11 @@ module DEBUG_UNIT
 
 
 
-    /*assign rewr_flag = rewrite_flag;
+    assign rewr_flag = rewrite_flag;
     assign substate_flag = sub_state;
     assign substatenext_flag = sub_state_next;
     assign state_flag = state;
-    assign statenext_flag = state_next;*/
+    assign statenext_flag = state_next;
 
     //assign addr_mem_inst = num_inst;
     //assign ins_to_mem = instruction;
@@ -144,6 +144,7 @@ module DEBUG_UNIT
 		case(state)
 			IDLE:
 				begin
+          ctrl_clk_mips = 1'b0;
           rewrite_flag = rewrite_flag_prev;
 					if((rx_done_tick == 1) && (reg_rx_done_tick == 0)) 
 					begin
@@ -167,6 +168,7 @@ module DEBUG_UNIT
 
 			PROGRAMMING:
 				begin
+        ctrl_clk_mips = 1'b0;
                     case(sub_state)
                         SUB_INIT:
                         begin
@@ -292,6 +294,7 @@ module DEBUG_UNIT
 		
 			WAITING:
 				begin
+          ctrl_clk_mips = 1'b0;
           rewrite_flag = rewrite_flag_prev;
 					if((rx_done_tick == 1) && (reg_rx_done_tick == 0))
 					begin
@@ -327,19 +330,21 @@ module DEBUG_UNIT
 		
 			STEP_BY_STEP:
 				begin
+          ctrl_clk_mips = 1'b0;
           rewrite_flag = rewrite_flag_prev;
 					if((rx_done_tick == 1) && (reg_rx_done_tick == 0))
 					begin
-                        if (reg_rxdatain == StepSignal)
-                        begin
-                          state_next = SENDING_DATA;
-                          sub_state_next = SUB_INIT;
-                        end
-                        else
-                        begin
-                          state_next = STEP_BY_STEP;
-                          sub_state_next = SUB_INIT;
-                        end
+            if (reg_rxdatain == StepSignal)
+            begin
+              ctrl_clk_mips = 1'b1;
+              state_next = SENDING_DATA;
+              sub_state_next = SUB_INIT;
+            end
+            else
+            begin
+              state_next = STEP_BY_STEP;
+              sub_state_next = SUB_INIT;
+            end
 					end
 					else
 					begin
@@ -350,6 +355,7 @@ module DEBUG_UNIT
 				
 			CONTINUOUS:
 				begin
+          ctrl_clk_mips = 1'b1;
                     rewrite_flag = rewrite_flag_prev;
 					if (halt)
                     begin
@@ -364,20 +370,30 @@ module DEBUG_UNIT
 				end
       SENDING_DATA:   
         begin
+          ctrl_clk_mips = 1'b0;
           rewrite_flag = rewrite_flag_prev;
 					if((tx_done_tick == 1) && (reg_tx_done_tick == 0))
-					begin
-						state_next = IDLE;
-            sub_state_next = SUB_INIT;
-					end
-					else
-					begin
-						state_next = SENDING_DATA;
-            sub_state_next = SUB_INIT;
-					end
+            begin
+              if(halt)
+                begin
+                  state_next = WAITING;
+                  sub_state_next = SUB_INIT;
+                end
+              else
+                begin
+                  state_next = STEP_BY_STEP;
+                  sub_state_next = SUB_INIT;
+                end
+            end
+          else
+            begin
+              state_next = SENDING_DATA;
+              sub_state_next = SUB_INIT;
+            end
 				end
 			default:
 				begin
+          ctrl_clk_mips = 1'b0;
           rewrite_flag = rewrite_flag_prev;
 					state_next = IDLE;
           sub_state_next = SUB_INIT;
@@ -398,7 +414,7 @@ module DEBUG_UNIT
         instruction = ins_to_mem;
         num_inst = 8'b0;
         write_enable_ram_inst = 1'b0;
-        ctrl_clk_mips = 1'b0;
+        //ctrl_clk_mips = 1'b0;
         debug = 1'b0;
 				tx_start = 1'b0;
 				reg_data_out_next  = data_out;
@@ -413,7 +429,7 @@ module DEBUG_UNIT
                             instruction = 0;
                             num_inst = addr_mem_inst;
                             write_enable_ram_inst = 1'b0;
-                            ctrl_clk_mips = 1'b0;
+                           // ctrl_clk_mips = 1'b0;
                             debug = 1'b1;
                             tx_start = 1'b0;
                             reg_data_out_next  = data_out;
@@ -424,7 +440,7 @@ module DEBUG_UNIT
                             num_inst = addr_mem_inst;
                             reg_rxdatain = rx_data_in;
                             write_enable_ram_inst = 1'b0;
-                            ctrl_clk_mips = 1'b0;
+                            //ctrl_clk_mips = 1'b0;
                             debug = 1'b1;
                             tx_start = 1'b0;
                             reg_data_out_next  = data_out;
@@ -452,7 +468,7 @@ module DEBUG_UNIT
                             num_inst = addr_mem_inst;
                             write_enable_ram_inst = 1'b0;
                             reg_rxdatain = rx_data_in;
-                            ctrl_clk_mips = 1'b0;
+                           // ctrl_clk_mips = 1'b0;
                             debug = 1'b1;
                             tx_start = 1'b0;
                             reg_data_out_next  = data_out;  
@@ -480,7 +496,7 @@ module DEBUG_UNIT
                             num_inst = addr_mem_inst;
                             write_enable_ram_inst = 1'b0;
                             reg_rxdatain = rx_data_in;
-                            ctrl_clk_mips = 1'b0;
+                            //ctrl_clk_mips = 1'b0;
                             debug = 1'b1;
                             tx_start = 1'b0;
                             reg_data_out_next  = data_out; 
@@ -508,7 +524,7 @@ module DEBUG_UNIT
                             num_inst = addr_mem_inst;
                             write_enable_ram_inst = 1'b0;
                             reg_rxdatain = rx_data_in;
-                            ctrl_clk_mips = 1'b0;
+                           // ctrl_clk_mips = 1'b0;
                             debug = 1'b1;
                             tx_start = 1'b0;
                             reg_data_out_next  = data_out;   
@@ -537,7 +553,7 @@ module DEBUG_UNIT
                             num_inst = addr_mem_inst + 8'b1;
                             reg_rxdatain = rx_data_in;
                             write_enable_ram_inst = 1'b1;
-                            ctrl_clk_mips = 1'b0;
+                           // ctrl_clk_mips = 1'b0;
                             debug = 1'b0;
                             tx_start = 1'b0;
                             reg_data_out_next  = data_out;
@@ -549,7 +565,7 @@ module DEBUG_UNIT
                         num_inst = addr_mem_inst;
                         reg_rxdatain = rx_data_in;
                         write_enable_ram_inst = 1'b0;
-                        ctrl_clk_mips = 1'b0;
+                        //ctrl_clk_mips = 1'b0;
                         debug = 1'b0;
                         tx_start = 1'b0;
                         reg_data_out_next  = data_out;
@@ -563,7 +579,7 @@ module DEBUG_UNIT
                 reg_rxdatain = rx_data_in;
                 num_inst = addr_mem_inst;
                 write_enable_ram_inst = 1'b0;
-                ctrl_clk_mips = 1'b0;
+               // ctrl_clk_mips = 1'b0;
                 debug = 1'b0;
                 tx_start = 1'b0;
                 reg_data_out_next  = data_out;				
@@ -575,7 +591,7 @@ module DEBUG_UNIT
                 reg_rxdatain = rx_data_in;
                 num_inst = addr_mem_inst;
                 write_enable_ram_inst = 1'b0;
-                ctrl_clk_mips = 1'b1;
+                //ctrl_clk_mips = 1'b0;
                 debug = 1'b0;
                 tx_start = 1'b0;
                 reg_data_out_next  = data_out;
@@ -587,23 +603,23 @@ module DEBUG_UNIT
                 num_inst = addr_mem_inst;
                 reg_rxdatain = rx_data_in;
                 write_enable_ram_inst = 1'b0;
-                ctrl_clk_mips = 1'b1;
+               // ctrl_clk_mips = 1'b1;
                 debug = 1'b0;
                 tx_start = 1'b0;
                 reg_data_out_next  = data_out;
 			end
 			
-            SENDING_DATA:
-            begin
+      SENDING_DATA:
+      begin
                 instruction = ins_to_mem;
                 num_inst = addr_mem_inst;
                 reg_rxdatain = rx_data_in;
                 write_enable_ram_inst = 1'b0;
-                ctrl_clk_mips = 1'b0;
+                //ctrl_clk_mips = 1'b0;
                 debug = 1'b0;
                 tx_start = 1'b1;
                 reg_data_out_next = test_reg; // mandamos solo los primeros 8 bits del PC
-            end
+      end
 
 			default:
 			begin
@@ -611,7 +627,7 @@ module DEBUG_UNIT
                 num_inst = addr_mem_inst;
                 write_enable_ram_inst = 1'b0;
                 reg_rxdatain = rx_data_in;
-                ctrl_clk_mips = 1'b0;
+               // ctrl_clk_mips = 1'b0;
                 debug = 1'b0;
                 tx_start = 1'b0;
                 reg_data_out_next  = data_out;

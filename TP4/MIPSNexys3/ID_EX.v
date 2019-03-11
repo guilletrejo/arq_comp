@@ -53,9 +53,16 @@ module ID_EX #(
 	output reg [len_mem_bus-1:0] memory_bus,
 	output reg [len_wb_bus-1:0] writeBack_bus,
 
+	// TESTINNGGGG
+	output [len_data-1:0] out_test,
+
 	//señal de control de riesgos
 	output stall_flag
     );
+
+	// TESTIINGNNGNGNGNG
+	wire [len_data-1:0] conn_test;
+	assign out_test = conn_test;
 
 	wire [len_exec_bus-1:0] connect_execute_bus;
 	wire [len_mem_bus-1:0] connect_memory_bus ;
@@ -132,6 +139,7 @@ module ID_EX #(
 			.wire_read_data_7(connect_out_wire_reg7),*/
 			.reg_jump_register(connect_reg_jump_register),
 			.read_data_1(connect_out_reg1),
+			.test_reg(conn_test),
 			.read_data_2(connect_out_reg2)
 		);
 

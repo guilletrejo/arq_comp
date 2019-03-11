@@ -37,12 +37,12 @@ module DEBUG_UNIT_TEST;
 	wire [7:0] addr_mem_inst;
 	wire [31:0] ins_to_mem;
 	wire wr_ram_inst;
-	wire [31:0] test;
-	/*wire rewr_flag;
+	//wire [31:0] test;
+	wire rewr_flag;
 	wire [2:0] substate_flag;
 	wire [2:0] substatenext_flag;
 	wire [2:0] state_flag;
-	wire [2:0] statenext_flag;*/
+	wire [2:0] statenext_flag;
 	wire ctrl_clk_mips;
 	wire debug;
 	wire tx_start;
@@ -57,12 +57,12 @@ module DEBUG_UNIT_TEST;
 		.addr_mem_inst(addr_mem_inst), 
 		.ins_to_mem(ins_to_mem), 
 		.wr_ram_inst(wr_ram_inst), 
-		.test(test), 
-		/*.rewr_flag(rewr_flag),
+		//.test(test), 
+		.rewr_flag(rewr_flag),
 		.substate_flag(substate_flag),
 		.substatenext_flag(substatenext_flag),
 		.state_flag(state_flag),
-		.statenext_flag(statenext_flag),*/
+		.statenext_flag(statenext_flag),
 		.ctrl_clk_mips(ctrl_clk_mips), 
 		.debug(debug), 
 		.rx_done_tick(rx_done_tick), 
@@ -360,8 +360,10 @@ module DEBUG_UNIT_TEST;
 		#200 clk=1;
 		#200 clk=0;
 		
-		rx_data_in = 8'b00000010;	// Continuous Signal
+		//rx_data_in = 8'b00000010;	// Continuous Signal
 		
+		rx_data_in = 8'b00000011;	// Step-by-step Signal
+
 		#200 clk=1;
 		#200 clk=0;
 		#200 clk=1;
@@ -385,25 +387,131 @@ module DEBUG_UNIT_TEST;
 		#200 clk=1;
 		#200 clk=0;
 
-		halt = 1'b1;
+		rx_data_in = 8'b00000110;	// Step Signal		
 
 		#200 clk=1;
 		#200 clk=0;
 		#200 clk=1;
 		#200 clk=0;
+
+		//halt = 1'b1;
+
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+		
 		#200 clk=1;
 		#200 clk=0;
 		#200 clk=1;
 		#200 clk=0;
 
 		tx_done_tick = 1'b1;	// El MIPS me termino de mandar los datos
-
+		
 		#200 clk=1;
 		#200 clk=0;
 		#200 clk=1;
 		#200 clk=0;
 
 		tx_done_tick = 1'b0;
+
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+		rx_data_in = 8'b00000110;	// Step Signal	
+
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;	
+
+		//halt = 1'b1;
+
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+		tx_done_tick = 1'b1;	// El MIPS me termino de mandar los datos
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+		tx_done_tick = 1'b0;
+
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+		rx_data_in = 8'b00000110;	// Step Signal		
+
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+		//halt = 1'b1;
+
+		rx_done_tick = 1'b1;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		rx_done_tick = 1'b0;
+
+
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+		tx_done_tick = 1'b1;	// El MIPS me termino de mandar los datos
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+		tx_done_tick = 1'b0;
+
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+		
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+		//tx_done_tick = 1'b1;	// El MIPS me termino de mandar los datos
+
+		#200 clk=1;
+		#200 clk=0;
+		#200 clk=1;
+		#200 clk=0;
+
+	//	tx_done_tick = 1'b0;
 
 		#200 clk=1;
 		#200 clk=0;
