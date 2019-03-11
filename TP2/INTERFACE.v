@@ -28,7 +28,11 @@ module INTERFACE
 	output reg tx_start = 0,				
 
 	// para escribir en TX
- 	output reg [NBIT_DATA_LEN-1:0] data_out  
+ 	output reg [NBIT_DATA_LEN-1:0] data_out,
+
+	// para testear MIPS
+
+	output [NBIT_DATA_LEN-1:0]test
 ); 
 
 	// estados 
@@ -48,7 +52,10 @@ module INTERFACE
 	reg [NBIT_OP_LEN-1  :0] reg_opout_next;
 	reg [NBIT_DATA_LEN-1:0] reg_data_out_next;
 	
-	
+	//para probar MIPS
+
+	//assign test = rx_data_in;
+
 	/* Logica de actualizacion de registros
 	   (pasa lo que hay en la entrada a los reg)
 		en cada pulso de clock.
@@ -63,6 +70,7 @@ module INTERFACE
 		bout <= reg_bout_next;
 		opout <= reg_opout_next;
 		data_out <= reg_data_out_next;
+		test <= rx_data_in;
 	end
 	
 	/* Logica de actualizacion de estados.

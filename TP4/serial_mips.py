@@ -46,6 +46,12 @@ def read32():
 	result = concat_bin(reg_4, reg_3, reg_2, reg_1)
 	return result
 
+def read8():
+	# leo soloel byte menos significativo
+	reg_1 = ser.read()
+
+	return reg_1
+
 def concat_bin(byte_4, byte_3, byte_2, byte_1):
 
 	return (ord(byte_4) << 24) + (ord(byte_3) << 16) + (ord(byte_2) << 8) + ord(byte_1)
@@ -201,8 +207,8 @@ def showAllRegisters():
 
 def readPC():
 	print "---Contador de Programa---"
-	pc = read32()
-	print_registro_32("PC: ", pc)	
+	pc = read8()
+	print "result =", bin(ord(pc))	
 	print
 
 def read_all():

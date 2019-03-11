@@ -34,15 +34,15 @@ module DEBUG_UNIT_TEST;
 	reg [7:0] rx_data_in;
 
 	// Outputs
-	wire [10:0] addr_mem_inst;
+	wire [7:0] addr_mem_inst;
 	wire [31:0] ins_to_mem;
 	wire wr_ram_inst;
 	wire [31:0] test;
-	wire rewr_flag;
+	/*wire rewr_flag;
 	wire [2:0] substate_flag;
 	wire [2:0] substatenext_flag;
 	wire [2:0] state_flag;
-	wire [2:0] statenext_flag;
+	wire [2:0] statenext_flag;*/
 	wire ctrl_clk_mips;
 	wire debug;
 	wire tx_start;
@@ -58,11 +58,11 @@ module DEBUG_UNIT_TEST;
 		.ins_to_mem(ins_to_mem), 
 		.wr_ram_inst(wr_ram_inst), 
 		.test(test), 
-		.rewr_flag(rewr_flag),
+		/*.rewr_flag(rewr_flag),
 		.substate_flag(substate_flag),
 		.substatenext_flag(substatenext_flag),
 		.state_flag(state_flag),
-		.statenext_flag(statenext_flag),
+		.statenext_flag(statenext_flag),*/
 		.ctrl_clk_mips(ctrl_clk_mips), 
 		.debug(debug), 
 		.rx_done_tick(rx_done_tick), 

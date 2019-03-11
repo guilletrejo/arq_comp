@@ -16,7 +16,7 @@ module TOP
 	input RX_INPUT,
 
 	output TX_OUTPUT,
-	output OSC
+	output [LEN_DATA-1:0]led_fpga
 );
 
 	wire [`LEN_DATA-1 : 0] connect_A;
@@ -29,8 +29,9 @@ module TOP
 	wire connect_tx_start;
 	wire connect_rx_done_tick;
 	wire connect_tx_done_tick;
-	
-   assign OSC = TX_OUTPUT;
+	wire [LEN_DATA-1:0] conn_led;
+
+  assign led_fpga = conn_led;
 	
 	UART #(
 		.NBIT_DATA(`LEN_DATA),
@@ -78,6 +79,7 @@ module TOP
 			.opout(connect_Op),
 		 	.tx_start(connect_tx_start),
 		 	.data_out(connect_data_tx),
+			.test (conn_led),
 			.tx_done_tick(connect_tx_done_tick)
 		); 
 
