@@ -123,7 +123,7 @@ module EX_MEM #(
 			.out_mux(mux2_alu_forwarding)
 			);
 
-	always @(negedge clk, posedge reset) 
+	always @(posedge clk, posedge reset) 
 	begin
 		if (reset) begin
 			out_pc_branch <= 0;

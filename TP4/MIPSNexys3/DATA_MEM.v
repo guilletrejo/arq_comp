@@ -16,8 +16,8 @@ module DATA_MEM #(
   input clk,                           // Clock
   input Wr,                            // Write enable
   input Rd,                            // RAM Enable, for additional power savings, disable port when not in use
-  output [len_data-1:0] Out_Data         // RAM output data
-  //output [len_data-1:0] douta_wire     // RAM output data wire
+  output [len_data-1:0] Out_Data,         // RAM output data
+  output [len_data-1:0] douta_wire     // RAM output data wire
 );
   wire regcea = 1;                         // Output register enable
   wire rsta = 0; // Output reset (does not affect memory contents)
@@ -26,7 +26,7 @@ module DATA_MEM #(
   reg [len_data-1:0] ram_data = {len_data{1'b0}};
 
 
-  //assign douta_wire = BRAM[Addr];
+  assign douta_wire = ram_data[0];
 
   // The following code either initializes the memory values to a specified file or to all zeros to match hardware
   generate
@@ -46,6 +46,10 @@ module DATA_MEM #(
   begin
     if (Wr)
       BRAM[Addr] <= In_Data;
+  end
+
+  always @(posedge clk)
+  begin
     if (Rd)
       ram_data <= BRAM[Addr];
   end

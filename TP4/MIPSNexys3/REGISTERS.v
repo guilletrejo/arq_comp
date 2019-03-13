@@ -21,14 +21,14 @@ module REGISTERS#(
 	input [num_bits-1:0] write_register,
 	input [len_data-1:0] write_data,
 
-	//output [len_data-1:0] wire_read_data_0, // ver despues para que lo usa
-	//output [len_data-1:0] wire_read_data_1, // ver despues para que lo usa
-	/*output [len_data-1:0] wire_read_data_2, // ver despues para que lo usa
+	output [len_data-1:0] wire_read_data_0, // ver despues para que lo usa
+	output [len_data-1:0] wire_read_data_1, // ver despues para que lo usa
+	output [len_data-1:0] wire_read_data_2, // ver despues para que lo usa
 	output [len_data-1:0] wire_read_data_3, // ver despues para que lo usa
 	output [len_data-1:0] wire_read_data_4, // ver despues para que lo usa
 	output [len_data-1:0] wire_read_data_5, // ver despues para que lo usa
 	output [len_data-1:0] wire_read_data_6, // ver despues para que lo usa
-	output [len_data-1:0] wire_read_data_7, // ver despues para que lo usa*/
+	output [len_data-1:0] wire_read_data_7, // ver despues para que lo usa
 
 	// TESTINGGG
 	output [len_data-1:0] test_reg,
@@ -40,14 +40,14 @@ module REGISTERS#(
 
 	reg [len_data-1:0] registers_mips [depth-1:0]; // Banco de registros (tam. es len_data y cantidad es depth) 
 
-	//assign wire_read_data_0 = registers_mips[0]; // Algo desconozido aun
-	//assign wire_read_data_1 = registers_mips[3]; // Algo desconozido aun
-	/*assign wire_read_data_2 = registers_mips[2]; // Algo desconozido aun
+	assign wire_read_data_0 = registers_mips[0]; // Algo desconozido aun
+	assign wire_read_data_1 = registers_mips[1]; // Algo desconozido aun
+	assign wire_read_data_2 = registers_mips[2]; // Algo desconozido aun
 	assign wire_read_data_3 = registers_mips[3]; // Algo desconozido aun
 	assign wire_read_data_4 = registers_mips[4]; // Algo desconozido aun
 	assign wire_read_data_5 = registers_mips[5]; // Algo desconozido aun
 	assign wire_read_data_6 = registers_mips[6]; // Algo desconozido aun
-	assign wire_read_data_7 = registers_mips[7]; // Algo desconozido aun*/
+	assign wire_read_data_7 = registers_mips[7]; // Algo desconozido aun
 	
 	assign reg_jump_register = registers_mips[read_register_1];
 

@@ -27,6 +27,8 @@ module IF_ID #(
 	output reg [len_data-1:0] out_pc_branch,
 	output [len_data-1:0] out_instruction,
 	output [len_data-1:0] out_pc,
+
+
 	//output [len_data-1:0] out_adder,
 	output reg out_halt_flag_if // para debug
     );
@@ -63,7 +65,7 @@ module IF_ID #(
             .clk(clk),
             .reset(reset),
             .PCWrite(~stall_flag), //ver eso despues, la stall flag no deberia estar negada? SI
-				.adder_input((connect_wire_douta)?(conn_pc_adder_imem):(conn_pcmux_pc)),
+			.adder_input((connect_wire_douta)?(conn_pc_adder_imem):(conn_pcmux_pc)),
 			
             .pc_out(conn_pc_adder_imem)
 			);
@@ -72,7 +74,7 @@ module IF_ID #(
 		.len_addr(len_addr),
       .len_data(len_data),
 		.ram_depth(256),
-		.init_file("test2.hex")
+		.init_file("test.hex")
 		)
 		u_instruction_mem(
 			.clk(clk),
@@ -97,7 +99,7 @@ module IF_ID #(
 		); 
 
 
-	always @(posedge clk, posedge reset) 
+	always @(negedge clk, posedge reset) 
 	begin
 		if(reset) begin
 			out_pc_branch <= 0;

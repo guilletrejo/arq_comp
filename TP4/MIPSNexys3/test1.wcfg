@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="/home/guilletrejo/arq_comp/TP4/MIPSNexys3/TOP_MIPS3_TEST_isim_beh3.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="TOP_MIPS3_TEST" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="19" />
+   <wvobject fp_name="/TOP_MIPS3_TEST/out_reg0_recolector" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_reg0_recolector[31:0]</obj_property>
+      <obj_property name="ObjectShortName">out_reg0_recolector[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/out_reg1_recolector" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_reg1_recolector[31:0]</obj_property>
+      <obj_property name="ObjectShortName">out_reg1_recolector[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/out_reg2_recolector" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_reg2_recolector[31:0]</obj_property>
+      <obj_property name="ObjectShortName">out_reg2_recolector[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/out_reg3_recolector" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_reg3_recolector[31:0]</obj_property>
+      <obj_property name="ObjectShortName">out_reg3_recolector[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/out_reg4_recolector" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_reg4_recolector[31:0]</obj_property>
+      <obj_property name="ObjectShortName">out_reg4_recolector[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/out_reg5_recolector" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_reg5_recolector[31:0]</obj_property>
+      <obj_property name="ObjectShortName">out_reg5_recolector[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/out_reg6_recolector" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_reg6_recolector[31:0]</obj_property>
+      <obj_property name="ObjectShortName">out_reg6_recolector[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/out_reg7_recolector" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_reg7_recolector[31:0]</obj_property>
+      <obj_property name="ObjectShortName">out_reg7_recolector[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/out_mem_wire" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_mem_wire[31:0]</obj_property>
+      <obj_property name="ObjectShortName">out_mem_wire[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/led_fpga" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">led_fpga[7:0]</obj_property>
+      <obj_property name="ObjectShortName">led_fpga[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/out_pc" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_pc[7:0]</obj_property>
+      <obj_property name="ObjectShortName">out_pc[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/out_instruct" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">out_instruct[31:0]</obj_property>
+      <obj_property name="ObjectShortName">out_instruct[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/halt_flag" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">halt_flag</obj_property>
+      <obj_property name="ObjectShortName">halt_flag</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/reset" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/debug_flag" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">debug_flag</obj_property>
+      <obj_property name="ObjectShortName">debug_flag</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/in_addr_mem_inst" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">in_addr_mem_inst[7:0]</obj_property>
+      <obj_property name="ObjectShortName">in_addr_mem_inst[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/in_ins_to_mem" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">in_ins_to_mem[31:0]</obj_property>
+      <obj_property name="ObjectShortName">in_ins_to_mem[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/TOP_MIPS3_TEST/wea_ram_inst" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">wea_ram_inst</obj_property>
+      <obj_property name="ObjectShortName">wea_ram_inst</obj_property>
+   </wvobject>
+</wave_config>
