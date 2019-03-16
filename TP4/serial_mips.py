@@ -286,7 +286,7 @@ if __name__ == '__main__':
 					ret = ser.write(chr(StepSignal))
 					readTestReg()
 					count = count + 1
-					if count == 7:
+					if count == 30:
 						print 'Ejecucion finalizada'
 						count = 0
 						break

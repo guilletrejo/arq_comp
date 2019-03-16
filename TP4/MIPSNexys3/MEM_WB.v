@@ -33,7 +33,7 @@ module MEM_WB #(
 	output reg [num_bits-1:0] out_write_reg,
 
 	//output [len_data-1:0] out_mem_wire,
-	output reg out_halt_flag_m
+	output reg out_halt_flag_m=0
     );
 
 	wire 	MemWrite,
@@ -48,7 +48,7 @@ module MEM_WB #(
 
 	reg [len_data-1:0] 	connect_mux_in_mem;	
 	wire [len_data-1:0]	conn_out_mem;
-	//wire [len_data-1:0]	connect_out_mem_debug;
+	wire [len_data-1:0]	connect_out_mem_debug;
 
 
 
@@ -73,7 +73,7 @@ module MEM_WB #(
 		.ram_depth(256)
 		)
 		u_data_mem(
-            .clk(clk),
+            .clk(~clk),
             .Rd(MemRead),
             .Wr(MemWrite),
             .Addr(in_addr_mem[7:0]),
@@ -82,6 +82,15 @@ module MEM_WB #(
 			.Out_Data(conn_out_mem)
 			//.douta_wire(connect_out_mem_debug)
 			);
+
+	initial
+    begin
+      	read_data <= 0;
+		out_writeBack_bus <= 0;
+		out_addr_mem <= 0;
+		out_write_reg <= 0;
+		out_halt_flag_m <= 0;
+    end
 
 	always @(posedge clk, posedge reset)
 	begin

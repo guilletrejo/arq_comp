@@ -80,7 +80,7 @@ module DEBUG_UNIT
     // alimentan salidas
     reg [len_data-1:0] instruction=0;     // instruccion a escribir en memoria de programa
     reg write_enable_ram_inst=1'b0;          // le dice al MIPS cuando escribir en mem la instruccion
-	reg [len_addr-1:0] num_inst=7'b0;  // contador de instrucciones para direccionar donde escribir
+	reg [len_addr-1:0] num_inst=8'b0;  // contador de instrucciones para direccionar donde escribir
 	reg [NBIT_DATA_LEN-1:0] reg_data_out_next=0;
   reg [NBIT_DATA_LEN-1:0] reg_rxdatain=0;  
 
@@ -412,7 +412,7 @@ module DEBUG_UNIT
 			IDLE:
 			begin
         instruction = ins_to_mem;
-        num_inst = 7'b0;
+        num_inst = 8'b0;
         write_enable_ram_inst = 1'b0;
         //ctrl_clk_mips = 1'b0;
         debug = 1'b0;
@@ -550,7 +550,7 @@ module DEBUG_UNIT
                     SUB_WRITE_MEM:
                         begin
                             instruction = ins_to_mem;
-                            num_inst = addr_mem_inst + 7'b1;
+                            num_inst = addr_mem_inst + 8'b1;
                             reg_rxdatain = rx_data_in;
                             write_enable_ram_inst = 1'b1;
                            // ctrl_clk_mips = 1'b0;

@@ -25,7 +25,7 @@ module INSTRUCTION_MEM
 
         output [len_data-1:0] Data,     // Contenido de la instruccion leida
         //TEST
-        //output [len_data-1:0] Data_test, //TEEEEST
+        output [len_data-1:0] Data_test, //TEEEEST
         //
         output wire_douta               // Para detectar instruccion de HALT
     );
@@ -39,7 +39,7 @@ module INSTRUCTION_MEM
     assign wire_douta = &instruccion_ram[Addr_reg][len_data-1:len_data-6]; // verifica si el Opcode es 111111 para hacer el halt
     
     //test
-   // assign Data_test = instruccion_ram[1];
+    assign Data_test = instruccion_ram[0];
 	 
 	 /*  Para inicializar la RAM en 0000 0000 */
      initial

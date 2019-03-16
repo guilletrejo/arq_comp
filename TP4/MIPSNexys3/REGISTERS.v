@@ -52,16 +52,22 @@ module REGISTERS#(
 	assign reg_jump_register = registers_mips[read_register_1];
 
 	//TESTITNITSNIGINGNFGI
-	assign test_reg = registers_mips[3];
+	assign test_reg = registers_mips[4];
 
 	generate
 		integer i;		
 		initial
-        for (i = 0; i < depth; i = i + 1)
-          registers_mips[i] = i; // reg0 = 0. reg1 = 1. reg2 = 2... etc.
+		begin
+			for (i = 0; i < depth; i = i + 1)
+			begin
+				registers_mips[i] = i; // reg0 = 0. reg1 = 1. reg2 = 2... etc.
+			end
+			read_data_1 <= 0;
+			read_data_2 <= 0;
+		end
 	endgenerate
 
-	always @(posedge clk)
+	always @(negedge clk)
 	begin
 		if (reset)
 		begin
@@ -75,7 +81,7 @@ module REGISTERS#(
 		end
 	end
 
-	always @(negedge clk)
+	always @(posedge clk)
 	begin
 		if (RegWrite) 
 		begin

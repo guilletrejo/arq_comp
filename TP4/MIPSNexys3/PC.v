@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-//	Alumnos:
+//Alumnos:
 //				 Ortmann, Nestor Javier
 // 				 Trejo, Bruno Guillermo
 // Year: 		 2019
@@ -18,8 +18,12 @@ module PC
 
         output reg [len_addr-1 : 0] pc_out = 0 // Direccion que se leera de INSTRUCTION_MEM
     );
+    initial
+    begin
+      pc_out = {len_addr{1'b 0}};
+    end
 
-    always @(posedge clk) // Podria hacer posedge aca?
+    always @(posedge clk)
     begin
         if(reset)
         begin
@@ -29,10 +33,10 @@ module PC
         begin
           pc_out = adder_input;
         end
-        else
+        /*else
         begin
           pc_out = pc_out;
-        end
+        end*/
     end    
 
 endmodule

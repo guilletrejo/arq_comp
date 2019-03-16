@@ -44,7 +44,7 @@ module ID_EX #(
 	output [len_data-1:0] out_reg6_recolector,	// para recolector en modo debug
 	output [len_data-1:0] out_reg7_recolector,	// para recolector en modo debug*/
 	
-	output reg out_halt_flag_d,
+	output reg out_halt_flag_d=0,
 
 	// señales de control
 	output flag_jump,
@@ -121,7 +121,7 @@ module ID_EX #(
 		.num_bits(5)
 		)
 		u_registers(
-			.clk(clk),
+			.clk(~clk),
 			.reset(reset),
 			.RegWrite(RegWrite),
 			.read_register_1(in_instruccion[25:21]),
@@ -154,6 +154,20 @@ module ID_EX #(
 
 			.stall_flag(mux_control)
 		);
+
+	initial
+    begin
+    	out_pc_branch <= 0;
+		out_sign_extend <= 0;
+		out_rt <= 0;
+		out_rd <= 0;
+		out_rs <= 0;
+		out_shamt <= 0;
+		execute_bus <= 0;
+		memory_bus <= 0;
+		writeBack_bus <= 0;
+		out_halt_flag_d <= 0;
+    end
 
 	always @(posedge clk, posedge reset) 
 	begin

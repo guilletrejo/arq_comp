@@ -47,7 +47,7 @@ module EX_MEM #(
 	output reg [len_data-1:0] out_reg2,
 	output reg [num_bits-1:0] out_write_reg,
 
-	output reg out_halt_flag_e,
+	output reg out_halt_flag_e=0,
 
 	// señales de control
 	output reg [len_mem_bus-1:0] memory_bus_out,
@@ -122,6 +122,18 @@ module EX_MEM #(
 			.select(conn_forwarding_mux2),
 			.out_mux(mux2_alu_forwarding)
 			);
+
+	initial
+	begin
+    out_pc_branch <= 0;
+		out_alu <= 0;
+		zero_flag <= 0;
+		out_reg2 <= 0;
+		out_write_reg <= 0;
+		memory_bus_out <= 0;
+		writeBack_bus_out <= 0;
+		out_halt_flag_e <= 0;	
+  end
 
 	always @(posedge clk, posedge reset) 
 	begin

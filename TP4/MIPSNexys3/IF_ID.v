@@ -9,7 +9,6 @@
 
 module IF_ID #(
 	parameter len_data = 32,
-	parameter len_test = 8,
 	parameter len_addr = 7
 	) (
 	input clk,
@@ -27,11 +26,9 @@ module IF_ID #(
 
 	output reg [len_data-1:0] out_pc_branch,
 	output [len_data-1:0] out_instruction,
-	output [len_test-1:0] out_pc,
+	output [len_addr-1:0] out_pc,
 
-
-	//output [len_data-1:0] out_adder,
-	output reg out_halt_flag_if // para debug
+	output reg out_halt_flag_if=0 // para debug
     );
 
     wire [len_data-1:0] conn_adder_pcmux;
@@ -44,10 +41,10 @@ module IF_ID #(
     wire flush = in_pc_src[0];
 
 	//test
-	//wire [len_data-1:0] conn_instruction_test;
+	wire [len_data-1:0] conn_instruction_test;
 
     assign out_instruction = conn_out_instruction;
-    assign out_pc = conn_pc_adder_imem[7:0];
+    assign out_pc = conn_instruction_test[7:0];
 
 	PC_MUX #(
 		.len_data(len_data)
@@ -66,7 +63,7 @@ module IF_ID #(
 		.len_addr(len_data)
 		)
 		u_pc(
-            .clk(clk),
+            .clk(~clk),
             .reset(reset),
             .PCWrite(~stall_flag), //ver eso despues, la stall flag no deberia estar negada? SI
 			.adder_input((connect_wire_douta)?(conn_pc_adder_imem):(conn_pcmux_pc)),
@@ -79,20 +76,15 @@ module IF_ID #(
       .len_data(len_data)
 		)
 		u_instruction_mem(
-			//.clk(clk),
 			.Wr(wea_ram_inst),
             .Addr(debug_flag ? in_addr_debug : conn_pc_adder_imem[len_addr-1:0]),
 			.In_Data(in_ins_to_mem),
 
-            .Data(conn_out_instruction),
 			//test
-			//.Data_test(conn_instruction_test),
+			.Data_test(conn_instruction_test),
 
-
-			//.reset(reset),
-			//.ena(~stall_flag), // ver desues si hace falta
+            .Data(conn_out_instruction),
 			.wire_douta(connect_wire_douta)
-			//.flush(flush)
 			); 
 
 	PC_ADDER #(
@@ -100,10 +92,14 @@ module IF_ID #(
 		)
 		u_pc_adder(
 			.in_a(conn_pc_adder_imem),
-			//.in_b(32'b00000000000000000000000000000001),
 			.adder_out(conn_adder_pcmux)
 		); 
 
+	initial
+    begin
+      	out_pc_branch <= 0;
+		out_halt_flag_if <= 0;
+    end
 
 	always @(posedge clk, posedge reset) 
 	begin

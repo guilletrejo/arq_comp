@@ -82,19 +82,6 @@ module TOP
 
 	assign led_state = connect_state_out;*/
 
-  /*clk_wiz_0 
-  u_clk_wiz_0
-   (
-    	// Clock out ports
-    	.clk_out1(clk),     // output clk_out1
-    	// Status and control signals
-    	.reset(reset), // input reset
-    	.locked(),       // output locked
-        // Clock in ports
-    	.clk_in1(CLK100MHZ)      // input clk_in1
-    );*/
-
-
 	TOP_MIPS #(
 	.len_data(len_data),
 	.num_bits(num_bits),
@@ -127,20 +114,6 @@ module TOP
 		.Latches_3_4(connect_Latches_3_4),
 		.Latches_4_5(connect_Latches_4_5)*/
 		);
-	/*
-	recolector #(
-		.len(LEN)
-		)
-		u_recolector(
-			.clk(clk),
-			.regs(connect_regs_recolector_mips),
-			.mem_datos(connect_mem_datos_recolector_mips),
-			.enable_next(connect_enable_next),
-			.send_regs(connect_send_regs),
-			.restart(connect_restart_recolector),
-			.addr(connect_addr_recolector_mips),
-			.data(connect_data_recolector)
-	    ); 	*/
 
 	DEBUG_UNIT #(
 		.NBIT_DATA_LEN(NBIT_DATA_LEN),
