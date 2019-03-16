@@ -9,7 +9,8 @@
 
 module IF_ID #(
 	parameter len_data = 32,
-	parameter len_addr = 8
+	parameter len_test = 8,
+	parameter len_addr = 7
 	) (
 	input clk,
 	input reset,
@@ -26,7 +27,7 @@ module IF_ID #(
 
 	output reg [len_data-1:0] out_pc_branch,
 	output [len_data-1:0] out_instruction,
-	output [len_data-1:0] out_pc,
+	output [len_test-1:0] out_pc,
 
 
 	//output [len_data-1:0] out_adder,
@@ -40,10 +41,13 @@ module IF_ID #(
     wire [len_data-1:0] conn_out_instruction;
 
     wire connect_wire_douta;
-    wire flush = in_pc_src;
+    wire flush = in_pc_src[0];
+
+	//test
+	//wire [len_data-1:0] conn_instruction_test;
 
     assign out_instruction = conn_out_instruction;
-    assign out_pc = conn_pc_adder_imem;
+    assign out_pc = conn_pc_adder_imem[7:0];
 
 	PC_MUX #(
 		.len_data(len_data)
@@ -72,21 +76,23 @@ module IF_ID #(
 
 	INSTRUCTION_MEM #(
 		.len_addr(len_addr),
-      .len_data(len_data),
-		.ram_depth(256),
-		.init_file("test.hex")
+      .len_data(len_data)
 		)
 		u_instruction_mem(
-			.clk(clk),
+			//.clk(clk),
 			.Wr(wea_ram_inst),
             .Addr(debug_flag ? in_addr_debug : conn_pc_adder_imem[len_addr-1:0]),
 			.In_Data(in_ins_to_mem),
 
             .Data(conn_out_instruction),
+			//test
+			//.Data_test(conn_instruction_test),
+
+
 			//.reset(reset),
-			//.ena(stall_flag), // ver desues si hace falta
+			//.ena(~stall_flag), // ver desues si hace falta
 			.wire_douta(connect_wire_douta)
-			//.flush(flush),
+			//.flush(flush)
 			); 
 
 	PC_ADDER #(
@@ -94,12 +100,12 @@ module IF_ID #(
 		)
 		u_pc_adder(
 			.in_a(conn_pc_adder_imem),
-			.in_b(1),
+			//.in_b(32'b00000000000000000000000000000001),
 			.adder_out(conn_adder_pcmux)
 		); 
 
 
-	always @(negedge clk, posedge reset) 
+	always @(posedge clk, posedge reset) 
 	begin
 		if(reset) begin
 			out_pc_branch <= 0;

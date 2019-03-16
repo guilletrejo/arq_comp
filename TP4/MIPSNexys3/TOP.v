@@ -10,7 +10,7 @@ module TOP
 #(
     parameter NBIT_DATA_LEN = 8,
 	parameter len_data = 32,
-	parameter len_addr = 8,
+	parameter len_addr = 7,
 	parameter num_bits = 5,
     parameter estamos_en_test_bench = 0,
 	parameter len_exec_bus = 11,
@@ -50,7 +50,7 @@ module TOP
 		 connect_tx_debug,
 		 //connect_rx_debug,
 		 connect_wea_ram_inst;
-	wire [7:0]	connect_pc_debug;
+	wire [NBIT_DATA_LEN-1:0]	connect_pc_debug;
 		 
 	wire [len_addr-1:0] connect_addr_mem_inst;
 	wire [len_data-1:0] connect_ins_to_mem;
@@ -66,11 +66,11 @@ module TOP
 
 	//assign connect_write_dataconnect_write_data_5_2_5_2 = (connect_out_writeBack_bus[0]) ? connect_read_data : connect_out_addr_mem;
 
-	assign clk_mips = (ctrl_clk_mips) ? (!CLK100MHZ) : (1'b 0);
+	assign clk_mips = (ctrl_clk_mips) ? (CLK100MHZ) : (1'b 0);
 
 	//assign connect_rx_debug = RX_INPUT; //(1 & estamos_en_test_bench) ? connect_tx_debug : UART_TXD_IN;
 	assign TX_OUTPUT = connect_tx_debug;
-	assign led_fpga = connect_uart_data_in;
+	//assign led_fpga = connect_pc_debug;
 	//assign tx_done_debug = connect_uart_tx_done;
 
 
@@ -120,6 +120,7 @@ module TOP
 		//.out_reg1_recolector(conn_led),
 		//.out_mem_wire(conn_led),
 		.out_pc(connect_pc_debug),
+		.led_fpga(led_fpga),
 		.halt_flag(connect_halt)
 		/*.Latches_1_2(connect_Latches_1_2),
 		.Latches_2_3(connect_Latches_2_3),

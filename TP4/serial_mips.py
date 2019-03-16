@@ -282,10 +282,6 @@ if __name__ == '__main__':
 					while (not read_all()):
 						ret = ser.write(chr(StepSignal))
 					break
-				elif command == '1':
-					ret = ser.write(chr(StartSignal)) 
-					instrucciones = openFile(ser, file)
-					ret = ser.write(chr(StepByStepSignal))
 				else:
 					ret = ser.write(chr(StepSignal))
 					readTestReg()
