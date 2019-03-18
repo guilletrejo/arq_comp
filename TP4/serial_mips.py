@@ -41,16 +41,21 @@ def read32():
 	reg_1 = ser.read()
 	reg_2 = ser.read()
 	reg_3 = ser.read()
-	reg_4 = ser.read()
+	#reg_4 = ser.read()
 
-	result = concat_bin(reg_4, reg_3, reg_2, reg_1)
+	#result = concat_bin(reg_4, reg_3, reg_2, reg_1)
+	result = concat_bin3(reg_3, reg_2, reg_1)
 	return result
 
 def read8():
-	# leo soloel byte menos significativo
+	# leo solo el byte menos significativo
 	reg_1 = ser.read()
 
 	return reg_1
+
+def concat_bin3(byte_3, byte_2, byte_1):
+
+	return (ord(byte_3) << 16) + (ord(byte_2) << 8) + ord(byte_1)
 
 def concat_bin(byte_4, byte_3, byte_2, byte_1):
 
@@ -284,7 +289,8 @@ if __name__ == '__main__':
 					break
 				else:
 					ret = ser.write(chr(StepSignal))
-					readTestReg()
+					reg_read = read32()
+					print reg_read
 					count = count + 1
 					if count == 30:
 						print 'Ejecucion finalizada'

@@ -50,7 +50,7 @@ module TOP
 		 connect_tx_debug,
 		 //connect_rx_debug,
 		 connect_wea_ram_inst;
-	wire [NBIT_DATA_LEN-1:0]	connect_pc_debug;
+	//wire [NBIT_DATA_LEN-1:0]	connect_pc_debug;
 		 
 	wire [len_addr-1:0] connect_addr_mem_inst;
 	wire [len_data-1:0] connect_ins_to_mem;
@@ -73,6 +73,7 @@ module TOP
 	//assign led_fpga = connect_pc_debug;
 	//assign tx_done_debug = connect_uart_tx_done;
 
+	wire [len_data-1:0] bucket;
 
 	/*assign led[0] = connect_uart_tx_start;	
 	assign led[1] = connect_halt;
@@ -106,8 +107,8 @@ module TOP
 
 		//.out_reg1_recolector(conn_led),
 		//.out_mem_wire(conn_led),
-		.out_pc(connect_pc_debug),
-		.led_fpga(led_fpga),
+		.out_pc(led_fpga),
+		.register_test(bucket),
 		.halt_flag(connect_halt)
 		/*.Latches_1_2(connect_Latches_1_2),
 		.Latches_2_3(connect_Latches_2_3),
@@ -123,7 +124,7 @@ module TOP
 		    .clk(CLK100MHZ),
 		    .reset(SWITCH_RESET),
 		    .halt(connect_halt),
-		    .test_reg(connect_pc_debug),
+		    .bucket(bucket),
 		    /*.Latches_1_2(connect_Latches_1_2),
 		    .Latches_2_3(connect_Latches_2_3),
 		    .Latches_3_4(connect_Latches_3_4),

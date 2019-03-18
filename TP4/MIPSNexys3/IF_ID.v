@@ -9,7 +9,8 @@
 
 module IF_ID #(
 	parameter len_data = 32,
-	parameter len_addr = 7
+	parameter len_addr = 7,
+	parameter len_test = 8
 	) (
 	input clk,
 	input reset,
@@ -26,7 +27,7 @@ module IF_ID #(
 
 	output reg [len_data-1:0] out_pc_branch,
 	output [len_data-1:0] out_instruction,
-	output [len_addr-1:0] out_pc,
+	output [len_test-1:0] out_pc,
 
 	output reg out_halt_flag_if=0 // para debug
     );

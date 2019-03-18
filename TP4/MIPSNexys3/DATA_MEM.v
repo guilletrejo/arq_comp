@@ -9,7 +9,7 @@ module DATA_MEM #(
   parameter len_data = 32,                       // Specify RAM data width
   parameter ram_depth = 256,                    // Specify RAM depth (number of entries)
   parameter RAM_PERFORMANCE = "LOW_LATENCY",     // Select "HIGH_PERFORMANCE" or "LOW_LATENCY" 
-  parameter init_file = "test2.hex"              // Specify name/location of RAM initialization file if using one (leave blank if not)
+  parameter init_file = "test.hex"              // Specify name/location of RAM initialization file if using one (leave blank if not)
 ) (
   input [clogb2(ram_depth-1)-1:0] Addr,  // Address bus, width determined from ram_depth
   input [len_data-1:0] In_Data,           // RAM input data
