@@ -41,10 +41,10 @@ def read32():
 	reg_1 = ser.read()
 	reg_2 = ser.read()
 	reg_3 = ser.read()
-	#reg_4 = ser.read()
+	reg_4 = ser.read()
 
-	#result = concat_bin(reg_4, reg_3, reg_2, reg_1)
-	result = concat_bin3(reg_3, reg_2, reg_1)
+	result = concat_bin(reg_4, reg_3, reg_2, reg_1)
+	#result = concat_bin3(reg_3, reg_2, reg_1)
 	return result
 
 def read8():
@@ -290,7 +290,7 @@ if __name__ == '__main__':
 				else:
 					ret = ser.write(chr(StepSignal))
 					reg_read = read32()
-					print reg_read
+					print hex(reg_read)
 					count = count + 1
 					if count == 30:
 						print 'Ejecucion finalizada'
