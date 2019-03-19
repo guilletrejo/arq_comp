@@ -7,28 +7,35 @@
 
 module DATA_MEM #(
   parameter len_data = 32,                       // Specify RAM data width
-  parameter ram_depth = 256,                    // Specify RAM depth (number of entries)
+  parameter ram_depth = 64,                    // Specify RAM depth (number of entries)
   parameter RAM_PERFORMANCE = "LOW_LATENCY",     // Select "HIGH_PERFORMANCE" or "LOW_LATENCY" 
-  parameter init_file = "test.hex"              // Specify name/location of RAM initialization file if using one (leave blank if not)
+  parameter init_file = "init_data_mem.hex"              // Specify name/location of RAM initialization file if using one (leave blank if not)
 ) (
   input [clogb2(ram_depth-1)-1:0] Addr,  // Address bus, width determined from ram_depth
   input [len_data-1:0] In_Data,           // RAM input data
   input clk,                           // Clock
   input Wr,                            // Write enable
   input Rd,                            // RAM Enable, for additional power savings, disable port when not in use
-  output [len_data-1:0] Out_Data         // RAM output data
- // output [len_data-1:0] douta_wire     // RAM output data wire
-);
+  output [len_data-1:0] Out_Data,         // RAM output data
+ 
+  /* Para mandar a Debug Unit */
+  output [len_data-1:0] data_0,
+  output [len_data-1:0] data_1,
+  output [len_data-1:0] data_2,
+  output [len_data-1:0] data_3
+  /* ------------------------ */
+  );
   wire regcea = 1;                         // Output register enable
   wire rsta = 0; // Output reset (does not affect memory contents)
 
   reg [len_data-1:0] BRAM [ram_depth-1:0];
   reg [len_data-1:0] ram_data = {len_data{1'b0}};
 
+  assign data_0 = BRAM[0];
+  assign data_1 = BRAM[1];
+  assign data_2 = BRAM[2];
+  assign data_3 = BRAM[3];
   
-
-  //assign douta_wire = ram_data[0];
-
   // The following code either initializes the memory values to a specified file or to all zeros to match hardware
   generate
     if (init_file != "") begin: use_init_file

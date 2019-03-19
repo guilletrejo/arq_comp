@@ -1,7 +1,8 @@
-beq 1, 0, 7
-subu 2, 1, 3
-lw 0, 1(1)
-addi 0, 0, 4
-and 5, 2, 5
-or 0, 6, 2
+addi 0, 0, 1
+beq 0, 1, 4
+subu 2, 5, 1
+and 5, 5, 2
+sw 5, 0(1)
+or 7, 7, 10
+lw 6, 0(1)
 END

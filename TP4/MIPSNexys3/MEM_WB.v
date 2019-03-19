@@ -32,8 +32,14 @@ module MEM_WB #(
 	output reg [len_data-1:0] out_addr_mem,
 	output reg [num_bits-1:0] out_write_reg,
 
-	//output [len_data-1:0] out_mem_wire,
-	output reg out_halt_flag_m=0
+	/* Para mandar a Debug Unit */
+	output [len_data-1:0] data_0,
+	output [len_data-1:0] data_1,
+	output [len_data-1:0] data_2,
+	output [len_data-1:0] data_3,
+	/* ------------------------ */	
+
+	output reg out_halt_flag_m = 0
     );
 
 	wire 	MemWrite,
@@ -50,7 +56,10 @@ module MEM_WB #(
 	wire [len_data-1:0]	conn_out_mem;
 	wire [len_data-1:0]	connect_out_mem_debug;
 
-
+	wire [len_data-1:0] conn_data0;
+	wire [len_data-1:0] conn_data1;
+	wire [len_data-1:0] conn_data2;
+	wire [len_data-1:0] conn_data3;
 
 
 	assign MemWrite			= memory_bus[0],
@@ -66,21 +75,29 @@ module MEM_WB #(
 	assign out_pc_branch = in_pc_branch;
 	assign pc_src = Branch && ((BranchNotEqual) ? (~zero_flag) : (zero_flag));	// la señal de Branch se activa con ambas intrucciones de branch, la otra señal te indica cual de las 2 fue
 
-	//assign out_mem_wire = connect_out_mem_debug;
+	/* Para mandar a Debug Unit */
+	assign data_0 = conn_data0;
+	assign data_1 = conn_data1;
+	assign data_2 = conn_data2;
+	assign data_3 = conn_data3;
+	/* ------------------------ */
 
 	DATA_MEM #(
-        .len_data(len_data),
-		.ram_depth(256)
+        .len_data(len_data)
 		)
 		u_data_mem(
             .clk(~clk),
             .Rd(MemRead),
             .Wr(MemWrite),
-            .Addr(in_addr_mem[7:0]),
+            .Addr(in_addr_mem[5:0]),
             .In_Data(connect_mux_in_mem),
 		
-			.Out_Data(conn_out_mem)
-			//.douta_wire(connect_out_mem_debug)
+			.Out_Data(conn_out_mem),
+
+			.data_0(conn_data0),
+			.data_1(conn_data1),
+			.data_2(conn_data2),
+			.data_3(conn_data3)
 			);
 
 	initial

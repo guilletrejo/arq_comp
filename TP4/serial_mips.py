@@ -6,7 +6,7 @@ d = True
 h = True
 
 nro_registros = 8
-posiciones_memoria = 16
+posiciones_memoria = 4
 
 # codigos a enviar por UART
 StartSignal        = 0b00000001
@@ -51,9 +51,19 @@ def showRegisters():
 	print "---Registros del procesador---"
 	for i in xrange(0,nro_registros):
 		registro = read32()
-		print("Registro" + str(i) + ": " + hex(registro))
+		print("Registro " + str(i) + ": " + hex(registro))
 	print
-	
+
+	print "---Contador de programa---"
+	registro = read32()
+	print("PC: " + str(registro))
+	print
+
+	print "---Memoria de datos---"
+	for i in xrange(0,posiciones_memoria):
+		registro = read32()
+		print("Posicion " + str(i) + ": " + hex(registro))
+	print
 
 def read8():
 	# leo solo el byte menos significativo

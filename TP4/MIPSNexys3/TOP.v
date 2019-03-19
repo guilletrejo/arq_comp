@@ -10,7 +10,7 @@ module TOP
 #(
     parameter NBIT_DATA_LEN = 8,
 	parameter len_data = 32,
-	parameter cant_registros = 8,
+	parameter cant_registros = 13,
 	parameter len_bucket = cant_registros*len_data,
 	parameter len_addr = 7,
 	parameter num_bits = 5,
@@ -51,7 +51,6 @@ module TOP
 		 connect_tx_debug,
 		 //connect_rx_debug,
 		 connect_wea_ram_inst;
-	//wire [NBIT_DATA_LEN-1:0]	connect_pc_debug;
 		 
 	wire [len_addr-1:0] connect_addr_mem_inst;
 	wire [len_data-1:0] connect_ins_to_mem;
@@ -65,13 +64,15 @@ module TOP
     wire [NBIT_DATA_LEN-1:0] connect_uart_data_in,
 			                 connect_uart_data_out;
 
+	wire [len_data-1:0] conn_inst_test;
+
 	//assign connect_write_dataconnect_write_data_5_2_5_2 = (connect_out_writeBack_bus[0]) ? connect_read_data : connect_out_addr_mem;
 
 	assign clk_mips = (ctrl_clk_mips) ? (CLK100MHZ) : (1'b 0);
 
 	//assign connect_rx_debug = RX_INPUT; //(1 & estamos_en_test_bench) ? connect_tx_debug : UART_TXD_IN;
 	assign TX_OUTPUT = connect_tx_debug;
-	//assign led_fpga = connect_pc_debug;
+	assign led_fpga = conn_inst_test[7:0];
 	//assign tx_done_debug = connect_uart_tx_done;
 
 	wire [len_bucket-1:0] bucket;
@@ -118,6 +119,11 @@ module TOP
 		.out_reg6_recolector(bucket[223:192]),
 		.out_reg7_recolector(bucket[255:224]),
 		.out_pc(bucket[287:256]),
+		.data_0(bucket[319:288]),
+		.data_1(bucket[351:320]),
+		.data_2(bucket[383:352]),
+		.data_3(bucket[415:384]),
+		.inst_test(conn_inst_test),
 
 		.halt_flag(connect_halt)
 		/*.Latches_1_2(connect_Latches_1_2),

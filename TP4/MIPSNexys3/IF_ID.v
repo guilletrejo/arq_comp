@@ -18,16 +18,18 @@ module IF_ID #(
 	input [len_data-1:0] in_pc_jump,
 	input [len_data-1:0] in_pc_register,
 	input [len_data-1:0] in_branch_address,
-	input stall_flag,  // ??
+	input stall_flag,  
 
 	input [len_addr-1:0] in_addr_debug,
 	input debug_flag,
 	input [len_data-1:0] in_ins_to_mem,
-	input wea_ram_inst, // POR QUE TIENEN ESTO??:? PARA ESCRIBIR EN LA MEMORIA
+	input wea_ram_inst,
 
 	output reg [len_data-1:0] out_pc_branch,
 	output [len_data-1:0] out_instruction,
-	output [len_test-1:0] out_pc,
+	output [len_data-1:0] out_pc,
+
+	output [len_data-1:0] out_inst_test,
 
 	output reg out_halt_flag_if=0 // para debug
     );
@@ -38,14 +40,15 @@ module IF_ID #(
 
     wire [len_data-1:0] conn_out_instruction;
 
+	wire [len_data-1:0] conn_inst_test;
+
     wire connect_wire_douta;
     wire flush = in_pc_src[0];
 
-	//test
-	wire [len_data-1:0] conn_instruction_test;
 
     assign out_instruction = conn_out_instruction;
-    assign out_pc = conn_instruction_test[7:0];
+    assign out_pc = conn_pc_adder_imem;
+	assign out_inst_test = conn_inst_test;
 
 	PC_MUX #(
 		.len_data(len_data)
@@ -81,10 +84,10 @@ module IF_ID #(
             .Addr(debug_flag ? in_addr_debug : conn_pc_adder_imem[len_addr-1:0]),
 			.In_Data(in_ins_to_mem),
 
-			//test
-			.Data_test(conn_instruction_test),
-
             .Data(conn_out_instruction),
+
+			.Data_test(conn_inst_test),
+
 			.wire_douta(connect_wire_douta)
 			); 
 
