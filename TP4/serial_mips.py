@@ -5,7 +5,7 @@ b = True
 d = True
 h = True
 
-nro_registros = 32
+nro_registros = 8
 posiciones_memoria = 16
 
 # codigos a enviar por UART
@@ -46,6 +46,14 @@ def read32():
 	result = concat_bin(reg_4, reg_3, reg_2, reg_1)
 	#result = concat_bin3(reg_3, reg_2, reg_1)
 	return result
+
+def showRegisters():
+	print "---Registros del procesador---"
+	for i in xrange(0,nro_registros):
+		registro = read32()
+		print("Registro" + str(i) + ": " + hex(registro))
+	print
+	
 
 def read8():
 	# leo solo el byte menos significativo
@@ -289,8 +297,7 @@ if __name__ == '__main__':
 					break
 				else:
 					ret = ser.write(chr(StepSignal))
-					reg_read = read32()
-					print hex(reg_read)
+					showRegisters()
 					count = count + 1
 					if count == 30:
 						print 'Ejecucion finalizada'

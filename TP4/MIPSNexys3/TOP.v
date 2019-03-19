@@ -10,9 +10,10 @@ module TOP
 #(
     parameter NBIT_DATA_LEN = 8,
 	parameter len_data = 32,
+	parameter cant_registros = 8,
+	parameter len_bucket = cant_registros*len_data,
 	parameter len_addr = 7,
 	parameter num_bits = 5,
-    parameter estamos_en_test_bench = 0,
 	parameter len_exec_bus = 11,
 	parameter len_mem_bus = 9,
 	parameter len_wb_bus = 2
@@ -73,7 +74,7 @@ module TOP
 	//assign led_fpga = connect_pc_debug;
 	//assign tx_done_debug = connect_uart_tx_done;
 
-	wire [len_data-1:0] bucket;
+	wire [len_bucket-1:0] bucket;
 
 	/*assign led[0] = connect_uart_tx_start;	
 	assign led[1] = connect_halt;
@@ -107,8 +108,17 @@ module TOP
 
 		//.out_reg1_recolector(conn_led),
 		//.out_mem_wire(conn_led),
-		.out_pc(led_fpga),
-		.register_test(bucket),
+		
+		.out_reg0_recolector(bucket[31:0]),
+		.out_reg1_recolector(bucket[63:32]),
+		.out_reg2_recolector(bucket[95:64]),
+		.out_reg3_recolector(bucket[127:96]),
+		.out_reg4_recolector(bucket[159:128]),
+		.out_reg5_recolector(bucket[191:160]),
+		.out_reg6_recolector(bucket[223:192]),
+		.out_reg7_recolector(bucket[255:224]),
+		.out_pc(bucket[287:256]),
+
 		.halt_flag(connect_halt)
 		/*.Latches_1_2(connect_Latches_1_2),
 		.Latches_2_3(connect_Latches_2_3),
@@ -118,7 +128,9 @@ module TOP
 
 	DEBUG_UNIT #(
 		.NBIT_DATA_LEN(NBIT_DATA_LEN),
-        .len_data(len_data)
+        .len_data(len_data),
+		.len_contador(clogb2(len_bucket)),
+		.len_bucket(len_bucket)
 		)
 		u_debug_unit(
 		    .clk(CLK100MHZ),
@@ -172,5 +184,11 @@ module TOP
 			.tx_bit(connect_tx_debug),
 			.tx_done_tick(connect_uart_tx_done)
 			);
+
+	function integer clogb2;
+    input integer depth;
+      for (clogb2=0; depth>0; clogb2=clogb2+1)
+        depth = depth >> 1;
+  	endfunction
 
 endmodule

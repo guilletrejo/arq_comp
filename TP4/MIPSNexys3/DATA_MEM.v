@@ -25,6 +25,7 @@ module DATA_MEM #(
   reg [len_data-1:0] BRAM [ram_depth-1:0];
   reg [len_data-1:0] ram_data = {len_data{1'b0}};
 
+  
 
   //assign douta_wire = ram_data[0];
 

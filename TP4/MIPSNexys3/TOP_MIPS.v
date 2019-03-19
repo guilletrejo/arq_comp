@@ -31,14 +31,17 @@ module TOP_MIPS#(
 	input [len_data-1:0] in_ins_to_mem,
 	input wea_ram_inst,
 
-	/*output [len_data-1:0] out_reg0_recolector,
+
+	//PARA MANDAR A DEBUG.U
+	output [len_data-1:0] out_reg0_recolector,
 	output [len_data-1:0] out_reg1_recolector,
 	output [len_data-1:0] out_reg2_recolector,
 	output [len_data-1:0] out_reg3_recolector,
 	output [len_data-1:0] out_reg4_recolector,
 	output [len_data-1:0] out_reg5_recolector,
 	output [len_data-1:0] out_reg6_recolector,
-	output [len_data-1:0] out_reg7_recolector,*/
+	output [len_data-1:0] out_reg7_recolector,
+	//----------------------------------------
 	
 	//test
 	//output [31:0] out_instruct,
@@ -57,7 +60,6 @@ module TOP_MIPS#(
 
     wire [len_data-1:0] connect_in_pc_branch_1_2,
 				   connect_in_pc_branch_2_3,
-				   //connect_in_pc_branch_3_1, // la comentamos porque no se usa, el pcbranch pasa de 1-2-3-4 y vuelve a la 1
 				   connect_in_pc_jump,
 				   connect_in_pc_jump_register,
 				   connect_instruccion,
@@ -71,14 +73,14 @@ module TOP_MIPS#(
 				   connect_write_data_3_4,
 				   connect_in_pc_branch_3_4,
 				   connect_in_pc_branch_4_1,
-				   /*connect_reg0_recolector,
+				   connect_reg0_recolector,
 				   connect_reg1_recolector,
 				   connect_reg2_recolector,
 				   connect_reg3_recolector,
 				   connect_reg4_recolector,
 				   connect_reg5_recolector,
 				   connect_reg6_recolector,
-				   connect_reg7_recolector,*/
+				   connect_reg7_recolector,
 				   connect_out_mem_wire;
 	wire [len_test-1:0] connect_out_pc;
 
@@ -111,16 +113,15 @@ module TOP_MIPS#(
 	assign connect_write_data_5_2 = (connect_out_writeBack_bus[0]) ? connect_read_data : connect_out_addr_mem;
  	//assign connect_write_data_5_2 = connect_read_data; //no se soluciona con esto, por lo q el problema no es el MUX
 
-	/*assign out_reg0_recolector = connect_reg0_recolector;
+	assign out_reg0_recolector = connect_reg0_recolector;
 	assign out_reg1_recolector = connect_reg1_recolector;
 	assign out_reg2_recolector = connect_reg2_recolector;
 	assign out_reg3_recolector = connect_reg3_recolector;
 	assign out_reg4_recolector = connect_reg4_recolector;
 	assign out_reg5_recolector = connect_reg5_recolector;
 	assign out_reg6_recolector = connect_reg6_recolector;
-	assign out_reg7_recolector = connect_reg7_recolector;*/
-	wire [len_data-1:0] conn_led_test;
-	assign register_test = conn_led_test;
+	assign out_reg7_recolector = connect_reg7_recolector;
+
 	//assign out_mem_wire = connect_out_mem_wire; //[7:0];
 	assign out_pc = connect_out_pc;
 	assign halt_flag = connect_halt_flag_4_5;
@@ -212,16 +213,15 @@ module TOP_MIPS#(
 			.out_rd(connect_rd),
 			.out_rs(connect_rs),
 			.out_shamt(connect_shamt),
-			.out_test(conn_led_test),
 
-			/*.out_reg0_recolector(connect_reg0_recolector),
+			.out_reg0_recolector(connect_reg0_recolector),
 			.out_reg1_recolector(connect_reg1_recolector),
 			.out_reg2_recolector(connect_reg2_recolector),
 			.out_reg3_recolector(connect_reg3_recolector),
 			.out_reg4_recolector(connect_reg4_recolector),
 			.out_reg5_recolector(connect_reg5_recolector),
 			.out_reg6_recolector(connect_reg6_recolector),
-			.out_reg7_recolector(connect_reg7_recolector),*/
+			.out_reg7_recolector(connect_reg7_recolector),
 
 			.execute_bus(connect_execute_bus),
 			.flag_jump(connect_flag_jump),

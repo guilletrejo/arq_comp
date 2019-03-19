@@ -14,8 +14,8 @@ module DEBUG_UNIT
   parameter len_data		= 32,	    
   parameter cant_inst     = 64,       // cantidad esperada de instrucciones
   parameter NBIT_cant_inst = 6,
-  parameter len_bucket   = 32,        // largo total del bucket
-  parameter len_contador = 5,         // contador puede contar hasta 2^len_contador
+  parameter len_bucket   = 32,        // largo total del bucket SE PISA DESDE TOP
+  parameter len_contador = 5,         // contador puede contar hasta 2^len_contador SE PISA DESDE TOP
   parameter max_count = len_bucket/8  // cantidad x de veces tengo que mandar 8 bits para mandar todo el bucket
 ) 
 ( 
@@ -67,7 +67,7 @@ module DEBUG_UNIT
   /*
     Señales de comparacion con los datos que llegan desde la PC
   */
-  localparam [7:0] StartSignal        = 8'b 00000001,
+  localparam [7:0]  StartSignal        = 8'b 00000001,
                     ContinuousSignal   = 8'b 00000010,
                     StepByStepSignal   = 8'b 00000011,
                     ReProgramSignal    = 8'b 00000101,
