@@ -12,7 +12,7 @@ module INSTRUCTION_MEM
         parameter len_addr  = 7,
         parameter len_data  = 32,
 		parameter ram_depth = 128, // Cantidad de entradas de la memoria
-        parameter init_file = "init_inst_mem.hex"    // Se le va a pasar el path text.hex es para esto
+        parameter init_file = "test2.hex"    // Se le va a pasar el path text.hex es para esto
     )
     (
        // input clk,
@@ -39,7 +39,7 @@ module INSTRUCTION_MEM
     assign wire_douta = &instruccion_ram[Addr_reg][len_data-1:len_data-6]; // verifica si el Opcode es 111111 para hacer el halt
     
     //test
-    assign Data_test = instruccion_ram[Addr_reg];
+    assign Data_test = instruccion_ram[0];
 	 
 	 /*  Para inicializar la RAM en 0000 0000 */
      initial

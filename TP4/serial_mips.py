@@ -59,11 +59,11 @@ def showRegisters():
 	print("PC: " + str(registro))
 	print
 
-	print "---Memoria de datos---"
+	'''print "---Memoria de datos---"
 	for i in xrange(0,posiciones_memoria):
 		registro = read32()
 		print("Posicion " + str(i) + ": " + hex(registro))
-	print
+	print'''
 
 def read8():
 	# leo solo el byte menos significativo

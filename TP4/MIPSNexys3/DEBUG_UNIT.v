@@ -98,7 +98,7 @@ module DEBUG_UNIT
 	reg [NBIT_DATA_LEN-1:0] reg_data_out_next = 0; // agarra el dato que se va a mandar a la PC
   reg [NBIT_DATA_LEN-1:0] reg_rxdatain = 0;      // agarra el dato que se va a mandar al MIPS
   reg [len_contador-1:0] contador = 0;           // para direccionar el bucket
-  reg [len_contador-1:0] contador_prev = 0;
+  reg [len_contador-1:0] contador_prev = 5'b0;
 
   /*
     Assigns para testing
