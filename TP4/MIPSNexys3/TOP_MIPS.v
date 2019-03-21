@@ -26,7 +26,6 @@ module TOP_MIPS#(
 	// para debug
 
 	input debug_flag,
-	//input [len_data-1:0] in_addr_debug, // para recolector, no usamos aun
 	input [len_addr-1:0] in_addr_mem_inst,
 	input [len_data-1:0] in_ins_to_mem,
 	input wea_ram_inst,
@@ -41,16 +40,9 @@ module TOP_MIPS#(
 	output [len_data-1:0] out_reg5_recolector,
 	output [len_data-1:0] out_reg6_recolector,
 	output [len_data-1:0] out_reg7_recolector,
-	//----------------------------------------
-	
-	//test
-	//output [31:0] out_instruct,
-
-	//output [len_data-1:0] out_mem_wire,
-
-	output [len_data-1:0] register_test,
-
 	output [len_data-1:0] out_pc,
+	//----------------------------------------
+
 	output [len_test-1:0] out_inst_test,
 	output halt_flag
    /*output [32-1:0] Latches_1_2, // pensar la longitud pq queda demasiados cables
@@ -82,9 +74,8 @@ module TOP_MIPS#(
 				   connect_reg5_recolector,
 				   connect_reg6_recolector,
 				   connect_reg7_recolector,
-				   connect_out_mem_wire;
-	wire [len_data-1:0] connect_out_pc;
-	wire [len_test-1:0] conn_inst_test;
+				   connect_out_pc;
+	wire [len_test-1:0] conn_inst_test; // va a los led
 
 	wire [num_bits-1:0] connect_rt,
 						connect_rd,
@@ -115,6 +106,7 @@ module TOP_MIPS#(
 	assign connect_write_data_5_2 = (connect_out_writeBack_bus[0]) ? connect_read_data : connect_out_addr_mem;
  	//assign connect_write_data_5_2 = connect_read_data; //no se soluciona con esto, por lo q el problema no es el MUX
 
+	/* Para mandar a Debug Unit */
 	assign out_reg0_recolector = connect_reg0_recolector;
 	assign out_reg1_recolector = connect_reg1_recolector;
 	assign out_reg2_recolector = connect_reg2_recolector;
@@ -123,14 +115,12 @@ module TOP_MIPS#(
 	assign out_reg5_recolector = connect_reg5_recolector;
 	assign out_reg6_recolector = connect_reg6_recolector;
 	assign out_reg7_recolector = connect_reg7_recolector;
-
-	//assign out_mem_wire = connect_out_mem_wire; //[7:0];
 	assign out_pc = connect_out_pc;
+	/* ------------------------ */
+	
 	assign out_inst_test = conn_inst_test;
 	assign halt_flag = connect_halt_flag_4_5;
 	
-	//test
-	//assign out_instruct = connect_instruccion;
 
 	/*assign Latches_1_2 = {	// 2 registros			TOTAL 64 BITS
 		connect_instruccion // 32 bits
@@ -306,7 +296,6 @@ module TOP_MIPS#(
 			.out_addr_mem(connect_out_addr_mem),
 			.out_write_reg(connect_write_reg_4_2),
 
-			//.out_mem_wire(connect_out_mem_wire), // para debug
 			.out_halt_flag_m(connect_halt_flag_4_5)
 			);
 

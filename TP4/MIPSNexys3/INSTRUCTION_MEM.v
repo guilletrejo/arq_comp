@@ -12,13 +12,9 @@ module INSTRUCTION_MEM
         parameter len_addr  = 7,
         parameter len_data  = 32,
 		parameter ram_depth = 128, // Cantidad de entradas de la memoria
-        parameter init_file = "test2.hex"    // Se le va a pasar el path text.hex es para esto
+        parameter init_file = "init_inst_mem.hex"    // Se le va a pasar el path text.hex es para esto
     )
     (
-       // input clk,
-        //input reset,
-        //input flush,
-        //input ena,
         input Wr,                      // enable para escritura
         input [len_addr-1:0] Addr,     // Direccion de la instruccion a leer o escribir
         input [len_data-1:0] In_Data,  // Instruccion a escribir
@@ -32,7 +28,6 @@ module INSTRUCTION_MEM
 
     /* Memoria de lectura y escritura */
     reg [len_data-1:0] instruccion_ram [ram_depth-1:0]; // Vector de instrucciones (primero tamaño de registro, segundo depth)
-    //reg [len_data-1:0] ram_data = {len_data{1'b0}};
     reg [len_addr-1:0] Addr_reg;                        // Guarda el valor de la direccion accedida
     
     assign Data = instruccion_ram[Addr_reg];

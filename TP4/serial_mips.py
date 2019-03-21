@@ -287,7 +287,8 @@ if __name__ == '__main__':
 			print "Modo continuo seleccionado\nEl valor final del PC es:\n\n"
 			ret = ser.write(chr(ContinuosSignal))
 			#showAllRegisters()
-			readTestReg()
+			#readTestReg()
+			showRegisters()
 
 		elif modo == "s":
 			count = 0

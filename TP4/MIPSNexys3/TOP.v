@@ -23,21 +23,15 @@ module TOP
     input SWITCH_RESET,
     input RX_INPUT,
 
-    output TX_OUTPUT,            
-    // output led_fpga... para probar algo
+    output TX_OUTPUT,
 	output [NBIT_DATA_LEN-1:0] led_fpga
 );
-
-	//wire [32-1:0] conn_led;
 
     wire clk_mips, 
          ctrl_clk_mips; 
 		 //clk, 
          //reset, 
          //reset_mips;
-             
-	//assign clk = CLK100MHZ;
-    //assign reset = SWITCH_RESET; 
     
     wire connect_uart_rx_done,
 	     connect_uart_tx_start,
@@ -101,13 +95,9 @@ module TOP
 
 		//para debug
 		.debug_flag(connect_debug_mode),
-		//.in_addr_debug(connect_addr_recolector_mips),
 		.in_addr_mem_inst(connect_addr_mem_inst),
 		.in_ins_to_mem(connect_ins_to_mem),
 		.wea_ram_inst(connect_wea_ram_inst),
-
-		//.out_reg1_recolector(conn_led),
-		//.out_mem_wire(conn_led),
 		
 		.out_reg0_recolector(bucket[31:0]),
 		.out_reg1_recolector(bucket[63:32]),
@@ -179,7 +169,7 @@ module TOP
 			//.reset(reset),
 			.tx_start(connect_uart_tx_start),
 			.rx_bit(RX_INPUT),
-			.data_in(connect_uart_data_in),   //((1 & estamos_en_test_bench) ? uart_in_debug : connect_uart_data_in),
+			.data_in(connect_uart_data_in),  
 
 			.data_out(connect_uart_data_out),
 			.rx_done_tick(connect_uart_rx_done),

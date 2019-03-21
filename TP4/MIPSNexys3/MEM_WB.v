@@ -32,7 +32,6 @@ module MEM_WB #(
 	output reg [len_data-1:0] out_addr_mem,
 	output reg [num_bits-1:0] out_write_reg,
 
-	//output [len_data-1:0] out_mem_wire,
 	output reg out_halt_flag_m=0
     );
 
@@ -66,21 +65,17 @@ module MEM_WB #(
 	assign out_pc_branch = in_pc_branch;
 	assign pc_src = Branch && ((BranchNotEqual) ? (~zero_flag) : (zero_flag));	// la señal de Branch se activa con ambas intrucciones de branch, la otra señal te indica cual de las 2 fue
 
-	//assign out_mem_wire = connect_out_mem_debug;
-
 	DATA_MEM #(
-        .len_data(len_data),
-		.ram_depth(256)
+        .len_data(len_data)
 		)
 		u_data_mem(
             .clk(~clk),
             .Rd(MemRead),
             .Wr(MemWrite),
-            .Addr(in_addr_mem[7:0]),
+            .Addr(in_addr_mem[5:0]),
             .In_Data(connect_mux_in_mem),
 		
 			.Out_Data(conn_out_mem)
-			//.douta_wire(connect_out_mem_debug)
 			);
 
 	initial
