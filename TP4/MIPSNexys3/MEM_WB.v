@@ -33,7 +33,7 @@ module MEM_WB #(
 	output reg [num_bits-1:0] out_write_reg,
 
 	/* Para mandar a Debug Unit */
-	output [len_data-1:0] data0,
+	output [len_data-1:0] out_data_debug,
 	/* ------------------------ */	
 
 	output reg out_halt_flag_m=0
@@ -67,7 +67,7 @@ module MEM_WB #(
 	assign pc_src = Branch && ((BranchNotEqual) ? (~zero_flag) : (zero_flag));	// la señal de Branch se activa con ambas intrucciones de branch, la otra señal te indica cual de las 2 fue
 
 	/* Para mandar a Debug Unit */
-	assign data0 = conn_out_mem_debug;
+	assign out_data_debug = conn_out_mem_debug;
 	/*------------------------ */	
 
 	DATA_MEM #(
@@ -111,10 +111,6 @@ module MEM_WB #(
 			out_writeBack_bus <= in_writeBack_bus;
 			out_addr_mem <= in_addr_mem;
 			out_write_reg <= in_write_reg;
-
-			// para mostrar en debug unit
-			//data0 <= conn_out_mem_debug;
-			//
 
 			if (control_LH) 
 			begin

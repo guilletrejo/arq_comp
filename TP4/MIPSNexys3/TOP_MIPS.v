@@ -45,6 +45,8 @@ module TOP_MIPS#(
 	output [len_data-1:0] out_pc,
 	output [len_data-1:0] data0,
 	output [len_data-1:0] data1,
+	output [len_data-1:0] data2,
+	output [len_data-1:0] data3,
 	//----------------------------------------
 
 	output [len_test-1:0] out_inst_test,
@@ -79,7 +81,7 @@ module TOP_MIPS#(
 				   connect_reg6_recolector,
 				   connect_reg7_recolector,
 				   connect_out_pc,
-				   conn_data0;
+				   out_data_debug;
 	wire [len_test-1:0] conn_inst_test; // va a los led
 
 	wire [num_bits-1:0] connect_rt,
@@ -121,8 +123,10 @@ module TOP_MIPS#(
 	assign out_reg6_recolector = connect_reg6_recolector;
 	assign out_reg7_recolector = connect_reg7_recolector;
 	assign out_pc = connect_out_pc;
-	assign data0 = conn_data0;
-	assign data1 = conn_data0;
+	assign data0 = out_data_debug;
+	assign data1 = out_data_debug;
+	assign data2 = out_data_debug;
+	assign data3 = out_data_debug;
 	/* ------------------------ */
 	
 	assign out_inst_test = conn_inst_test;
@@ -304,7 +308,7 @@ module TOP_MIPS#(
 			.out_write_reg(connect_write_reg_4_2),
 
 			//para mostrar en debug unit
-			.data0(conn_data0),
+			.out_data_debug(out_data_debug),
 			//
 
 			.out_halt_flag_m(connect_halt_flag_4_5)

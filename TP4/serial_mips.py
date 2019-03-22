@@ -6,7 +6,7 @@ d = True
 h = True
 
 nro_registros = 8
-posiciones_memoria = 2
+posiciones_memoria = 4
 
 # codigos a enviar por UART
 StartSignal        = 0b00000001

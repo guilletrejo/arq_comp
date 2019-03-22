@@ -10,7 +10,7 @@ module TOP
 #(
     parameter NBIT_DATA_LEN = 8,
 	parameter len_data = 32,
-	parameter cant_registros = 11,
+	parameter cant_registros = 13,
 	parameter len_bucket = cant_registros*len_data,
 	parameter len_addr = 7,
 	parameter num_bits = 5,
@@ -115,6 +115,8 @@ module TOP
 		.out_pc(bucket[287:256]),
 		.data0(bucket[319:288]), // 36, 37, 38, 39
 		.data1(bucket[351:320]), // 40, 41, 42, 43
+		.data2(bucket[383:352]),
+		.data3(bucket[415:384]),
 		.out_inst_test(led_fpga),
 
 		.halt_flag(connect_halt)

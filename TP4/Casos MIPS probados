@@ -38,7 +38,9 @@ Casos MIPS probados
 	or 4, 6, 2
 	END
 
-5: Funciona maomenos en placa. La memoria se graba bien con SW pero el LW anda mal, en el reg. 6 se guarda un 7!
+5: Funciona maomenos en placa. La memoria se graba bien con SW pero el LW anda mal, en el reg. 6 se guarda un 7! (pero en posicion 1 se muestra el 5) 
+y ademas en el reg 7 se guarda una d. entonces tb anda mal el or ----> Arreglado, ahora se carga bien el reg con un 5, y el or anda bien pq guarda una f
+pero si se siguen dando pasos, se vuelve a cambiar el reg 7 y aparece un 5. Y si se cambia por sw 1, 0(1) tb anda raro el OR, es como que el valor interfiere.
 	addi 0, 0, 1
 	bne 0, 1, 4
 	subu 2, 5, 1

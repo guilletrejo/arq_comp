@@ -114,7 +114,9 @@ module DEBUG_UNIT
   /* Para indicar si estamos leyendo data_mem */
   assign debug_ram_flag = (state==SENDING_DATA);
   assign debug_ram_addr = (contador>=36 && contador<=39)? 0 :
-                          (contador>=40 && contador<=43)? 1 : 2;
+                          (contador>=40 && contador<=43)? 1 :
+                          (contador>=44 && contador<=47)? 2 :
+                          (contador>=48 && contador<=51)? 3 : 4;
 
 
 	/* 
