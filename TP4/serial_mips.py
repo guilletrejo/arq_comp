@@ -71,6 +71,14 @@ def showRegisters():
 	ciclos = read32()
 	print("Ciclos: " + str(ciclos))
 	print
+
+	print "---Latches Intermedios IF/ID---"
+	branch_1_2 = read32()
+	instruccion = read32()
+
+	print("Instruccion: " + hex(instruccion))
+	print("Branch target: " + str(branch_1_2))
+	print
 	print "------------------------------"
 
 def read8():

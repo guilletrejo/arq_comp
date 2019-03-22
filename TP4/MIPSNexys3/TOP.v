@@ -10,7 +10,7 @@ module TOP
 #(
     parameter NBIT_DATA_LEN = 8,
 	parameter len_data = 32,
-	parameter cant_registros = 14,
+	parameter cant_registros = 16,
 	parameter len_bucket = cant_registros*len_data,
 	parameter len_addr = 7,
 	parameter num_bits = 5,
@@ -50,12 +50,6 @@ module TOP
 	wire [len_addr-1:0] connect_addr_mem_inst;
 	wire [len_data-1:0] connect_ins_to_mem;
 
-	/*wire [(nb_Latches_1_2*8)-1:0] connect_Latches_1_2;
-	wire [(nb_Latches_2_3*8)-1:0] connect_Latches_2_3;
-	wire [(nb_Latches_3_4*8)-1:0] connect_Latches_3_4;
-	wire [(nb_Latches_4_5*8)-1:0] connect_Latches_4_5;*/
-
-
     wire [NBIT_DATA_LEN-1:0] connect_uart_data_in,
 			                 connect_uart_data_out;
 
@@ -87,10 +81,6 @@ module TOP
 	.len_exec_bus(len_exec_bus),
 	.len_mem_bus(len_mem_bus),
 	.len_wb_bus(len_wb_bus)
-	/*.nb_Latches_1_2(nb_Latches_1_2),
-	.nb_Latches_2_3(nb_Latches_2_3),
-	.nb_Latches_3_4(nb_Latches_3_4),
-	.nb_Latches_4_5(nb_Latches_4_5)*/
 	)
 	u_top_mips(
 		.clk(clk_mips),
@@ -113,17 +103,14 @@ module TOP
 		.out_reg6_recolector(bucket[223:192]),
 		.out_reg7_recolector(bucket[255:224]),
 		.out_pc(bucket[287:256]),
-		.data0(bucket[319:288]), // 36, 37, 38, 39
-		.data1(bucket[351:320]), // 40, 41, 42, 43
+		.data0(bucket[319:288]), // 36, 37, 38, 39 -> en estos valores va a estar el contador cuando
+		.data1(bucket[351:320]), // 40, 41, 42, 43 -> se este pasando esta parte
 		.data2(bucket[383:352]),
 		.data3(bucket[415:384]),
-		.out_inst_test(led_fpga),
+		.Latch_IF_ID(bucket[511:448]), // Contiene 2 reg. de 32 bits: out_instruction y pc_branch_1_2
 
+		.out_inst_test(led_fpga),
 		.halt_flag(connect_halt)
-		/*.Latches_1_2(connect_Latches_1_2),
-		.Latches_2_3(connect_Latches_2_3),
-		.Latches_3_4(connect_Latches_3_4),
-		.Latches_4_5(connect_Latches_4_5)*/
 		);
 
 	DEBUG_UNIT #(
@@ -137,11 +124,6 @@ module TOP
 		    .reset(SWITCH_RESET),
 		    .halt(connect_halt),
 		    .bucket(bucket),
-		    /*.Latches_1_2(connect_Latches_1_2),
-		    .Latches_2_3(connect_Latches_2_3),
-		    .Latches_3_4(connect_Latches_3_4),
-		    .Latches_4_5(connect_Latches_4_5),
-		    .recolector(connect_data_recolector),*/
 
 		    // outputs
 		    //.state_out             (connect_state_out),
