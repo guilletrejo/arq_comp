@@ -10,7 +10,7 @@ module TOP
 #(
     parameter NBIT_DATA_LEN = 8,
 	parameter len_data = 32,
-	parameter cant_registros = 16,
+	parameter cant_registros = 20,
 	parameter len_bucket = cant_registros*len_data,
 	parameter len_addr = 7,
 	parameter num_bits = 5,
@@ -108,6 +108,7 @@ module TOP
 		.data2(bucket[383:352]),
 		.data3(bucket[415:384]),
 		.Latch_IF_ID(bucket[511:448]), // Contiene 2 reg. de 32 bits: out_instruction y pc_branch_1_2
+		.Latch_ID_EX(bucket[639:512]), // Contiene varios registros, en total 4 grupos de 32b: pc_branch_2_3, sign_extend, rs, rt, rd y buses de control
 
 		.out_inst_test(led_fpga),
 		.halt_flag(connect_halt)

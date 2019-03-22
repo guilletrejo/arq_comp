@@ -44,6 +44,7 @@ module TOP_MIPS#(
 	output [len_data-1:0] data2,
 	output [len_data-1:0] data3,
 	output [2*len_data-1:0] Latch_IF_ID,
+	output [4*len_data-1:0] Latch_ID_EX,
 	//----------------------------------------
 
 	output [len_test-1:0] out_inst_test,
@@ -125,9 +126,22 @@ module TOP_MIPS#(
 	assign data2 = out_data_debug;
 	assign data3 = out_data_debug;
 	
-	assign Latch_IF_ID = {	// 2 registros
+	assign Latch_IF_ID = {	// 2 registros TOTAL 64 BITS
 		connect_instruccion, // 32 bits
 		connect_in_pc_branch_1_2 // 32 bits
+	};
+	assign Latch_ID_EX = {	// 4 registros ...	TOTAL 128 BITS
+		{10{1'b 0}}, // 10 bits --> Se agrega para alinear
+		connect_execute_bus, // 11 bits
+		connect_memory_bus_2_3, // 9 bits
+		connect_writeBack_bus_2_3, // 2 bits
+		{12{1'b 0}}, // 12 bits --> Se agrega para alinear
+		connect_rd, // 5 bits
+		connect_rs, // 5 bits
+		connect_rt, // 5 bits
+		connect_shamt, // 5 bits
+		connect_sign_extend, // 32 bits
+		connect_in_pc_branch_2_3 // 32 bits
 	};
 	/* ------------------------ */
 	
@@ -135,24 +149,8 @@ module TOP_MIPS#(
 	assign halt_flag = connect_halt_flag_4_5;
 	
 
-	/*assign Latches_1_2 = {	// 2 registros			TOTAL 64 BITS
-		connect_instruccion // 32 bits
-		//connect_in_pc_branch_1_2 // 32 bits
-	};
-	assign Latches_2_3 = {	// 4 registros ...	TOTAL 128 BITS
-		//{10{1'b 0}}, // 10 bits
-		//connect_execute_bus, // 11 bits
-		//connect_memory_bus_2_3, // 9 bits
-		//connect_writeBack_bus_2_3, // 2 bits
-		//{12{1'b 0}}, // 12 bits
-		//connect_rd, // 5 bits
-		//connect_rs, // 5 bits
-		//connect_rt, // 5 bits
-		//connect_shamt // 5 bits
-		//connect_sign_extend // 32 bits
-		connect_in_pc_branch_2_3 // 32 bits
-	};
-	assign Latches_3_4 = {	// 4 registros			TOTAL 128 BITS
+	
+	/*assign Latches_3_4 = {	// 4 registros			TOTAL 128 BITS
 		//{15{1'b 0}}, // 15 bits
 		//connect_memory_bus_3_4, // 9 bits
 		//connect_writeBack_bus_3_4, // 2 bits

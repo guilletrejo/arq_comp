@@ -79,6 +79,22 @@ def showRegisters():
 	print("Instruccion: " + hex(instruccion))
 	print("Branch target: " + str(branch_1_2))
 	print
+
+	print "---Latches Intermedios ID/EX---"
+
+	branch_2_3 = read32()
+	sign_extend_2_3 = read32()
+	bus1_2_3 = read32()
+	bus2_2_3 = read32()
+
+	print("Sign extend: " + str(sign_extend_2_3))
+	print("Branch target: " + str(branch_2_3))
+	
+	print_registro_32("Shamt: ", bus1_2_3, msb=4, lsb=0)
+	print_registro_32("Rt: ", bus1_2_3, msb=9, lsb=5)
+	print_registro_32("Rs: ", bus1_2_3, msb=14, lsb=10)
+	print_registro_32("Rd: ", bus1_2_3, msb=19, lsb=15)
+	print
 	print "------------------------------"
 
 def read8():
