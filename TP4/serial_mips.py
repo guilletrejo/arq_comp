@@ -48,6 +48,8 @@ def read32():
 	return result
 
 def showRegisters():
+	print "------------------------------"
+	print
 	print "---Registros del procesador---"
 	for i in xrange(0,nro_registros):
 		registro = read32()
@@ -64,6 +66,12 @@ def showRegisters():
 		registro = read32()
 		print("Posicion " + str(i) + ": " + hex(registro))
 	print
+
+	print "---Ciclos de clock empleados---"
+	ciclos = read32()
+	print("Ciclos: " + str(ciclos))
+	print
+	print "------------------------------"
 
 def read8():
 	# leo solo el byte menos significativo

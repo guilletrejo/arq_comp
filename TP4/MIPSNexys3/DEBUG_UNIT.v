@@ -24,6 +24,7 @@ module DEBUG_UNIT
   input halt,								 // indica si cpu termino
 
   input [len_bucket-1:0] bucket,               // para recibir datos del MIPS y mandarlo a la compu 
+  output [len_data-1:0] out_clk_counter,
   output reg [len_addr-1:0] addr_mem_inst,     // direccion de la instruccion a escribir
   output reg [len_data-1:0] ins_to_mem,        // instruccion a escribir
   output reg wr_ram_inst,                      // pin para habilitar escritura a INST_MEM
@@ -99,8 +100,13 @@ module DEBUG_UNIT
   reg [len_addr-1:0] num_inst = 7'b0;            // contador de instrucciones para direccionar donde escribir
 	reg [NBIT_DATA_LEN-1:0] reg_data_out_next = 0; // agarra el dato que se va a mandar a la PC
   reg [NBIT_DATA_LEN-1:0] reg_rxdatain = 0;      // agarra el dato que se va a mandar al MIPS
+
+  reg [len_data-1:0] clk_counter = 0;
+  reg [len_data-1:0] clk_counter_prev = 0;
   reg [len_contador-1:0] contador = 0;           // para direccionar el bucket
   reg [len_contador-1:0] contador_prev = 5'b0;
+
+  assign out_clk_counter = clk_counter;
 
   /*
     Assigns para testing
@@ -137,6 +143,7 @@ module DEBUG_UNIT
     data_out <= reg_data_out_next;
     rewrite_flag_prev <= rewrite_flag;
     contador_prev <= contador;
+    clk_counter_prev <= clk_counter;
 
 		if(reset)
 		begin
@@ -155,7 +162,8 @@ module DEBUG_UNIT
 			IDLE:
 			begin
         ctrl_clk_mips = 1'b0;
-        contador=0;
+        contador = 0;
+        clk_counter = 0;
         rewrite_flag = rewrite_flag_prev;
         if((rx_done_tick == 1) && (reg_rx_done_tick == 0)) 
         begin
@@ -180,7 +188,8 @@ module DEBUG_UNIT
 			PROGRAMMING:
       begin
       ctrl_clk_mips = 1'b0;
-      contador=0;
+      contador = 0;
+      clk_counter = 0;
       case(sub_state)
         SUB_INIT:
         begin
@@ -306,9 +315,10 @@ module DEBUG_UNIT
 		
 			WAITING:
 			begin
+        clk_counter = 0;
         ctrl_clk_mips = 1'b0;
         rewrite_flag = rewrite_flag_prev;
-        contador=0;
+        contador = 0;
         if((rx_done_tick == 1) && (reg_rx_done_tick == 0))
         begin
           case(reg_rxdatain)
@@ -345,11 +355,13 @@ module DEBUG_UNIT
       begin
         ctrl_clk_mips = 1'b0;
         contador = 0;
+        clk_counter = clk_counter_prev;
         rewrite_flag = rewrite_flag_prev;
         if((rx_done_tick == 1) && (reg_rx_done_tick == 0))
         begin
           if (reg_rxdatain == StepSignal)
           begin
+            clk_counter = clk_counter + 32'b1;
             ctrl_clk_mips = 1'b1;
             state_next = SENDING_DATA;
             sub_state_next = SUB_INIT;
@@ -370,7 +382,8 @@ module DEBUG_UNIT
 			CONTINUOUS:
       begin
         ctrl_clk_mips = 1'b1;
-        contador=0;
+        contador = 0;
+        clk_counter = clk_counter_prev;
         rewrite_flag = rewrite_flag_prev;
         if (halt)
         begin
@@ -379,6 +392,7 @@ module DEBUG_UNIT
         end
         else
         begin
+          clk_counter = clk_counter + 32'b1;
           state_next = CONTINUOUS; 
           sub_state_next = SUB_INIT;
         end
@@ -388,6 +402,7 @@ module DEBUG_UNIT
       begin
         ctrl_clk_mips = 1'b0;
         rewrite_flag = rewrite_flag_prev;
+        clk_counter = clk_counter_prev;
         if((tx_done_tick == 1) && (reg_tx_done_tick == 0))
         begin
           contador = contador_prev + 5'b1;
@@ -419,7 +434,8 @@ module DEBUG_UNIT
       end
 			default:
 				begin
-          contador=0;
+          clk_counter = clk_counter_prev;
+          contador = 0;
           ctrl_clk_mips = 1'b0;
           rewrite_flag = rewrite_flag_prev;
 					state_next = IDLE;

@@ -62,6 +62,14 @@ module IF_ID #(
             .pc_out(conn_pcmux_pc)
 		); 
 
+	PC_ADDER #(
+		.len_addr(len_data)
+		)
+		u_pc_adder(
+			.in_a(conn_pc_adder_imem),
+			.adder_out(conn_adder_pcmux)
+			); 
+
 	PC #(
 		.len_addr(len_data)
 		)
@@ -72,7 +80,7 @@ module IF_ID #(
 			.adder_input((connect_wire_douta)?(conn_pc_adder_imem):(conn_pcmux_pc)),
 			
             .pc_out(conn_pc_adder_imem)
-			);
+		);
 
 	INSTRUCTION_MEM #(
 		.len_addr(len_addr),
@@ -88,14 +96,6 @@ module IF_ID #(
             .Data(conn_out_instruction),
 			.wire_douta(connect_wire_douta)
 			); 
-
-	PC_ADDER #(
-		.len_addr(len_data)
-		)
-		u_pc_adder(
-			.in_a(conn_pc_adder_imem),
-			.adder_out(conn_adder_pcmux)
-		); 
 
 	initial
     begin
@@ -113,7 +113,7 @@ module IF_ID #(
 		else begin
 			out_halt_flag_if <= connect_wire_douta;
 
-			if (stall_flag | flush) 
+			if ((~stall_flag) | flush) 
 			begin
 				out_pc_branch <= (flush) ? {len_data{1'b 0}} : conn_adder_pcmux;
 			end

@@ -10,7 +10,7 @@ module TOP
 #(
     parameter NBIT_DATA_LEN = 8,
 	parameter len_data = 32,
-	parameter cant_registros = 13,
+	parameter cant_registros = 14,
 	parameter len_bucket = cant_registros*len_data,
 	parameter len_addr = 7,
 	parameter num_bits = 5,
@@ -159,7 +159,7 @@ module TOP
 			.debug_ram_flag(debug_ram_flag),
 			.debug_ram_addr(debug_ram_addr),
 		
-			//.test(conn_led),
+			.out_clk_counter(bucket[447:416]),
 
 		    //UART
 		    .rx_done_tick(connect_uart_rx_done),	    

@@ -14,11 +14,7 @@ module TOP_MIPS#(
 	parameter num_bits = 5, //$clog2(len_data),
 	parameter len_exec_bus = 11,
 	parameter len_mem_bus = 9,
-	parameter len_wb_bus = 2,
-    parameter nb_Latches_1_2 = (len_data*1)/8,
-    parameter nb_Latches_2_3 = (len_data*1)/8,
-    parameter nb_Latches_3_4 = (len_data*1)/8,
-    parameter nb_Latches_4_5 = (len_data*1)/8
+	parameter len_wb_bus = 2
 	)(
 	input clk,
 	input reset,
@@ -47,6 +43,7 @@ module TOP_MIPS#(
 	output [len_data-1:0] data1,
 	output [len_data-1:0] data2,
 	output [len_data-1:0] data3,
+	//output [len_data-1:0] Latch_IF_ID,
 	//----------------------------------------
 
 	output [len_test-1:0] out_inst_test,
@@ -127,6 +124,10 @@ module TOP_MIPS#(
 	assign data1 = out_data_debug;
 	assign data2 = out_data_debug;
 	assign data3 = out_data_debug;
+	/*assign Latches_1_2 = {	// 2 registros
+	connect_instruccion, // 32 bits
+	connect_in_pc_branch_1_2 // 32 bits
+	};*/
 	/* ------------------------ */
 	
 	assign out_inst_test = conn_inst_test;
