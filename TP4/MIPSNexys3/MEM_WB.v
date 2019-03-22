@@ -32,6 +32,10 @@ module MEM_WB #(
 	output reg [len_data-1:0] out_addr_mem,
 	output reg [num_bits-1:0] out_write_reg,
 
+	/* Para mandar a Debug Unit */
+	output [len_data-1:0] data0,
+	/* ------------------------ */	
+
 	output reg out_halt_flag_m=0
     );
 
@@ -47,10 +51,7 @@ module MEM_WB #(
 
 	reg [len_data-1:0] 	connect_mux_in_mem;	
 	wire [len_data-1:0]	conn_out_mem;
-	wire [len_data-1:0]	connect_out_mem_debug;
-
-
-
+	wire [len_data-1:0]	conn_out_mem_debug;
 
 	assign MemWrite			= memory_bus[0],
 		   MemRead 			= memory_bus[1],
@@ -65,6 +66,10 @@ module MEM_WB #(
 	assign out_pc_branch = in_pc_branch;
 	assign pc_src = Branch && ((BranchNotEqual) ? (~zero_flag) : (zero_flag));	// la señal de Branch se activa con ambas intrucciones de branch, la otra señal te indica cual de las 2 fue
 
+	/* Para mandar a Debug Unit */
+	assign data0 = conn_out_mem_debug;
+	/*------------------------ */	
+
 	DATA_MEM #(
         .len_data(len_data)
 		)
@@ -75,6 +80,7 @@ module MEM_WB #(
             .Addr(in_addr_mem[5:0]),
             .In_Data(connect_mux_in_mem),
 		
+			.Out_Data_debug(conn_out_mem_debug),
 			.Out_Data(conn_out_mem)
 			);
 
@@ -105,6 +111,10 @@ module MEM_WB #(
 			out_writeBack_bus <= in_writeBack_bus;
 			out_addr_mem <= in_addr_mem;
 			out_write_reg <= in_write_reg;
+
+			// para mostrar en debug unit
+			//data0 <= conn_out_mem_debug;
+			//
 
 			if (control_LH) 
 			begin
@@ -137,6 +147,17 @@ module MEM_WB #(
 
 	always @(*)
 	begin
+
+		/* PROBAR ESTA NEGRADA EN EL IF SECUENCIAL. 
+		   OTRA NEGRADA PARA PROBAR: ver data_mem*/
+		/*if(in_addr_mem==0)
+		begin
+			data_0 <= conn_out_mem;
+		end
+		else
+		begin
+			data_0 <= 32'hffffffff;
+		end*/
 
 		if (control_SH) 
 		begin

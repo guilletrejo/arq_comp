@@ -26,6 +26,8 @@ module TOP_MIPS#(
 	// para debug
 
 	input debug_flag,
+	input debug_ram_flag,
+	input [len_data-1:0] debug_ram_addr,
 	input [len_addr-1:0] in_addr_mem_inst,
 	input [len_data-1:0] in_ins_to_mem,
 	input wea_ram_inst,
@@ -41,6 +43,8 @@ module TOP_MIPS#(
 	output [len_data-1:0] out_reg6_recolector,
 	output [len_data-1:0] out_reg7_recolector,
 	output [len_data-1:0] out_pc,
+	output [len_data-1:0] data0,
+	output [len_data-1:0] data1,
 	//----------------------------------------
 
 	output [len_test-1:0] out_inst_test,
@@ -74,7 +78,8 @@ module TOP_MIPS#(
 				   connect_reg5_recolector,
 				   connect_reg6_recolector,
 				   connect_reg7_recolector,
-				   connect_out_pc;
+				   connect_out_pc,
+				   conn_data0;
 	wire [len_test-1:0] conn_inst_test; // va a los led
 
 	wire [num_bits-1:0] connect_rt,
@@ -116,6 +121,8 @@ module TOP_MIPS#(
 	assign out_reg6_recolector = connect_reg6_recolector;
 	assign out_reg7_recolector = connect_reg7_recolector;
 	assign out_pc = connect_out_pc;
+	assign data0 = conn_data0;
+	assign data1 = conn_data0;
 	/* ------------------------ */
 	
 	assign out_inst_test = conn_inst_test;
@@ -278,7 +285,7 @@ module TOP_MIPS#(
 		u_mem_wb(
 			.clk(clk),
 			.reset(reset),
-			.in_addr_mem(connect_alu_out),
+			.in_addr_mem(debug_ram_flag? debug_ram_addr : connect_alu_out),
 			.write_data(connect_write_data_3_4),
 			
 			.memory_bus(connect_memory_bus_3_4),
@@ -295,6 +302,10 @@ module TOP_MIPS#(
 		    .out_writeBack_bus(connect_out_writeBack_bus),
 			.out_addr_mem(connect_out_addr_mem),
 			.out_write_reg(connect_write_reg_4_2),
+
+			//para mostrar en debug unit
+			.data0(conn_data0),
+			//
 
 			.out_halt_flag_m(connect_halt_flag_4_5)
 			);

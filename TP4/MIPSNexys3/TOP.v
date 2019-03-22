@@ -10,7 +10,7 @@ module TOP
 #(
     parameter NBIT_DATA_LEN = 8,
 	parameter len_data = 32,
-	parameter cant_registros = 9,
+	parameter cant_registros = 11,
 	parameter len_bucket = cant_registros*len_data,
 	parameter len_addr = 7,
 	parameter num_bits = 5,
@@ -70,6 +70,9 @@ module TOP
 
 	wire [len_bucket-1:0] bucket;
 
+	wire debug_ram_flag;
+	wire [len_data-1:0] debug_ram_addr;
+
 	/*assign led[0] = connect_uart_tx_start;	
 	assign led[1] = connect_halt;
 	assign led[2] = reset;*/
@@ -95,6 +98,8 @@ module TOP
 
 		//para debug
 		.debug_flag(connect_debug_mode),
+		.debug_ram_flag(debug_ram_flag),
+		.debug_ram_addr(debug_ram_addr),
 		.in_addr_mem_inst(connect_addr_mem_inst),
 		.in_ins_to_mem(connect_ins_to_mem),
 		.wea_ram_inst(connect_wea_ram_inst),
@@ -107,9 +112,10 @@ module TOP
 		.out_reg5_recolector(bucket[191:160]),
 		.out_reg6_recolector(bucket[223:192]),
 		.out_reg7_recolector(bucket[255:224]),
-
-		.out_inst_test(led_fpga),
 		.out_pc(bucket[287:256]),
+		.data0(bucket[319:288]), // 36, 37, 38, 39
+		.data1(bucket[351:320]), // 40, 41, 42, 43
+		.out_inst_test(led_fpga),
 
 		.halt_flag(connect_halt)
 		/*.Latches_1_2(connect_Latches_1_2),
@@ -147,6 +153,9 @@ module TOP
 			//.enable_next_recolector(connect_enable_next),
 			.debug(connect_debug_mode),
 			.wr_ram_inst(connect_wea_ram_inst),
+
+			.debug_ram_flag(debug_ram_flag),
+			.debug_ram_addr(debug_ram_addr),
 		
 			//.test(conn_led),
 

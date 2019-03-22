@@ -37,3 +37,13 @@ Casos MIPS probados
 	and 5, 2, 5
 	or 4, 6, 2
 	END
+
+5: Funciona maomenos en placa. La memoria se graba bien con SW pero el LW anda mal, en el reg. 6 se guarda un 7!
+	addi 0, 0, 1
+	bne 0, 1, 4
+	subu 2, 5, 1
+	and 5, 5, 2
+	sw 5, 0(1)
+	or 7, 7, 10
+	lw 6, 0(1)
+	END

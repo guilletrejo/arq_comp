@@ -15,7 +15,7 @@ module DEBUG_UNIT
   parameter cant_inst     = 64,       // cantidad esperada de instrucciones
   parameter NBIT_cant_inst = 6,
   parameter len_bucket   = 32,        // largo total del bucket SE PISA DESDE TOP
-  parameter len_contador = 5,         // contador puede contar hasta 2^len_contador SE PISA DESDE TOP
+  parameter len_contador = 6,         // contador puede contar hasta 2^len_contador SE PISA DESDE TOP
   parameter max_count = len_bucket/8  // cantidad x de veces tengo que mandar 8 bits para mandar todo el bucket
 ) 
 ( 
@@ -37,6 +37,8 @@ module DEBUG_UNIT
 
   output reg ctrl_clk_mips,
   output reg debug,                            // debug_flag para indicar si se esta escribiendo el programa en INST_MEM
+  output debug_ram_flag,
+  output [len_data-1:0] debug_ram_addr,
   /*
     UART
   */
@@ -108,6 +110,11 @@ module DEBUG_UNIT
   assign substatenext_flag = sub_state_next;
   assign state_flag = state;
   assign statenext_flag = state_next;*/
+
+  /* Para indicar si estamos leyendo data_mem */
+  assign debug_ram_flag = (state==SENDING_DATA);
+  assign debug_ram_addr = (contador>=36 && contador<=39)? 0 :
+                          (contador>=40 && contador<=43)? 1 : 2;
 
 
 	/* 

@@ -16,7 +16,9 @@ module DATA_MEM #(
   input clk,                           // Clock
   input Wr,                            // Write enable
   input Rd,                            // RAM Enable, for additional power savings, disable port when not in use
+  output [len_data-1:0] Out_Data_debug,
   output [len_data-1:0] Out_Data         // RAM output data
+
 );
   wire regcea = 1;                         // Output register enable
   wire rsta = 0; // Output reset (does not affect memory contents)
@@ -24,7 +26,7 @@ module DATA_MEM #(
   reg [len_data-1:0] BRAM [ram_depth-1:0];
   reg [len_data-1:0] ram_data = {len_data{1'b0}};
 
-  
+
   // The following code either initializes the memory values to a specified file or to all zeros to match hardware
   generate
     if (init_file != "") begin: use_init_file
@@ -38,17 +40,21 @@ module DATA_MEM #(
           BRAM[ram_index] = {len_data{1'b0}}+(ram_index)+valor;
     end
   endgenerate
-
+  
   always @(negedge clk)
   begin
     if (Wr)
+    begin
       BRAM[Addr] <= In_Data;
+    end
   end
 
   always @(posedge clk)
   begin
     if (Rd)
+    begin
       ram_data <= BRAM[Addr];
+    end
   end
 
   //  The following code generates HIGH_PERFORMANCE (use output register) or LOW_LATENCY (no output register)
@@ -57,6 +63,8 @@ module DATA_MEM #(
 
       // The following is a 1 clock cycle read latency at the cost of a longer clock-to-out timing
        assign Out_Data = ram_data;
+      // para mostrar en debug unit
+       assign Out_Data_debug = BRAM[Addr];
 
     end else begin: output_register
 
@@ -83,26 +91,5 @@ module DATA_MEM #(
   endfunction
 
 endmodule
-
-// The following is an instantiation template for xilinx_single_port_ram_no_change
-/*
-  //  Xilinx Single Port No Change RAM
-  xilinx_single_port_ram_no_change #(
-    .len_data(18),                       // Specify RAM data width
-    .ram_depth(1024),                     // Specify RAM depth (number of entries)
-    .RAM_PERFORMANCE("HIGH_PERFORMANCE"), // Select "HIGH_PERFORMANCE" or "LOW_LATENCY" 
-    .init_file("")                        // Specify name/location of RAM initialization file if using one (leave blank if not)
-  ) your_instance_name (
-    .Addr(Addr),    // Address bus, width determined from ram_depth
-    .In_Data(In_Data),      // RAM input data, width determined from len_data
-    .clk(clk),      // Clock
-    .Wr(Wr),        // Write enable
-    .Rd(Rd),        // RAM Enable, for additional power savings, disable port when not in use
-    .rsta(rsta),      // Output reset (does not affect memory contents)
-    .regcea(regcea),  // Output register enable
-    .Out_Data(Out_Data)     // RAM output data, width determined from len_data
-  );
-
-*/
 						
 						
