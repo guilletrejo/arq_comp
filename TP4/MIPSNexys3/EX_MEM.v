@@ -57,8 +57,8 @@ module EX_MEM #(
 	wire [1:0] 	conn_forwarding_mux1,
 				conn_forwarding_mux2;
 				
-    wire [len_data-1:0] 	mux1_alu_forwarding,
-    				        mux2_alu_forwarding;
+  wire [len_data-1:0] mux1_alu_forwarding,
+    				          mux2_alu_forwarding;
 
     /* a = b ? c : d ? e : f
         if b
@@ -168,6 +168,7 @@ module EX_MEM #(
 				out_pc_branch <= in_pc_branch + in_sign_extend;
 				out_alu <= conn_alu_out;
 				out_reg2 <= in_reg2;
+				/* execute_bus[9]: JALOnly ... execute_bus[8]: si es 0 RT es el destino, si es 1 RD es el destino  */
 				out_write_reg <= execute_bus[9] ? (5'b 11111) : (execute_bus[8] ? in_rd : in_rt);
 				zero_flag <= conn_zero_flag;
 			end

@@ -17,6 +17,11 @@ module CONTROL#(
 
     // Junto las salidas en buses para mas prolijidad
 
+	/*
+	   RegDst = 0 --> The register destination number for the Write register comes from the RT field (bits 20:16) (LOAD E INMEDIATOS).
+	   RegDst = 1 --> The register destination number for the Write register comes from the RD field (bits 15:11) (OTRAS INSTR.).
+	*/
+
     output reg [len_exec_bus-1:0] execute_bus, // Jump&Link, JALOnly, RegDst, ALUSrc1, ALUSrc2, jump, jump register, ALUCode [4 bits]
 
     output reg [len_mem_bus-1:0] memory_bus, // SB, SH, LB, LH, Unsigned, Branch, MemRead, MemWrite

@@ -27,8 +27,8 @@ module TOP
 	output [NBIT_DATA_LEN-1:0] led_fpga
 );
 
-    wire clk_mips, 
-         ctrl_clk_mips; 
+    wire clk_mips;
+    wire [1:0] ctrl_clk_mips; 
 		 //clk, 
          //reset, 
          //reset_mips;
@@ -55,7 +55,7 @@ module TOP
 
 	//assign connect_write_dataconnect_write_data_5_2_5_2 = (connect_out_writeBack_bus[0]) ? connect_read_data : connect_out_addr_mem;
 
-	assign clk_mips = (ctrl_clk_mips) ? (CLK100MHZ) : (1'b 0);
+	assign clk_mips = (ctrl_clk_mips[0]) ? (CLK100MHZ) : ((ctrl_clk_mips[1]) ? (!CLK100MHZ) : (1'b 0));
 
 	//assign connect_rx_debug = RX_INPUT; //(1 & estamos_en_test_bench) ? connect_tx_debug : UART_TXD_IN;
 	assign TX_OUTPUT = connect_tx_debug;
