@@ -106,6 +106,9 @@ module DEBUG_UNIT
   reg [len_contador-1:0] contador = 0;           // para direccionar el bucket
   reg [len_contador-1:0] contador_prev = 5'b0;
 
+  //--------------PARA ARREGLAR CONTINUOUS--------
+  //reg continuous_ccm;
+
   assign out_clk_counter = clk_counter;
 
   /*
@@ -150,7 +153,28 @@ module DEBUG_UNIT
 			state<=IDLE;
       sub_state<=SUB_INIT;
 		end
+    /*if(state == CONTINUOUS)
+		begin
+      continuous_ccm <= 1'b1;
+		end
+    else
+    begin
+      continuous_ccm <= 1'b0;
+    end  */
 	end
+
+  /*
+  always @(negedge clk)
+  begin
+    if(state == CONTINUOUS)
+		begin
+      continuous_ccm <= 1'b1;
+		end
+    else
+    begin
+      continuous_ccm <= 1'b0;
+    end
+  end*/
 	
 	/* 
     Logica de actualizacion de estados.
@@ -381,6 +405,7 @@ module DEBUG_UNIT
 				
 			CONTINUOUS:
       begin
+        //ctrl_clk_mips = continuous_ccm;
         ctrl_clk_mips = 1'b1;
         contador = 0;
         clk_counter = clk_counter_prev;
@@ -461,7 +486,6 @@ module DEBUG_UNIT
 				tx_start = 1'b0;
 				reg_data_out_next  = data_out;
         reg_rxdatain = rx_data_in;
-        //contador = 0;
 			end
 
 			PROGRAMMING:
@@ -476,7 +500,6 @@ module DEBUG_UNIT
               tx_start = 1'b0;
               reg_data_out_next  = data_out;
               reg_rxdatain = rx_data_in;
-              //contador = 0;
             end
           SUB_READ_1:
             begin
@@ -486,7 +509,6 @@ module DEBUG_UNIT
               debug = 1'b1;
               tx_start = 1'b0;
               reg_data_out_next  = data_out;
-              //contador = 0;
               if(!rewrite_flag)
               begin
                 instruction = {{24{1'b0}},reg_rxdatain};
@@ -504,7 +526,6 @@ module DEBUG_UNIT
               debug = 1'b1;
               tx_start = 1'b0;
               reg_data_out_next  = data_out;  
-              //contador = 0;
               if(!rewrite_flag)
               begin
                 instruction = {{16{1'b0}},reg_rxdatain,ins_to_mem[7:0]};                               
@@ -522,7 +543,6 @@ module DEBUG_UNIT
               debug = 1'b1;
               tx_start = 1'b0;
               reg_data_out_next  = data_out; 
-              //contador = 0;
               if(!rewrite_flag)
               begin
                 instruction = {{8{1'b0}},reg_rxdatain,ins_to_mem[15:0]};                                                            
@@ -539,8 +559,7 @@ module DEBUG_UNIT
               reg_rxdatain = rx_data_in;
               debug = 1'b1;
               tx_start = 1'b0;
-              reg_data_out_next  = data_out;
-              //contador = 0;   
+              reg_data_out_next  = data_out; 
               if(!rewrite_flag)
               begin
                 instruction = {reg_rxdatain,ins_to_mem[23:0]};
@@ -559,7 +578,6 @@ module DEBUG_UNIT
               debug = 1'b1;
               tx_start = 1'b0;
               reg_data_out_next  = data_out;
-              //contador = 0;
             end
           default:
             begin
@@ -570,7 +588,6 @@ module DEBUG_UNIT
               debug = 1'b0;
               tx_start = 1'b0;
               reg_data_out_next  = data_out;
-              //contador = 0;
             end
         endcase
 			end
@@ -583,8 +600,7 @@ module DEBUG_UNIT
         write_enable_ram_inst = 1'b0;
         debug = 1'b0;
         tx_start = 1'b0;
-        reg_data_out_next  = data_out;
-        //contador = 0;				
+        reg_data_out_next  = data_out;			
 			end
 			
 			STEP_BY_STEP:
@@ -596,7 +612,6 @@ module DEBUG_UNIT
         debug = 1'b0;
         tx_start = 1'b0;
         reg_data_out_next  = data_out;
-        //contador = 0;
 			end
 			
 			CONTINUOUS:
@@ -608,7 +623,6 @@ module DEBUG_UNIT
         debug = 1'b0;
         tx_start = 1'b0;
         reg_data_out_next  = data_out;
-        //contador = 0;
 			end
 			
       SENDING_DATA:
@@ -620,15 +634,6 @@ module DEBUG_UNIT
         debug = 1'b0;
         tx_start = 1'b1;
         reg_data_out_next = bucket[contador*8 +: 8];
-        /*if(!rewrite_flag)
-        begin
-          contador = contador_prev + 5'b1;
-          rewrite_flag_prev=1
-        end
-        else
-        begin
-          contador = contador_prev;
-        end*/
       end
 
 			default:
@@ -640,7 +645,7 @@ module DEBUG_UNIT
         debug = 1'b0;
         tx_start = 1'b0;
         reg_data_out_next  = data_out;
-        //contador = 0;
+
 			end
 	
 		endcase

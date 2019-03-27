@@ -44,7 +44,6 @@ def read32():
 	reg_4 = ser.read()
 
 	result = concat_bin(reg_4, reg_3, reg_2, reg_1)
-	#result = concat_bin3(reg_3, reg_2, reg_1)
 	return result
 
 def showRegisters():
@@ -87,14 +86,60 @@ def showRegisters():
 	bus1_2_3 = read32()
 	bus2_2_3 = read32()
 
-	print("Sign extend: " + str(sign_extend_2_3))
+	print("Sign extend: " + str(hex(sign_extend_2_3)))
 	print("Branch target: " + str(branch_2_3))
 	
-	print_registro_32("Shamt: ", bus1_2_3, msb=4, lsb=0)
-	print_registro_32("Rt: ", bus1_2_3, msb=9, lsb=5)
-	print_registro_32("Rs: ", bus1_2_3, msb=14, lsb=10)
-	print_registro_32("Rd: ", bus1_2_3, msb=19, lsb=15)
+	print_registro_32_hex("Shamt: ", bus1_2_3, msb=4, lsb=0)
+	print_registro_32_hex("Rt: ", bus1_2_3, msb=9, lsb=5)
+	print_registro_32_hex("Rs: ", bus1_2_3, msb=14, lsb=10)
+	print_registro_32_hex("Rd: ", bus1_2_3, msb=19, lsb=15)
 	print
+	
+	print "Buses de control"
+	print_registro_32_hex("Execute bus: ", bus2_2_3, msb=21, lsb=11)
+	print_registro_32_hex("Memory bus: ", bus2_2_3, msb=10, lsb=2)
+	print_registro_32_hex("Writeback bus: ", bus2_2_3, msb=1, lsb=0)
+	print
+
+	print "---Latches Intermedios EX/MEM---"
+
+	reg2_3_4 = read32()
+	branch_3_4 = read32()
+	alu_out = read32()
+	bus1_3_4 = read32()
+
+	print_registro_32_hex("ALU out: ", alu_out)
+	print_registro_32_hex("Branch target: ", branch_3_4)
+	print_registro_32_hex("Registro 2: ", reg2_3_4)
+
+	print_registro_32_hex("Zero flag: ", bus1_3_4, msb=0, lsb=0)
+	print_registro_32_hex("Write register: ", bus1_3_4, msb=5, lsb=1)
+	print
+	
+	print "Buses de control"
+	print_registro_32_hex("Memory bus: ", bus1_3_4, msb=16, lsb=8)
+	print_registro_32_hex("Writeback bus: ", bus1_3_4, msb=7, lsb=6)
+	print
+
+	print "---Latches Intermedios MEM/WB---"
+
+	read_data = read32()
+	alu_out_4_5 = read32()
+	bus1_4_5 = read32()
+
+	print_registro_32_hex("Read data: ", read_data)
+	print_registro_32_hex("ALU out: ", alu_out_4_5)
+
+	print_registro_32_hex("Write register: ", bus1_4_5, msb=6, lsb=2)
+	print
+
+	print "Buses de control"
+	print_registro_32_bin("Writeback bus: ", bus1_4_5, msb=1, lsb=0)
+	print
+
+	print_registro_32_hex("Halt Flag: ", bus1_4_5, msb=7, lsb=7)
+	print
+
 	print "------------------------------"
 
 def read8():
@@ -111,7 +156,7 @@ def concat_bin(byte_4, byte_3, byte_2, byte_1):
 
 	return (ord(byte_4) << 24) + (ord(byte_3) << 16) + (ord(byte_2) << 8) + ord(byte_1)
 
-def print_registro_32(mensaje, registro, msb = 31, lsb = 0):
+def print_registro_32_hex(mensaje, registro, msb = 31, lsb = 0):
 	
 	bitInicial = 31 - msb
 	nroBits = (31 - lsb) + 1
@@ -121,7 +166,32 @@ def print_registro_32(mensaje, registro, msb = 31, lsb = 0):
 	binario = str(bin(int(reg,2)))
 	decimal = str(complemento_a_2(int(reg,2)))
 	hexa = str(hex(int(reg,2)))
-	print mensaje.ljust(22) + binario.rjust(36) + decimal.rjust(14) + hexa.rjust(12)
+	print mensaje + hexa
+
+def print_registro_32_dec(mensaje, registro, msb = 31, lsb = 0):
+	
+	bitInicial = 31 - msb
+	nroBits = (31 - lsb) + 1
+
+	reg =  bin(registro).replace('0b','').zfill(32)[bitInicial:nroBits]
+
+	binario = str(bin(int(reg,2)))
+	decimal = str(complemento_a_2(int(reg,2)))
+	hexa = str(hex(int(reg,2)))
+	print mensaje + decimal
+
+def print_registro_32_bin(mensaje, registro, msb = 31, lsb = 0):
+	
+	bitInicial = 31 - msb
+	nroBits = (31 - lsb) + 1
+
+	reg =  bin(registro).replace('0b','').zfill(32)[bitInicial:nroBits]
+
+	binario = str(bin(int(reg,2)))
+	decimal = str(complemento_a_2(int(reg,2)))
+	hexa = str(hex(int(reg,2)))
+	print mensaje + binario
+
 
 def serialConnect(lim):
 

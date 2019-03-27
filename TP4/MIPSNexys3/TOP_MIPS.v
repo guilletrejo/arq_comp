@@ -45,14 +45,12 @@ module TOP_MIPS#(
 	output [len_data-1:0] data3,
 	output [2*len_data-1:0] Latch_IF_ID,
 	output [4*len_data-1:0] Latch_ID_EX,
+	output [4*len_data-1:0] Latch_EX_MEM,
+	output [3*len_data-1:0] Latch_MEM_WB,
 	//----------------------------------------
 
 	output [len_test-1:0] out_inst_test,
 	output halt_flag
-   /*output [32-1:0] Latches_1_2, // pensar la longitud pq queda demasiados cables
-   output [32-1:0] Latches_2_3, // pensar la longitud pq queda demasiados cables
-   output [32-1:0] Latches_3_4, // pensar la longitud pq queda demasiados cables
-   output [32-1:0] Latches_4_5 // pensar la longitud pq queda demasiados cables*/
 	);
 
     wire [len_data-1:0] connect_in_pc_branch_1_2,
@@ -109,7 +107,6 @@ module TOP_MIPS#(
 	     connect_halt_flag_4_5; 
 
 	assign connect_write_data_5_2 = (connect_out_writeBack_bus[0]) ? connect_read_data : connect_out_addr_mem;
- 	//assign connect_write_data_5_2 = connect_read_data; //no se soluciona con esto, por lo q el problema no es el MUX
 
 	/* Para mandar a Debug Unit */
 	assign out_reg0_recolector = connect_reg0_recolector;
@@ -130,7 +127,7 @@ module TOP_MIPS#(
 		connect_instruccion, // 32 bits
 		connect_in_pc_branch_1_2 // 32 bits
 	};
-	assign Latch_ID_EX = {	// 4 registros ...	TOTAL 128 BITS
+	assign Latch_ID_EX = {	// 4 registros 		TOTAL 128 BITS
 		{10{1'b 0}}, // 10 bits --> Se agrega para alinear
 		connect_execute_bus, // 11 bits
 		connect_memory_bus_2_3, // 9 bits
@@ -143,32 +140,29 @@ module TOP_MIPS#(
 		connect_sign_extend, // 32 bits
 		connect_in_pc_branch_2_3 // 32 bits
 	};
+	assign Latch_EX_MEM = {	// 4 registros		TOTAL 128 BITS
+		{15{1'b 0}}, // 15 bits
+		connect_memory_bus_3_4, // 9 bits
+		connect_writeBack_bus_3_4, // 2 bits
+		connect_write_reg_3_4, // 5 bits
+		connect_zero_flag, // 1 bit
+		connect_alu_out, // 32 bits
+		connect_in_pc_branch_3_4, // 32 bits
+		connect_reg1 // 32 bits
+	};
+
+	assign Latch_MEM_WB = {	// 4 registros 		TOTAL 128 BITS
+		{24{1'b 0}}, // 24 bits
+		connect_halt_flag_4_5, // 1 bitconnect_stall_flag
+		connect_write_reg_4_2, // 5 bits
+		connect_out_writeBack_bus, // 2 bits
+		connect_out_addr_mem, // 32 bits
+		connect_read_data // 32 bits
+	};
 	/* ------------------------ */
 	
 	assign out_inst_test = conn_inst_test;
 	assign halt_flag = connect_halt_flag_4_5;
-	
-
-	
-	/*assign Latches_3_4 = {	// 4 registros			TOTAL 128 BITS
-		//{15{1'b 0}}, // 15 bits
-		//connect_memory_bus_3_4, // 9 bits
-		//connect_writeBack_bus_3_4, // 2 bits
-		//connect_write_reg_3_4, // 5 bits
-		//connect_zero_flag, // 1 bit
-		//connect_alu_out // 32 bits
-		//connect_in_pc_branch_3_4 // 32 bits
-		connect_reg1 // 32 bits
-	};
-	assign Latches_4_5 = {	// 3 registroconnect_stall_flag BITS
-		//{24{1'b 0}}, // 24 bits
-		//connect_halt_flag_4_5, // 1 bitconnect_stall_flag
-		//connect_write_reg_4_2, // 5 bits
-		//connect_out_writeBack_bus, // 2 bits
-		//connect_out_addr_mem // 32 bits
-		//connect_read_data // 32 bits
-		connect_reg2
-	};*/
 
 	IF_ID #(
 		.len_data(len_data)
@@ -189,9 +183,9 @@ module TOP_MIPS#(
 
 			.out_pc_branch(connect_in_pc_branch_1_2),
 			.out_instruction(connect_instruccion),
-			.out_pc(connect_out_pc), // para debug
+			.out_pc(connect_out_pc), 
 			.out_inst_test(conn_inst_test),
-			.out_halt_flag_if(connect_halt_flag_1_2) // para debug
+			.out_halt_flag_if(connect_halt_flag_1_2) 
 		);
 
 	ID_EX #(

@@ -8,7 +8,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 module FORWARDING_UNIT #(
-	parameter num_bits = 5//$clog2(len_data)
+	parameter num_bits = 5
 	)(
 	input ex_mem_reg_write,	// flag
 	input mem_wb_reg_write,	// flag
