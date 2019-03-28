@@ -18,6 +18,6 @@ module FORWARDING_MUX #(
     );
 
     assign out_mux 	= (select == 2'b00) ? in_reg
-    				: (select == 2'b10) ? in_mem_forw // ex/mem
+    				: (select == 2'b01) ? in_mem_forw // ex/mem
     									: in_wb_forw; // mem/wb
 endmodule

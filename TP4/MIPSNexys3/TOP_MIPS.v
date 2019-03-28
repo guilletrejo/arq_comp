@@ -27,6 +27,7 @@ module TOP_MIPS#(
 	input [len_addr-1:0] in_addr_mem_inst,
 	input [len_data-1:0] in_ins_to_mem,
 	input wea_ram_inst,
+	input ctrl_clk_mips,
 
 
 	//PARA MANDAR A DEBUG.U
@@ -169,6 +170,7 @@ module TOP_MIPS#(
 		)
 		u_if_id(
 			.clk(clk),
+			.ctrl_clk_mips(ctrl_clk_mips),
 			.reset(reset),
 			.in_pc_src({connect_flag_jump, connect_flag_jump_register, connect_branch_flag}),
 			.in_pc_jump(connect_in_pc_jump),
@@ -193,6 +195,7 @@ module TOP_MIPS#(
 		)
 		u_id_ex(
 			.clk(clk),
+			.ctrl_clk_mips(ctrl_clk_mips),
 			.reset(reset),
 			.in_pc_branch(connect_in_pc_branch_1_2),
 			.in_instruccion(connect_instruccion),
@@ -239,6 +242,7 @@ module TOP_MIPS#(
 		)
 		u_ex_mem(
 			.clk(clk),
+			.ctrl_clk_mips(ctrl_clk_mips),
 			.reset(reset),
 		
 			.in_pc_branch(connect_in_pc_branch_2_3),
@@ -282,6 +286,7 @@ module TOP_MIPS#(
 		)
 		u_mem_wb(
 			.clk(clk),
+			.ctrl_clk_mips(ctrl_clk_mips),
 			.reset(reset),
 			.in_addr_mem(debug_ram_flag? debug_ram_addr : connect_alu_out),
 			.write_data(connect_write_data_3_4),

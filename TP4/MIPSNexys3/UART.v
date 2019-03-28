@@ -12,7 +12,7 @@ module UART
 	parameter NBIT_DATA = 8,
 	parameter NUM_TICKS = 16,
 	parameter BAUD_RATE = 9600,
-	parameter CLK_RATE = 100000000
+	parameter CLK_RATE = 40000000
 )
 (
 	input CLK, 								  // clock de la FPGA

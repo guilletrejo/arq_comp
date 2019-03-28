@@ -1,10 +1,10 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 //	Alumnos:
-//					 Ortmann, Nestor Javier
-// 				 Trejo, Bruno Guillermo
-// Year: 		 2019
-// Module Name:  UNIDAD DE DEBUG
+//					      Ortmann, Nestor Javier
+// 				        Trejo, Bruno Guillermo
+// Year: 		      2019
+// Module Name:   UNIDAD DE DEBUG
 //////////////////////////////////////////////////////////////////////////////////
 
 module DEBUG_UNIT
@@ -36,7 +36,7 @@ module DEBUG_UNIT
   output [2:0] statenext_flag,*/
   //output [len_data-1:0] test,
 
-  output reg [1:0] ctrl_clk_mips,
+  output reg ctrl_clk_mips,
   output reg debug,                            // debug_flag para indicar si se esta escribiendo el programa en INST_MEM
   output debug_ram_flag,
   output [len_data-1:0] debug_ram_addr,
@@ -106,9 +106,6 @@ module DEBUG_UNIT
   reg [len_contador-1:0] contador = 0;           // para direccionar el bucket
   reg [len_contador-1:0] contador_prev = 5'b0;
 
-  //--------------PARA ARREGLAR CONTINUOUS--------
-  reg [1:0]continuous_ccm=2'b00;
-
   assign out_clk_counter = clk_counter;
 
   /*
@@ -153,28 +150,8 @@ module DEBUG_UNIT
 			state<=IDLE;
       sub_state<=SUB_INIT;
 		end
-   /* if(state_next == CONTINUOUS || state == CONTINUOUS)
-		begin
-      continuous_ccm <= 2'b10;
-		end
-    else
-    begin
-      continuous_ccm <= 2'b00;
-    end */
+    
 	end
-
-  
-  always @(negedge clk,posedge clk)
-  begin
-    if(state_next == CONTINUOUS || state == CONTINUOUS)
-		begin
-      continuous_ccm <= 2'b10;
-		end
-    else
-    begin
-      continuous_ccm <= 2'b00;
-    end
-  end
 	
 	/* 
     Logica de actualizacion de estados.
@@ -185,7 +162,7 @@ module DEBUG_UNIT
 		case(state)
 			IDLE:
 			begin
-        ctrl_clk_mips = 2'b00;
+        ctrl_clk_mips = 1'b0;
         contador = 0;
         clk_counter = 0;
         rewrite_flag = rewrite_flag_prev;
@@ -211,7 +188,7 @@ module DEBUG_UNIT
 
 			PROGRAMMING:
       begin
-      ctrl_clk_mips = 2'b00;
+      ctrl_clk_mips = 1'b0;
       contador = 0;
       clk_counter = 0;
       case(sub_state)
@@ -340,7 +317,7 @@ module DEBUG_UNIT
 			WAITING:
 			begin
         clk_counter = 0;
-        ctrl_clk_mips = 2'b00;
+        ctrl_clk_mips = 1'b0;
         rewrite_flag = rewrite_flag_prev;
         contador = 0;
         if((rx_done_tick == 1) && (reg_rx_done_tick == 0))
@@ -377,7 +354,7 @@ module DEBUG_UNIT
 		
 			STEP_BY_STEP:
       begin
-        ctrl_clk_mips = 2'b00;
+        ctrl_clk_mips = 1'b0;
         contador = 0;
         clk_counter = clk_counter_prev;
         rewrite_flag = rewrite_flag_prev;
@@ -386,7 +363,7 @@ module DEBUG_UNIT
           if (reg_rxdatain == StepSignal)
           begin
             clk_counter = clk_counter + 32'b1;
-            ctrl_clk_mips = 2'b01;
+            ctrl_clk_mips = 1'b1;
             state_next = SENDING_DATA;
             sub_state_next = SUB_INIT;
           end
@@ -405,8 +382,7 @@ module DEBUG_UNIT
 				
 			CONTINUOUS:
       begin
-        ctrl_clk_mips = continuous_ccm;
-        //ctrl_clk_mips = 2'b10;
+        ctrl_clk_mips = 1'b1;
         contador = 0;
         clk_counter = clk_counter_prev;
         rewrite_flag = rewrite_flag_prev;
@@ -425,7 +401,7 @@ module DEBUG_UNIT
 
       SENDING_DATA:   
       begin
-        ctrl_clk_mips = 2'b00;
+        ctrl_clk_mips = 1'b0;
         rewrite_flag = rewrite_flag_prev;
         clk_counter = clk_counter_prev;
         if((tx_done_tick == 1) && (reg_tx_done_tick == 0))
@@ -461,7 +437,7 @@ module DEBUG_UNIT
 				begin
           clk_counter = clk_counter_prev;
           contador = 0;
-          ctrl_clk_mips = 2'b00;
+          ctrl_clk_mips = 1'b0;
           rewrite_flag = rewrite_flag_prev;
 					state_next = IDLE;
           sub_state_next = SUB_INIT;
