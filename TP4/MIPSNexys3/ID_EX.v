@@ -118,7 +118,7 @@ module ID_EX #(
 		.num_bits(5)
 		)
 		u_registers(
-			.clk(~clk),
+			.clk(clk),
 			.ctrl_clk_mips(ctrl_clk_mips),
 			.reset(reset),
 			.RegWrite(RegWrite),

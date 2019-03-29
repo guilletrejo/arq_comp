@@ -42,7 +42,7 @@ module DATA_MEM #(
     end
   endgenerate
   
-  always @(negedge clk)
+  always @(posedge clk)
   begin
     if(ctrl_clk_mips)
     begin
@@ -53,7 +53,7 @@ module DATA_MEM #(
     end
   end
 
-  always @(posedge clk)
+  always @(negedge clk)
   begin
     if(ctrl_clk_mips)
       begin
