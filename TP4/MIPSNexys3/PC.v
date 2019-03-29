@@ -15,6 +15,7 @@ module PC
         input reset,                        // Reinicia el PC a cero.
         input PCWrite,                      // Enable para copiar valor de la entrada del PC a la salida (viene de Hazard Detection Unit)
         input [len_addr-1:0] adder_input,   // Aumenta el valor del PC.
+        input ctrl_clk_mips,                // controla la ejecucion desde debug_unit
 
         output reg [len_addr-1 : 0] pc_out = 0 // Direccion que se leera de INSTRUCTION_MEM
     );
@@ -25,18 +26,20 @@ module PC
 
     always @(posedge clk)
     begin
-        if(reset)
-        begin
-          pc_out = {len_addr{1'b 0}}; // = {vector de 32 ceros) 
-        end
-        else if(PCWrite)
+      if(reset)
+      begin
+        pc_out = {len_addr{1'b 0}}; // = {vector de 32 ceros) 
+      end
+      else if(ctrl_clk_mips) 
+      begin
+        if (PCWrite)
         begin
           pc_out = adder_input;
         end
-        /*else
+        else
         begin
           pc_out = pc_out;
-        end*/
-    end    
-
+        end
+      end
+      end    
 endmodule

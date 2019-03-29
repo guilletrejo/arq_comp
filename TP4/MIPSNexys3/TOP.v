@@ -28,24 +28,21 @@ module TOP
 );
 
     wire clk_mips;
-    wire [1:0] ctrl_clk_mips; 
-		 //clk, 
+    wire ctrl_clk_mips; 
+	wire clk;
+	assign clk = CLK100MHZ; 
+	//assign clk_mips = CLK100MHZ;
          //reset, 
          //reset_mips;
     
     wire connect_uart_rx_done,
 	     connect_uart_tx_start,
 	     connect_uart_tx_done,
-		 //connect_restart_recolector,
-		 //connect_send_regs,
-		 //connect_enable_next,
 		 //connect_reprogram,
 		 connect_debug_mode,
 		 connect_halt,
 		 connect_tx_debug,
-		 //connect_rx_debug,
 		 connect_wea_ram_inst;
-	//wire [NBIT_DATA_LEN-1:0]	connect_pc_debug;
 		 
 	wire [len_addr-1:0] connect_addr_mem_inst;
 	wire [len_data-1:0] connect_ins_to_mem;
@@ -53,27 +50,14 @@ module TOP
     wire [NBIT_DATA_LEN-1:0] connect_uart_data_in,
 			                 connect_uart_data_out;
 
-	//assign connect_write_dataconnect_write_data_5_2_5_2 = (connect_out_writeBack_bus[0]) ? connect_read_data : connect_out_addr_mem;
+	assign clk_mips = (ctrl_clk_mips) ? (!clk) : (1'b 0);
 
-	assign clk_mips = (ctrl_clk_mips[0]) ? (CLK100MHZ) : ((ctrl_clk_mips[1]) ? (!CLK100MHZ) : (1'b 0));
-
-	//assign connect_rx_debug = RX_INPUT; //(1 & estamos_en_test_bench) ? connect_tx_debug : UART_TXD_IN;
 	assign TX_OUTPUT = connect_tx_debug;
-	//assign led_fpga = connect_pc_debug;
-	//assign tx_done_debug = connect_uart_tx_done;
 
 	wire [len_bucket-1:0] bucket;
 
 	wire debug_ram_flag;
 	wire [len_data-1:0] debug_ram_addr;
-
-	/*assign led[0] = connect_uart_tx_start;	
-	assign led[1] = connect_halt;
-	assign led[2] = reset;*/
-
-	/*wire [5:0] connect_state_out;
-
-	assign led_state = connect_state_out;*/
 
 	TOP_MIPS #(
 	.len_data(len_data),
@@ -84,6 +68,7 @@ module TOP
 	)
 	u_top_mips(
 		.clk(clk_mips),
+		.ctrl_clk_mips(ctrl_clk_mips),
 		.reset(SWITCH_RESET),// | reset_mips),
 
 		//para debug
@@ -123,21 +108,17 @@ module TOP
 		.len_bucket(len_bucket)
 		)
 		u_debug_unit(
-		    .clk(CLK100MHZ),
+		    .clk(clk),
 		    .reset(SWITCH_RESET),
 		    .halt(connect_halt),
 		    .bucket(bucket),
 
 		    // outputs
-		    //.state_out             (connect_state_out),
 		    .addr_mem_inst(connect_addr_mem_inst),
 		    .ins_to_mem(connect_ins_to_mem),
 		    //.reset_mips(reset_mips),
 		    //.reprogram(connect_reprogram),
 		    .ctrl_clk_mips(ctrl_clk_mips), // para parar el mips cuando esta grabando el programa/enviando resultados
-			//.restart_recolector(connect_restart_recolector),
-			//.send_regs_recolector(connect_send_regs),
-			//.enable_next_recolector(connect_enable_next),
 			.debug(connect_debug_mode),
 			.wr_ram_inst(connect_wea_ram_inst),
 
@@ -161,7 +142,7 @@ module TOP
 		.CLK_RATE(100000000)
 		)
 		u_uart(
-			.CLK(CLK100MHZ),
+			.CLK(clk),
 			//.reset(reset),
 			.tx_start(connect_uart_tx_start),
 			.rx_bit(RX_INPUT),

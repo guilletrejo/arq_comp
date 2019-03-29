@@ -14,6 +14,7 @@ module MEM_WB #(
 	parameter len_wb_bus = 2
 	)(
 	input clk,
+	input ctrl_clk_mips,
 	input reset,
 	input [len_data-1:0] in_addr_mem,
 	input [len_data-1:0] write_data,
@@ -74,7 +75,8 @@ module MEM_WB #(
         .len_data(len_data)
 		)
 		u_data_mem(
-            .clk(~clk),
+            .clk(clk),
+			.ctrl_clk_mips(ctrl_clk_mips),
             .Rd(MemRead),
             .Wr(MemWrite),
             .Addr(in_addr_mem[5:0]),
@@ -105,7 +107,7 @@ module MEM_WB #(
 			out_halt_flag_m <= 0;
 		end
 
-		else begin
+		else if(ctrl_clk_mips) begin
 			out_halt_flag_m <= halt_flag_m;
 
 			out_writeBack_bus <= in_writeBack_bus;
@@ -143,17 +145,6 @@ module MEM_WB #(
 
 	always @(*)
 	begin
-
-		/* PROBAR ESTA NEGRADA EN EL IF SECUENCIAL. 
-		   OTRA NEGRADA PARA PROBAR: ver data_mem*/
-		/*if(in_addr_mem==0)
-		begin
-			data_0 <= conn_out_mem;
-		end
-		else
-		begin
-			data_0 <= 32'hffffffff;
-		end*/
 
 		if (control_SH) 
 		begin

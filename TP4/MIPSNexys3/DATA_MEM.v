@@ -14,6 +14,7 @@ module DATA_MEM #(
   input [clogb2(ram_depth-1)-1:0] Addr,  // Address bus, width determined from ram_depth
   input [len_data-1:0] In_Data,           // RAM input data
   input clk,                           // Clock
+  input ctrl_clk_mips,
   input Wr,                            // Write enable
   input Rd,                            // RAM Enable, for additional power savings, disable port when not in use
   output [len_data-1:0] Out_Data_debug,
@@ -43,17 +44,23 @@ module DATA_MEM #(
   
   always @(negedge clk)
   begin
-    if (Wr)
+    if(ctrl_clk_mips)
     begin
-      BRAM[Addr] <= In_Data;
+      if (Wr)
+      begin
+        BRAM[Addr] <= In_Data;
+      end
     end
   end
 
   always @(posedge clk)
   begin
-    if (Rd)
-    begin
-      ram_data <= BRAM[Addr];
+    if(ctrl_clk_mips)
+      begin
+      if (Rd)
+      begin
+        ram_data <= BRAM[Addr];
+      end
     end
   end
 

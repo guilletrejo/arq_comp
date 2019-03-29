@@ -13,6 +13,7 @@ module IF_ID #(
 	parameter len_test = 8
 	) (
 	input clk,
+	input ctrl_clk_mips,
 	input reset,
 	input [2:0] in_pc_src, // viene de la unidad de control
 	input [len_data-1:0] in_pc_jump,
@@ -75,6 +76,7 @@ module IF_ID #(
 		)
 		u_pc(
             .clk(~clk),
+			.ctrl_clk_mips(ctrl_clk_mips),
             .reset(reset),
             .PCWrite(~stall_flag),
 			.adder_input((connect_wire_douta)?(conn_pc_adder_imem):(conn_pcmux_pc)),
@@ -110,7 +112,7 @@ module IF_ID #(
 			out_halt_flag_if <= 0;			
 		end
 
-		else begin
+		else if(ctrl_clk_mips) begin
 			out_halt_flag_if <= connect_wire_douta;
 
 			if ((~stall_flag) | flush) 

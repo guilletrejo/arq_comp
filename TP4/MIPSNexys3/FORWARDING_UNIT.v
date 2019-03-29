@@ -29,43 +29,22 @@ module FORWARDING_UNIT #(
 
 		/* Lo mismo pero para RS */
 
-		if (ex_mem_reg_write && (ex_mem_rd != 0) && (ex_mem_rd == id_ex_rs))
-			forwarding_muxA = 2'b10;
-		else
-			forwarding_muxA = 2'b00;
-		
-		if (ex_mem_reg_write && (ex_mem_rd !=0) && (ex_mem_rd == id_ex_rt))
-			forwarding_muxB = 2'b10;
-		else
-			forwarding_muxB = 2'b00;
 
-		if (mem_wb_reg_write && (mem_wb_rd != 0) && !(ex_mem_reg_write && (ex_mem_rd != 0) && (ex_mem_rd != id_ex_rs)) 
-			&& (mem_wb_rd == id_ex_rs))
-			forwarding_muxA = 2'b01;
-		else
-			forwarding_muxA = 2'b00;
-		
-		if (mem_wb_reg_write && (mem_wb_rd != 0) && !(ex_mem_reg_write && (ex_mem_rd != 0) && (ex_mem_rd != id_ex_rt))
-			&& (mem_wb_rd == id_ex_rt))
-			forwarding_muxB = 2'b01; 
-		else
-			forwarding_muxA = 2'b00;
-
-		/*if(mem_wb_reg_write == 1 & mem_wb_rd == id_ex_rs & (ex_mem_reg_write == 0 | ex_mem_rd != id_ex_rs))
+		if(mem_wb_reg_write == 1 & mem_wb_rd == id_ex_rs & (ex_mem_reg_write == 0 | ex_mem_rd != id_ex_rs))
 			forwarding_muxA <= 2'b10;
 		else if (ex_mem_reg_write == 1 & ex_mem_rd == id_ex_rs)
 			forwarding_muxA <= 2'b01;
 		else
-			forwarding_muxA <= 2'b00;*/
+			forwarding_muxA <= 2'b00;
 
-		/* Lo mismo pero para RT... ACA TENDRIA QUE ENTRAR en el caso add 5, 9, 0 ... sw 5, 0(1) , pq el 5 en el sw es RT */
+		/* Lo mismo pero para RT en los addi */
 
-		/*if(mem_wb_reg_write == 1 & mem_wb_rd == id_ex_rt & (ex_mem_reg_write == 0 | ex_mem_rd != id_ex_rt))
+		if(mem_wb_reg_write == 1 & mem_wb_rd == id_ex_rt & (ex_mem_reg_write == 0 | ex_mem_rd != id_ex_rt))
 			forwarding_muxB <= 2'b10;
 		else if (ex_mem_reg_write == 1 & ex_mem_rd == id_ex_rt)
 			forwarding_muxB <= 2'b01;
 		else
-			forwarding_muxB <= 2'b00;*/
+			forwarding_muxB <= 2'b00;
 	end
 
 endmodule

@@ -15,6 +15,7 @@ module ID_EX #(
 	parameter len_wb_bus = 2
 	)(
 	input clk,
+	input ctrl_clk_mips,
 	input reset,
 	input [len_data-1:0] in_pc_branch, // para tener PC+4 cuando necesite sumar el offset de un branch
 	input [len_data-1:0] in_instruccion,
@@ -118,6 +119,7 @@ module ID_EX #(
 		)
 		u_registers(
 			.clk(~clk),
+			.ctrl_clk_mips(ctrl_clk_mips),
 			.reset(reset),
 			.RegWrite(RegWrite),
 			.read_register_1(in_instruccion[25:21]),
@@ -179,7 +181,7 @@ module ID_EX #(
 			out_halt_flag_d <= 0;
 		end
 
-		else begin
+		else if(ctrl_clk_mips) begin
 			out_halt_flag_d <= halt_flag_d;
 
 			if(flush)

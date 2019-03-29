@@ -14,6 +14,7 @@ module REGISTERS#(
 	)
     (
 	input clk,
+	input ctrl_clk_mips,
 	input reset,
 	input RegWrite,
 	input [num_bits-1:0] read_register_1,
@@ -72,7 +73,7 @@ module REGISTERS#(
 			read_data_2 <= 0;
 		end
 
-		else begin
+		else if(ctrl_clk_mips) begin
 			read_data_1 <= registers_mips[read_register_1];
 			read_data_2 <= registers_mips[read_register_2];
 		end
@@ -80,9 +81,12 @@ module REGISTERS#(
 
 	always @(posedge clk)
 	begin
-		if (RegWrite) 
+		if(ctrl_clk_mips)
 		begin
-			registers_mips[write_register] <= write_data;				
+			if (RegWrite) 
+			begin
+				registers_mips[write_register] <= write_data;				
+			end
 		end
 	end
 
