@@ -22,6 +22,7 @@ ASM2HEX = {
                     JALR rd, rs
            '''
            # R-Type Instructions
+           "otra":  [("code", 0x00000000), ("rd", 11), ("rs", 16), ("rt", 6)],
            "SLL" :  [("code", 0x00000000), ("rd", 11), ("rs", 16), ("rt", 6)],
            "SRL" :  [("code", 0x00000002), ("rd", 11), ("rs", 16), ("rt", 6)],
            "SRA" :  [("code", 0x00000003), ("rd", 11), ("rs", 16), ("rt", 6)],

@@ -14,7 +14,7 @@ module BR_GEN(
 );
 	 
 parameter BAUD_RATE = 9600;
-parameter CLK_RATE = 100000000; //valor del clock de la placa
+parameter CLK_RATE = 40000000; //valor del clock de la placa
 localparam NUM_TICKS = 16;		 //division del baudio
 
 parameter TICK_RATE = CLK_RATE / (BAUD_RATE * NUM_TICKS);	//frecuencia del clk del RX
@@ -24,19 +24,19 @@ parameter TICK_RATE = CLK_RATE / (BAUD_RATE * NUM_TICKS);	//frecuencia del clk d
    para generar el tick rate (163 en el ej. de la filmina)
    para contar hasta el TICK_RATE		
 */
-parameter LEN_REG_ACUM = 10; 	//clog2(TICK_RATE);
+parameter LEN_REG_ACUM = 9; 	//clog2(TICK_RATE);
 
 // registro para ir sumando el tick rate
-reg [LEN_REG_ACUM - 1 : 0] acumulator = 10'b0;												
+reg [LEN_REG_ACUM - 1 : 0] acumulator = 9'b0;												
 
 
 always @(posedge CLK) 
 begin			
-	acumulator = acumulator + 10'b1;
+	acumulator = acumulator + 9'b1;
 	if (acumulator == (TICK_RATE)) 
 		begin
 			TICK = 1;
-			acumulator = 10'b0;
+			acumulator = 9'b0;
 		end
 	else
 		TICK = 0;

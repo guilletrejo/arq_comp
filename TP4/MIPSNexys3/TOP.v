@@ -30,7 +30,11 @@ module TOP
     wire clk_mips;
     wire ctrl_clk_mips; 
 	wire clk;
+<<<<<<< HEAD
 	assign clk = CLK100MHZ; 
+=======
+	//assign clk = CLK100MHZ; 
+>>>>>>> be1ea8dac8d1a51c3a37fda7638d0bc2a04f5f14
 	//assign clk_mips = CLK100MHZ;
          //reset, 
          //reset_mips;
@@ -50,14 +54,29 @@ module TOP
     wire [NBIT_DATA_LEN-1:0] connect_uart_data_in,
 			                 connect_uart_data_out;
 
+<<<<<<< HEAD
 	assign clk_mips = (ctrl_clk_mips) ? (!clk) : (1'b 0);
+=======
+	//assign clk_mips = (ctrl_clk_mips) ? (!clk) : (1'b 0);
+>>>>>>> be1ea8dac8d1a51c3a37fda7638d0bc2a04f5f14
 
 	assign TX_OUTPUT = connect_tx_debug;
 
 	wire [len_bucket-1:0] bucket;
 
 	wire debug_ram_flag;
+<<<<<<< HEAD
 	wire [len_data-1:0] debug_ram_addr;
+=======
+	wire [len_data-1:0] debug_ram_addr;
+	
+	  my_clock instance_name
+   (// Clock in ports
+    .CLK_IN1(CLK100MHZ),      // IN
+    // Clock out ports
+    .CLK_OUT1(clk),     // OUT
+    .CLK_OUT2(clk_mips));    // OUT
+>>>>>>> be1ea8dac8d1a51c3a37fda7638d0bc2a04f5f14
 
 	TOP_MIPS #(
 	.len_data(len_data),
@@ -139,7 +158,7 @@ module TOP
 		.NBIT_DATA(8),
 		.NUM_TICKS(16),
 		.BAUD_RATE(9600),
-		.CLK_RATE(100000000)
+		.CLK_RATE(40000000)
 		)
 		u_uart(
 			.CLK(clk),

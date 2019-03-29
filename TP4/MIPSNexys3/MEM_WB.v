@@ -75,7 +75,11 @@ module MEM_WB #(
         .len_data(len_data)
 		)
 		u_data_mem(
+<<<<<<< HEAD
             .clk(clk),
+=======
+            .clk(~clk),
+>>>>>>> be1ea8dac8d1a51c3a37fda7638d0bc2a04f5f14
 			.ctrl_clk_mips(ctrl_clk_mips),
             .Rd(MemRead),
             .Wr(MemWrite),
