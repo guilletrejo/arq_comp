@@ -42,7 +42,7 @@ module DATA_MEM #(
     end
   endgenerate
   
-  always @(posedge clk)
+ /* always @(posedge clk)
   begin
     if(ctrl_clk_mips)
     begin
@@ -51,12 +51,16 @@ module DATA_MEM #(
         BRAM[Addr] <= In_Data;
       end
     end
-  end
+  end*/
 
   always @(negedge clk)
   begin
     if(ctrl_clk_mips)
+    begin
+      if (Wr)
       begin
+        BRAM[Addr] <= In_Data;  
+      end
       if (Rd)
       begin
         ram_data <= BRAM[Addr];
